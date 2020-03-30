@@ -35,14 +35,14 @@ export default [
       // mock error
       if (!token) {
         return {
-          code: 60204,
-          message: 'Account and password are incorrect.'
+          code: 1,
+          errorMsg: 'Account and password are incorrect.'
         }
       }
 
       return {
-        code: 20000,
-        data: token
+        code: 0,
+        respObj: null
       }
     }
   },
@@ -52,20 +52,25 @@ export default [
     url: '/vue-element-admin/user/info\.*',
     type: 'get',
     response: config => {
-      const { token } = config.query
-      const info = users[token]
+      // const { token } = config.query
+      // const info = users[token]
+      //
+      // // mock error
+      // if (!info) {
+      //   return {
+      //     code: 1,
+      //     errorMsg: 'Login failed, unable to get user details.'
+      //   }
+      // }
 
-      // mock error
-      if (!info) {
-        return {
-          code: 50008,
-          message: 'Login failed, unable to get user details.'
-        }
-      }
+        // return {
+        //   code: 1,
+        //   errorMsg: 'Login failed, unable to get user details.'
+        // }
 
       return {
-        code: 20000,
-        data: info
+        code: 0,
+        respObj: users["admin-token"]
       }
     }
   },
@@ -76,8 +81,7 @@ export default [
     type: 'post',
     response: _ => {
       return {
-        code: 20000,
-        data: 'success'
+        code: 0
       }
     }
   }

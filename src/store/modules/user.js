@@ -34,9 +34,9 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        // const { data } = response
+        // commit('SET_TOKEN', "LOGIN_SUCCESS")
+        setToken("LOGIN_SUCCESS")//本项目中没有实际意义，只是一个标志位表示登录成功了，也可以用作token值
         resolve()
       }).catch(error => {
         reject(error)
@@ -48,13 +48,13 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        const { data } = response
+        const { respObj } = response
 
-        if (!data) {
+        if (!respObj) {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction } = data
+        const { roles, name, avatar, introduction } = respObj
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -65,7 +65,7 @@ const actions = {
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
-        resolve(data)
+        resolve(respObj)
       }).catch(error => {
         reject(error)
       })
