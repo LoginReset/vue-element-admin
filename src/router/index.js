@@ -130,6 +130,50 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
+    path: '/file',
+    component: Layout,
+    redirect: '/file/a',
+    alwaysShow: true, // will always show the root menu
+    name: 'file',
+    meta: {
+      title: '文件管理',
+      icon: 'lock',
+      // roles: ['admin', 'editor'] // you can set roles in root nav
+    },children: [
+      {
+        path: 'a',
+        component: () => import('@/views/file/index'),
+        name: 'a',
+        meta: {
+          title: '文件管理',
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }
+    ]
+  },
+  {
+    path: '/sys',
+    component: Layout,
+    redirect: '/sys/page',
+    alwaysShow: true, // will always show the root menu
+    name: 'sys',
+    meta: {
+      title: '系统管理员',
+      icon: 'lock',
+      // roles: ['admin', 'editor'] // you can set roles in root nav
+    },children: [
+      {
+        path: 'permission',
+        component: () => import('@/views/sys/permission'),
+        name: 'permission',
+        meta: {
+          title: '系统权限',
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }
+    ]
+  },
+  {
     path: '/permission',
     component: Layout,
     redirect: '/permission/page',
