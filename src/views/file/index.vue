@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="content">
     <xayah
       :id="id"
       v-model="images"
@@ -43,7 +43,8 @@ export default {
         policy: 'http://localhost:8080/b/xayah/policy', // 获取上传策略地址
         delete: 'http://localhost:8080/b/xayah/delete', // 删除文件或目录地址
         return: 'http://localhost:8080/b/xayah/return', // 本地回调地址
-        visible: '/sadfsdaf'
+        visible: 'http://localhost:8080/b/xayah/visible',
+        rename: 'http://localhost:8080/b/xayah/rename',
       },
       id: 'editorImage',
       max: 5,
@@ -53,7 +54,7 @@ export default {
         random: false,
         size: 0,
         format: [
-          'jpg', 'png', 'jpeg'
+          'jpg', 'png', 'jpeg','docx'
         ],
         style: '?x-oss-process=style/thumb',
         key: 'id',
@@ -61,8 +62,10 @@ export default {
         // prefix:"",//目录前缀
         // module:"",//模块名
         document: true, // 是否隐藏文档链接
-        resource: true// 是否隐藏源码链接
+        resource: true,// 是否隐藏源码链接
         // folder:true,//是否允许上传目录
+        isShowInsertImgBtn:false,
+        width:"80%",
       }
     }
   },
@@ -70,6 +73,9 @@ export default {
     callback(val) {
       console.log(val)
     }
+  },
+  mounted(){
+    // console.log(this.$refs.content.clientWidth)
   }
 }
 </script>
