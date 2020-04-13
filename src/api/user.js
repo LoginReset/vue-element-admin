@@ -1,8 +1,13 @@
 import request from '@/utils/request'
 
+/**
+ * 登录
+ * @param data
+ */
 export function login(data) {
   return request({
-    url: '/vue-element-admin/user/login',
+    // url: '/vue-element-admin/user/login',
+    url: '/b/login',
     method: 'post',
     data
   })
@@ -10,7 +15,7 @@ export function login(data) {
 
 export function getInfo(token) {
   return request({
-    url: '/vue-element-admin/user/info',
+    url: '/b/user/info',
     method: 'get',
     params: { token }
   })

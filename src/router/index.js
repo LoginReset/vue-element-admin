@@ -132,18 +132,18 @@ export const asyncRoutes = [
   {
     path: '/file',
     component: Layout,
-    redirect: '/file/a',
+    redirect: '/file/manage',
     alwaysShow: true, // will always show the root menu
     name: 'file',
     meta: {
       title: '文件管理',
-      icon: 'lock',
+      icon: 'excel',
       // roles: ['admin', 'editor'] // you can set roles in root nav
     },children: [
       {
-        path: 'a',
+        path: 'manage',
         component: () => import('@/views/file/index'),
-        name: 'a',
+        name: 'manage',
         meta: {
           title: '文件管理',
           // roles: ['admin'] // or you can only set roles in sub nav
@@ -154,20 +154,56 @@ export const asyncRoutes = [
   {
     path: '/sys',
     component: Layout,
-    redirect: '/sys/page',
+    redirect: '/sys/user',
     alwaysShow: true, // will always show the root menu
     name: 'sys',
     meta: {
-      title: '系统管理员',
+      title: '系统管理',
       icon: 'lock',
       // roles: ['admin', 'editor'] // you can set roles in root nav
     },children: [
+      {
+        path: 'user',
+        component: () => import('@/views/sys/user'),
+        name: 'user',
+        meta: {
+          title: '系统管理员',
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'role',
+        component: () => import('@/views/sys/role'),
+        name: 'role',
+        meta: {
+          title: '管理员角色',
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
       {
         path: 'permission',
         component: () => import('@/views/sys/permission'),
         name: 'permission',
         meta: {
           title: '系统权限',
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'login-log',
+        component: () => import('@/views/sys/login-log'),
+        name: 'login-log',
+        meta: {
+          title: '登录日志',
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'operation-log',
+        component: () => import('@/views/sys/operation-log'),
+        name: 'operation-log',
+        meta: {
+          title: '操作日志',
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       }
@@ -182,7 +218,7 @@ export const asyncRoutes = [
     meta: {
       title: 'permission',
       icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      // roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
       {
