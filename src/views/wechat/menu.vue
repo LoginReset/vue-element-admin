@@ -1,17 +1,17 @@
 <template>
   <div class="components-container board">
-    <menuItem :key="1" :list="list1" :group="group" class="kanban todo" header-text="Todo"/>
-    <menuItem :key="2" :list="list2" :group="group" class="kanban working" header-text="Working"/>
-    <menuItem :key="3" :list="list3" :group="group" class="kanban done" header-text="Done"/>
+    <menuContent :key="1" :list="list1" :group="group" class="kanban todo" header-text="Todo"/>
+    <menuContent :key="2" :list="list2" :group="group" class="kanban working" header-text="Working"/>
+    <menuContent :key="3" :list="list3" :group="group" class="kanban done" header-text="Done"/>
   </div>
 </template>
 
 <script>
-  import menuItem from './components/menu-item'
+  import menuContent from './components/menu-content'
   export default {
     name: "menu",
     components: {
-      menuItem
+      menuContent
     },
     data() {
       return {

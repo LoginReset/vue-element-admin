@@ -1,15 +1,21 @@
 <template>
   <div class="board-column">
-    <div class="board-column-header">
-      {{ headerText }}
-    </div>
     <draggable
-      :list="list"
-      v-bind="$attrs"
-      class="board-column-content"
-      :set-data="setData">
-      <div v-for="element in list" :key="element.id" class="board-item">
-        {{ element.name }} {{ element.id }}
+      group="parent">
+      <div>
+        <div class="board-column-header">
+          {{ headerText }}
+        </div>
+
+        <draggable
+          :list="list"
+          v-bind="$attrs"
+          class="board-column-content"
+          :set-data="setData">
+          <div v-for="element in list" :key="element.id" class="board-item">
+            {{ element.name }} {{ element.id }}
+          </div>
+        </draggable>
       </div>
     </draggable>
   </div>
@@ -18,37 +24,37 @@
 <script>
   import draggable from 'vuedraggable'
 
-export default {
-        name: "menu-item",
-  components: {
-    draggable
-  },
-  props: {
-    headerText: {
-      type: String,
-      default: 'Header'
+  export default {
+    name: "menu-item",
+    components: {
+      draggable
     },
-    options: {
-      type: Object,
-      default() {
-        return {}
+    props: {
+      headerText: {
+        type: String,
+        default: 'Header'
+      },
+      options: {
+        type: Object,
+        default() {
+          return {}
+        }
+      },
+      list: {
+        type: Array,
+        default() {
+          return []
+        }
       }
     },
-    list: {
-      type: Array,
-      default() {
-        return []
+    methods: {
+      setData(dataTransfer) {
+        // to avoid Firefox bug
+        // Detail see : https://github.com/RubaXa/Sortable/issues/1012
+        dataTransfer.setData('Text', '')
       }
-    }
-  },
-  methods: {
-    setData(dataTransfer) {
-      // to avoid Firefox bug
-      // Detail see : https://github.com/RubaXa/Sortable/issues/1012
-      dataTransfer.setData('Text', '')
     }
   }
-    }
 </script>
 
 <style lang="scss" scoped>
