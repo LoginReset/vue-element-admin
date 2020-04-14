@@ -152,6 +152,28 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/wechat',
+    component: Layout,
+    redirect: '/wechat/menu',
+    alwaysShow: true, // will always show the root menu
+    name: 'wechat',
+    meta: {
+      title: '公众号管理',
+      icon: 'wechat',
+      // roles: ['admin', 'editor'] // you can set roles in root nav
+    },children: [
+      {
+        path: 'menu',
+        component: () => import('@/views/wechat/menu'),
+        name: 'wehcat-menu',
+        meta: {
+          title: '自定义菜单',
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }
+    ]
+  },
+  {
     path: '/sys',
     component: Layout,
     redirect: '/sys/user',

@@ -2,6 +2,56 @@ import request from '@/utils/request'
 
 
 /**
+ * 获取管理员列表
+ * @param query
+ */
+export function getUsers(query) {
+  return request({
+    url: '/b/su',
+    method: 'get',
+    params: query
+  })
+}
+
+/**
+ * 添加系统管理员
+ * @param data
+ */
+export function postUserAdd(data) {
+  return request({
+    url: '/b/su',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 更新系统管理员
+ * @param data
+ */
+export function postUserUp(data) {
+  return request({
+    url: '/b/su/up',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 修改管理员状态
+ * @param data
+ */
+export function postUserStatus(data) {
+  return request({
+    url: '/b/su/status',
+    method: 'post',
+    data
+  })
+}
+
+
+
+/**
  * 获取角色列表
  * @param query
  * @returns {AxiosPromise}

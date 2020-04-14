@@ -1,0 +1,44 @@
+{
+  "button": [
+    {
+      "name": "透传服务",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "指令控制",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxde8ed2db65243e04redirect_uri=http://www.cdzic.cn/zic_wechat/cdzic/wechat-indexresponse_type=codescope=snsapi_basestate=1#wechat_redirect",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "绑定配置",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxde8ed2db65243e04redirect_uri=http://www.cdzic.cn/zic_wechat/cdzic/wechat-wifiresponse_type=codescope=snsapi_basestate=1#wechat_redirect",
+          "sub_button": []
+        }
+      ]
+    },
+    {
+      "name": "测试服务",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "爱客商城测试",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxde8ed2db65243e04redirect_uri=http://www.cdzic.cn/aike/re-get/ac_funresponse_type=codescope=snsapi_userinfostate=1#wechat_redirect",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "鱼灯测试工具",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxde8ed2db65243e04redirect_uri=http://www.cdzic.cn/zic_wechat/cdzic/rq-testresponse_type=codescope=snsapi_basestate=1#wechat_redirect",
+          "sub_button": []
+        },
+        {
+          "type": "view",
+          "name": "七孔wifi测试",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxde8ed2db65243e04redirect_uri=http://www.cdzic.cn/zic_wechat/cdzic/wifi-type7-testresponse_type=codescope=snsapi_basestate=1#wechat_redirect",
+          "sub_button": []
+        }
+      ]
+    }
+  ]
+}

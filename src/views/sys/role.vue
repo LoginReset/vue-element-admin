@@ -143,7 +143,7 @@
         };
         return {
           tableKey: 0,
-          list: null,
+          list: [],
           permissionAll: null,
           total: 0,
           listLoading: true,

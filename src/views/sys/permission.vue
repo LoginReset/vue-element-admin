@@ -34,14 +34,7 @@
       style="width: 100%;"
       @sort-change="sortChange"
       row-key="permission"
-      :tree-props="{children: 'children'}"
-    >
-      <!--<el-table-column label="序号" prop="id" sortable="custom" align="center" :class-name="getSortClass('id')">-->
-      <!--<template slot-scope="{row}">-->
-      <!--<span>{{ row.uuid }}</span>-->
-      <!--</template>-->
-
-      <!--</el-table-column>-->
+      :tree-props="{children: 'children'}">
       <el-table-column label="序号" prop="id" align="center"
                        type="index"
                        width="50">
@@ -76,24 +69,6 @@
           <span >{{ row.createDate }}</span>
         </template>
       </el-table-column>
-      <!--<el-table-column :label="$t('table.importance')" width="80px">-->
-      <!--<template slot-scope="{row}">-->
-      <!--<svg-icon v-for="n in +row.importance" :key="n" icon-class="star" class="meta-item__icon" />-->
-      <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column :label="$t('table.readings')" align="center" width="95">-->
-      <!--<template slot-scope="{row}">-->
-      <!--<span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>-->
-      <!--<span v-else>0</span>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column :label="$t('table.status')" class-name="status-col" width="100">-->
-      <!--<template slot-scope="{row}">-->
-      <!--<el-tag :type="row.status | statusFilter">-->
-      <!--{{ row.status }}-->
-      <!--</el-tag>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
@@ -174,19 +149,6 @@
     name: 'permission',
     components: {Pagination},
     directives: {waves},
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          published: 'success',
-          draft: 'info',
-          deleted: 'danger'
-        }
-        return statusMap[status]
-      },
-      typeFilter(type) {
-        return calendarTypeKeyValue[type]
-      }
-    },
     data() {
       var checkSort = (rule, value, callback) => {
         if (!value) {
@@ -202,7 +164,7 @@
       };
       return {
         tableKey: 0,
-        list: null,
+        list: [],
         permissionAll: null,
         total: 0,
         listLoading: true,
