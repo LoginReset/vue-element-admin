@@ -1,67 +1,94 @@
 <template>
   <div class="components-container board">
-    <menuContent :key="1" :list="list1" :group="group" class="kanban todo" header-text="Todo"/>
-    <menuContent :key="2" :list="list2" :group="group" class="kanban working" header-text="Working"/>
-    <menuContent :key="3" :list="list3" :group="group" class="kanban done" header-text="Done"/>
+    <menuContent :key="1" :list="list" @on-change-list="changeList" />
+    <el-button
+      style="margin-left: 10px;"
+      type="primary"
+      @click="synch2wechat"
+    >
+      同步到微信
+    </el-button>
   </div>
 </template>
 
 <script>
-  import menuContent from './components/menu-content'
-  export default {
-    name: "menu",
-    components: {
-      menuContent
-    },
-    data() {
-      return {
-        group: 'mission',
-        list1: [
-          {name: 'Mission', id: 1},
-          {name: 'Mission', id: 2},
-          {name: 'Mission', id: 3},
-          {name: 'Mission', id: 4}
-        ],
-        list2: [
-          {name: 'Mission', id: 5},
-          {name: 'Mission', id: 6},
-          {name: 'Mission', id: 7}
-        ],
-        list3: [
-          {name: 'Mission', id: 8},
-          {name: 'Mission', id: 9},
-          {name: 'Mission', id: 10}
+import menuContent from './components/menu-content'
+
+export default {
+  name: 'Menu',
+  components: {
+    menuContent
+  },
+  data() {
+    return {
+      group: 'mission',
+      list: [{
+        name: '父菜单1',
+        uuid: 10,
+        sub_button: [
+          { name: '子菜单1', uuid: 1 },
+          { name: '子菜单2', uuid: 2 },
+          { name: '子菜单3', uuid: 3 },
+          { name: '子菜单4', uuid: 4 }
+        ]
+      },
+      {
+        name: '父菜单2',
+        uuid: 20,
+        sub_button: [
+          { name: '子菜单5', uuid: 5 },
+          { name: '子菜单6', uuid: 6 },
+          { name: '子菜单7', uuid: 7 }
+        ]
+      },
+      {
+        name: '父菜单3',
+        uuid: 30,
+        sub_button: [
+          { name: '子菜单8', uuid: 8 },
+          { name: '子菜单9', uuid: 9 },
+          { name: '子菜单10', uuid: 10 }
         ]
       }
+      ]
+    }
+  },
+  methods: {
+    synch2wechat() {
+      console.log(this.list)
+    },
+    changeList(val) {
+      this.list = val
     }
   }
+}
 </script>
 
 <style lang="scss">
-  .board {
-    width: 1000px;
-    margin-left: 20px;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: row;
-    align-items: flex-start;
-  }
+  /*.board {*/
+  /*width: 1000px;*/
+  /*margin-left: 20px;*/
+  /*display: flex;*/
+  /*justify-content: space-around;*/
+  /*flex-direction: row;*/
+  /*align-items: flex-start;*/
+  /*}*/
 
-  .kanban {
-    &.todo {
-      .board-column-header {
-        background: #4A9FF9;
-      }
-    }
-    &.working {
-      .board-column-header {
-        background: #f9944a;
-      }
-    }
-    &.done {
-      .board-column-header {
-        background: #2ac06d;
-      }
-    }
-  }
+  /*.kanban {*/
+  /*&.todo {*/
+  /*.board-column-header {*/
+  /*background: #4A9FF9;*/
+  /*}*/
+  /*}*/
+  /*&.working {*/
+  /*.board-column-header {*/
+  /*background: #f9944a;*/
+  /*}*/
+  /*}*/
+  /*&.done {*/
+  /*.board-column-header {*/
+  /*background: #2ac06d;*/
+  /*}*/
+  /*}*/
+  /*}*/
 </style>
