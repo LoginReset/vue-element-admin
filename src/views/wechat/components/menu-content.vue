@@ -97,7 +97,11 @@ export default {
       for (const pMenu of this.list) {
         const cList = pMenu.sub_button
         if (cList && cList.length > 5) {
-          console.log('子菜单个数超出上限')
+          this.$notify({
+            title: '警告',
+            message: '最多支持5个子菜单',
+            type: 'warning'
+          })
           console.log('copyList', this.copyList)
           // setTimeout(()=>{
           //   console.log("定时器")

@@ -2,7 +2,7 @@
   <div class="components-container board">
     <menuContent :key="1" :list="list" @on-change-list="changeList" />
     <el-button
-      style="margin-left: 10px;"
+      style="margin-left: 10px;margin-top: 50px"
       type="primary"
       @click="synch2wechat"
     >
