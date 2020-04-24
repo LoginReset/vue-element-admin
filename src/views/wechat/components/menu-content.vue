@@ -8,7 +8,7 @@
       @end="datadragEnd"
     >
       <div v-for="(pItem,pIndex) in listMenu" :key="pItem.uuid" class="parent-menu">
-        <div class="board-column-header" :class="'board-column-header-'+pIndex">
+        <div class="board-column-header" :class="'board-column-header-'+pIndex" @click="editMenu(pIndex,-1)">
           {{ pItem.name }}
         </div>
         <draggable
@@ -21,10 +21,10 @@
           @end="datadragEnd"
           @add="datadragAdd"
         >
-          <div v-for="(cItem,cIndex) in pItem.sub_button" :key="cItem.uuid" class="board-item item">
+          <div v-for="(cItem,cIndex) in pItem.sub_button" :key="cItem.uuid" class="board-item item" @click="editMenu(pIndex,cIndex)">
             {{ cItem.name }}
           </div>
-          <div slot="footer" class="board-item" @click="">添加子菜单</div>
+          <div slot="footer" class="board-item" @click="addChildMenu(pIndex)">添加子菜单</div>
         </draggable>
       </div>
     </draggable>
@@ -116,6 +116,12 @@ export default {
     },
     addPeople() {
       console.log(this.list)
+    },
+    editMenu(pIndex,cIndex){//编辑菜单
+      this.$emit("editMenu",pIndex,cIndex);
+    },
+    addChildMenu(pIndex){
+      this.$emit("addChildMenu",pIndex);
     }
   }
 }
