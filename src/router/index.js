@@ -138,14 +138,17 @@ export const asyncRoutes = [
     meta: {
       title: '文件管理',
       icon: 'excel',
+      roles: ['file']
       // roles: ['admin', 'editor'] // you can set roles in root nav
-    },children: [
+    }, children: [
       {
         path: 'manage',
         component: () => import('@/views/file/index'),
         name: 'manage',
         meta: {
           title: '文件管理',
+          roles: ['file-manage']
+
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       }
@@ -160,18 +163,74 @@ export const asyncRoutes = [
     meta: {
       title: '公众号管理',
       icon: 'wechat',
+      roles: ['wechat']
+
       // roles: ['admin', 'editor'] // you can set roles in root nav
-    },children: [
+    }, children: [
       {
         path: 'menu',
         component: () => import('@/views/wechat/menu'),
         name: 'wehcat-menu',
         meta: {
           title: '自定义菜单',
+          roles: ['wechat-menu']
+
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       }
     ]
+  },
+  {
+    path: '/sms',
+    component: Layout,
+    redirect: '/sms/template',
+    alwaysShow: true, // will always show the root menu
+    name: 'sms',
+    meta: {
+      title: '短信管理',
+      icon: 'message',
+      roles: ['template']
+    },
+    children: [{
+      path: 'account',
+      component: () => import('@/views/sms/account'),
+      name: 'account',
+      meta: {
+        title: '短信账号',
+        roles: ['sys-sms'],
+        buttons: ['add', 'download', 'edit', 'switch', 'select']
+
+        // roles: ['admin'] // or you can only set roles in sub nav
+      }
+    }, {
+      path: 'template',
+      component: () => import('@/views/sms/templates'),
+      name: 'template',
+      meta: {
+        title: '短信模板',
+        roles: ['sys-sms'],
+        buttons: ['add', 'download', 'edit', 'switch', 'select']
+
+        // roles: ['admin'] // or you can only set roles in sub nav
+      }
+    }, {
+      path: 'create',
+      component: () => import('@/views/sms/redirectPage'),
+      name: 'createTemplate',
+      meta: {
+        title: '创建模板',
+        roles: ['sys-sms']
+
+        // roles: ['admin'] // or you can only set roles in sub nav
+      }
+    }, {
+      path: 'edit',
+      component: () => import('@/views/sms/redirectPage'),
+      name: 'editTemplate',
+      meta: {
+        title: '编辑模板', noCache: false, activeMenu: '/sms/template', roles: ['example-edit'] },
+      hidden: true
+    }]
   },
   {
     path: '/sys',
@@ -182,14 +241,20 @@ export const asyncRoutes = [
     meta: {
       title: '系统管理',
       icon: 'lock',
+      roles: ['sys']
+
       // roles: ['admin', 'editor'] // you can set roles in root nav
-    },children: [
+    },
+    children: [
       {
         path: 'user',
         component: () => import('@/views/sys/user'),
         name: 'user',
         meta: {
           title: '系统管理员',
+          roles: ['sys-user'],
+          buttons: ['add', 'download', 'edit', 'switch', 'select']
+
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
@@ -199,6 +264,9 @@ export const asyncRoutes = [
         name: 'role',
         meta: {
           title: '管理员角色',
+          roles: ['sys-role'],
+          buttons: ['add', 'download', 'edit', 'delete']
+
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
@@ -208,6 +276,31 @@ export const asyncRoutes = [
         name: 'permission',
         meta: {
           title: '系统权限',
+          roles: ['sys-permission'],
+          buttons: ['add', 'download', 'delete', 'edit']
+
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }, {
+        path: 'fieldName',
+        component: () => import('@/views/sys/fieldName'),
+        name: 'secretKey',
+        meta: {
+          title: '全局字段',
+          roles: ['sys-fieldName'],
+          buttons: []
+
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }, {
+        path: 'secretKey',
+        component: () => import('@/views/sys/secretKey'),
+        name: 'secretKey',
+        meta: {
+          title: '密钥管理',
+          roles: ['sys-secretKey'],
+          buttons: ['add', 'download', 'edit', 'delete', 'change']
+
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
@@ -217,6 +310,9 @@ export const asyncRoutes = [
         name: 'login-log',
         meta: {
           title: '登录日志',
+          roles: ['sys-login-log'],
+          buttons: []
+
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
@@ -226,6 +322,7 @@ export const asyncRoutes = [
         name: 'operation-log',
         meta: {
           title: '操作日志',
+          roles: ['sys-operation-log']
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       }
@@ -240,6 +337,7 @@ export const asyncRoutes = [
     meta: {
       title: 'permission',
       icon: 'lock',
+      roles: ['permission']
       // roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
@@ -249,7 +347,9 @@ export const asyncRoutes = [
         name: 'PagePermission',
         meta: {
           title: 'pagePermission',
-          roles: ['admin'] // or you can only set roles in sub nav
+          roles: ['permission-page']
+
+          // roles: ['admin'] or you can only set roles in sub nav
         }
       },
       {
@@ -257,7 +357,9 @@ export const asyncRoutes = [
         component: () => import('@/views/permission/directive'),
         name: 'DirectivePermission',
         meta: {
-          title: 'directivePermission'
+          title: 'directivePermission',
+          roles: ['permission-directive']
+
           // if do not set roles, means: this page does not require permission
         }
       },
@@ -267,7 +369,8 @@ export const asyncRoutes = [
         name: 'RolePermission',
         meta: {
           title: 'rolePermission',
-          roles: ['admin']
+          roles: ['permission-role']
+
         }
       }
     ]
@@ -276,12 +379,15 @@ export const asyncRoutes = [
   {
     path: '/icon',
     component: Layout,
+    meta: {
+      roles: ['icon']
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/icons/index'),
         name: 'Icons',
-        meta: { title: 'icons', icon: 'icon', noCache: true }
+        meta: { title: 'icons', icon: 'icon', roles: ['icon'], noCache: true }
       }
     ]
   },
@@ -299,27 +405,28 @@ export const asyncRoutes = [
     name: 'Example',
     meta: {
       title: 'example',
-      icon: 'example'
+      icon: 'example',
+      roles: ['example']
     },
     children: [
       {
         path: 'create',
         component: () => import('@/views/example/create'),
         name: 'CreateArticle',
-        meta: { title: 'createArticle', icon: 'edit' }
+        meta: { title: 'createArticle', icon: 'edit', roles: ['example-create'] }
       },
       {
         path: 'edit/:id(\\d+)',
         component: () => import('@/views/example/edit'),
         name: 'EditArticle',
-        meta: { title: 'editArticle', noCache: true, activeMenu: '/example/list' },
+        meta: { title: 'editArticle', noCache: true, activeMenu: '/example/list', roles: ['example-edit'] },
         hidden: true
       },
       {
         path: 'list',
         component: () => import('@/views/example/list'),
         name: 'ArticleList',
-        meta: { title: 'articleList', icon: 'list' }
+        meta: { title: 'articleList', icon: 'list', roles: ['example-list'] }
       }
     ]
   },
@@ -327,12 +434,15 @@ export const asyncRoutes = [
   {
     path: '/tab',
     component: Layout,
+    meta: {
+      roles: ['tab']
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/tab/index'),
         name: 'Tab',
-        meta: { title: 'tab', icon: 'tab' }
+        meta: { title: 'tab', icon: 'tab', roles: ['tab'] }
       }
     ]
   },
@@ -344,20 +454,21 @@ export const asyncRoutes = [
     name: 'ErrorPages',
     meta: {
       title: 'errorPages',
-      icon: '404'
+      icon: '404',
+      roles: ['error']
     },
     children: [
       {
         path: '401',
         component: () => import('@/views/error-page/401'),
         name: 'Page401',
-        meta: { title: 'page401', noCache: true }
+        meta: { title: 'page401', noCache: true, roles: ['error-401'] }
       },
       {
         path: '404',
         component: () => import('@/views/error-page/404'),
         name: 'Page404',
-        meta: { title: 'page404', noCache: true }
+        meta: { title: 'page404', noCache: true, roles: ['error-404'] }
       }
     ]
   },
@@ -365,12 +476,15 @@ export const asyncRoutes = [
   {
     path: '/error-log',
     component: Layout,
+    meta: {
+      roles: ['error-log']
+    },
     children: [
       {
         path: 'log',
         component: () => import('@/views/error-log/index'),
         name: 'ErrorLog',
-        meta: { title: 'errorLog', icon: 'bug' }
+        meta: { title: 'errorLog', icon: 'bug', roles: ['error-log'] }
       }
     ]
   },
@@ -382,32 +496,33 @@ export const asyncRoutes = [
     name: 'Excel',
     meta: {
       title: 'excel',
-      icon: 'excel'
+      icon: 'excel',
+      roles: ['excel']
     },
     children: [
       {
         path: 'export-excel',
         component: () => import('@/views/excel/export-excel'),
         name: 'ExportExcel',
-        meta: { title: 'exportExcel' }
+        meta: { title: 'exportExcel', roles: ['export-excel'] }
       },
       {
         path: 'export-selected-excel',
         component: () => import('@/views/excel/select-excel'),
         name: 'SelectExcel',
-        meta: { title: 'selectExcel' }
+        meta: { title: 'selectExcel', roles: ['export-selected-excel'] }
       },
       {
         path: 'export-merge-header',
         component: () => import('@/views/excel/merge-header'),
         name: 'MergeHeader',
-        meta: { title: 'mergeHeader' }
+        meta: { title: 'mergeHeader', roles: ['export-merge-header'] }
       },
       {
         path: 'upload-excel',
         component: () => import('@/views/excel/upload-excel'),
         name: 'UploadExcel',
-        meta: { title: 'uploadExcel' }
+        meta: { title: 'uploadExcel', roles: ['upload-excel'] }
       }
     ]
   },
@@ -418,13 +533,13 @@ export const asyncRoutes = [
     redirect: '/zip/download',
     alwaysShow: true,
     name: 'Zip',
-    meta: { title: 'zip', icon: 'zip' },
+    meta: { title: 'zip', icon: 'zip', roles: ['zip'] },
     children: [
       {
         path: 'download',
         component: () => import('@/views/zip/index'),
         name: 'ExportZip',
-        meta: { title: 'exportZip' }
+        meta: { title: 'exportZip', roles: ['zip-download'] }
       }
     ]
   },
@@ -433,30 +548,39 @@ export const asyncRoutes = [
     path: '/pdf',
     component: Layout,
     redirect: '/pdf/index',
+    meta: {
+      roles: ['pdf']
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/pdf/index'),
         name: 'PDF',
-        meta: { title: 'pdf', icon: 'pdf' }
+        meta: { title: 'pdf', icon: 'pdf', roles: ['pdf'] }
       }
     ]
   },
   {
     path: '/pdf/download',
     component: () => import('@/views/pdf/download'),
+    meta: {
+      roles: ['pdf-download']
+    },
     hidden: true
   },
 
   {
     path: '/theme',
     component: Layout,
+    meta: {
+      roles: ['theme']
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/theme/index'),
         name: 'Theme',
-        meta: { title: 'theme', icon: 'theme' }
+        meta: { title: 'theme', icon: 'theme', roles: ['theme'] }
       }
     ]
   },
@@ -464,12 +588,13 @@ export const asyncRoutes = [
   {
     path: '/clipboard',
     component: Layout,
+    meta: { roles: ['theme'] },
     children: [
       {
         path: 'index',
         component: () => import('@/views/clipboard/index'),
         name: 'ClipboardDemo',
-        meta: { title: 'clipboardDemo', icon: 'clipboard' }
+        meta: { title: 'clipboardDemo', icon: 'clipboard', roles: ['theme'] }
       }
     ]
   },
@@ -477,12 +602,15 @@ export const asyncRoutes = [
   {
     path: '/i18n',
     component: Layout,
+    meta: {
+      roles: ['i18n']
+    },
     children: [
       {
         path: 'index',
         component: () => import('@/views/i18n-demo/index'),
         name: 'I18n',
-        meta: { title: 'i18n', icon: 'international' }
+        meta: { title: 'i18n', icon: 'international', roles: ['i18n'] }
       }
     ]
   },
@@ -490,10 +618,13 @@ export const asyncRoutes = [
   {
     path: 'external-link',
     component: Layout,
+    meta: {
+      roles: ['external-link']
+    },
     children: [
       {
         path: 'https://github.com/PanJiaChen/vue-element-admin',
-        meta: { title: 'externalLink', icon: 'link' }
+        meta: { title: 'externalLink', icon: 'link', roles: ['external-link'] }
       }
     ]
   },

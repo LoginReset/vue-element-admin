@@ -63,10 +63,10 @@ export default [
       //   }
       // }
 
-        // return {
-        //   code: 1,
-        //   errorMsg: 'Login failed, unable to get user details.'
-        // }
+      // return {
+      //   code: 1,
+      //   errorMsg: 'Login failed, unable to get user details.'
+      // }
 
       return {
         code: 0,

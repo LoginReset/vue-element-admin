@@ -170,12 +170,16 @@ export default {
       this.dialogVisible = true
     },
     handleEdit(scope) {
+      console.log('------')
       this.dialogType = 'edit'
       this.dialogVisible = true
       this.checkStrictly = true
       this.role = deepClone(scope.row)
+
+      console.log(this.role)
       this.$nextTick(() => {
         const routes = this.generateRoutes(this.role.routes)
+
         this.$refs.tree.setCheckedNodes(this.generateArr(routes))
         // set checked state of a node not affects its father and child nodes
         this.checkStrictly = false
@@ -218,6 +222,9 @@ export default {
       const isEdit = this.dialogType === 'edit'
 
       const checkedKeys = this.$refs.tree.getCheckedKeys()
+      console.log('---checkedKeys---')
+
+      console.log(checkedKeys)
       this.role.routes = this.generateTree(deepClone(this.serviceRoutes), '/', checkedKeys)
 
       if (isEdit) {

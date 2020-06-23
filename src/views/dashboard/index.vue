@@ -19,11 +19,12 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'roles'
+      'roles', 'roleName'
     ])
   },
   created() {
-    if (!this.roles.includes('admin')) {
+    console.log(this.roleName)
+    if (this.roleName.includes('admin')) {
       this.currentRole = 'editorDashboard'
     }
   }

@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-
 /**
  * 获取管理员列表
  * @param query
@@ -48,8 +47,6 @@ export function postUserStatus(data) {
     data
   })
 }
-
-
 
 /**
  * 获取角色列表
@@ -103,9 +100,6 @@ export function getRoleDel(data) {
   })
 }
 
-
-
-
 /**
  * 获取权限列表
  * @param token
@@ -155,13 +149,14 @@ export function postPermissionUp(data) {
   })
 }
 
-
 /**
  * 删除系统权限
  * @param data
  * @returns {AxiosPromise}
  */
 export function getPermissionDel(data) {
+  console.log(data)
+  console.log('data')
   return request({
     url: '/b/sp/del',
     method: 'get',
@@ -169,3 +164,152 @@ export function getPermissionDel(data) {
   })
 }
 
+/**
+ * 获取秘钥列表
+ * @param token
+ */
+export function getSecreteKey(query) {
+  return request({
+    url: '/b/secretKey/view',
+    method: 'get',
+    params: query
+  })
+}
+
+/**
+ * 获取全部秘钥权限
+ * @returns {AxiosPromise}
+ */
+export function getSecreteKeyAll() {
+  return request({
+    url: '/b/secretKey/view',
+    method: 'get'
+  })
+}
+
+/**
+ * 添加秘钥
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function postSecreteKeyAdd(data) {
+  return request({
+    url: '/b/secretKey/add',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 修改
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function postSecreteKeyUp(data) {
+  return request({
+    url: '/b/secretKey/up',
+    method: 'post',
+    data
+  })
+}
+/**
+ * 更换秘钥
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function postSecreteKeyChange(data) {
+  console.log(555555)
+  console.log(data)
+  return request({
+    url: '/b/secretKey/chenge',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 删除秘钥
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function getSecreteKeyDel(data) {
+  return request({
+    url: '/b/secretKey/del',
+    method: 'post',
+    data
+  })
+}
+/**
+ * 获取登录日志
+ * @param query
+ */
+export function getLoginLog(query) {
+  return request({
+    url: '/b/sl',
+    method: 'get',
+    params: query
+  })
+}
+
+/**
+ * 获取全局字段变量列表
+ * @param
+ */
+// export function getPermissions(query) {
+//   return request({
+//     url: '/sys/fieldKey/view',
+//     method: 'get',
+//     params: query
+//   })
+// }
+
+/**
+ * 获取全部全局字段变量
+ * @returns {AxiosPromise}
+ */
+export function getFieldKeyAll() {
+  return request({
+    url: '/sys/fieldKey/view',
+    method: 'get'
+  })
+}
+
+/**
+ * 添加全局字段变量
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function postFieldKeyAdd(data) {
+  return request({
+    url: '/sys/fieldKey/add',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 更新全局字段变量
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function postFieldKeyUp(data) {
+  console.log(data)
+  return request({
+    url: '/sys/fieldKey/up',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 删除全局字段变量
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function getFieldKeyDel(data) {
+  return request({
+    url: 'sys/fieldKey/del',
+    method: 'post',
+    data
+  })
+}

@@ -1,5 +1,6 @@
 <template>
   <div v-if="!item.hidden">
+    <!-- 仅有一个可显示的子路由,并且没有孙子路由 -->
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
@@ -56,6 +57,8 @@ export default {
     // TODO: refactor with render function
     this.onlyOneChild = null
     return {}
+  },
+  mouted() {
   },
   methods: {
     hasOneShowingChild(children = [], parent) {

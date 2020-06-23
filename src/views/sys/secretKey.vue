@@ -2,13 +2,12 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-        v-model="listQuery.roleName"
-        placeholder="角色名"
-        style="width: 200px;"
+        v-model="listQuery.searchText"
+        placeholder="角色描述或密钥"
+        style="width: 300px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
-
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
@@ -16,7 +15,7 @@
         class="filter-item"
         icon="el-icon-edit"
         perms="add"
-        role="sys-role"
+        role="sys-secretKey"
         type="primary"
         label="table.add"
         @click="handleCreate"
@@ -29,9 +28,7 @@
         @click="getList"
       >{{ $t('table.refresh') }}
       </el-button>
-
     </div>
-
     <el-table
       :key="tableKey"
       v-loading="listLoading"
@@ -40,8 +37,6 @@
       fit
       highlight-current-row
       style="width: 100%;"
-      row-key="permission"
-      :tree-props="{children: 'children'}"
       @sort-change="sortChange"
     >
       <el-table-column
@@ -51,19 +46,20 @@
         type="index"
         width="50"
       />
-      <el-table-column label="角色名" align="center" width="220">
+      <el-table-column label="Key" align="center" width="300">
         <template slot-scope="{row}">
-          <el-tag type="success">{{ row.roleName }}</el-tag>
+          <el-tag type="success">{{ row.secretKey }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="排序" align="center" sortable="custom" prop="sort" width="220">
-        <template slot-scope="{row}">
-          <span>{{ row.sort }}</span>
-        </template>
       </el-table-column>
       <el-table-column label="描述">
         <template slot-scope="{row}">
           <span>{{ row.description }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="有效时间" align="center" sortable="custom" prop="valid_date">
+        <template slot-scope="{row}">
+          <span>{{ row.validDate == '-1' ? '永久有效' :row.validDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" sortable="custom" prop="create_date" width="220">
@@ -71,11 +67,25 @@
           <span>{{ row.createDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="修改时间" align="center" sortable="custom" prop="update_date" width="220">
+        <template slot-scope="{row}">
+          <span>{{ row.updateDate }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="300" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <PButton
+            class="filter-item"
+            perms="change"
+            role="sys-secretKey"
+            size="mini"
+            type="success"
+            label="table.change"
+            @click="handleChange(row)"
+          />
+          <PButton
             perms="edit"
-            role="sys-role"
+            role="sys-secretKey"
             size="mini"
             type="primary"
             label="table.edit"
@@ -85,7 +95,7 @@
             v-if="row.status!='deleted'"
             class="filter-item"
             perms="delete"
-            role="sys-role"
+            role="sys-secretKey"
             size="mini"
             type="danger"
             label="table.delete"
@@ -113,12 +123,6 @@
         label-width="70px"
         style="width: 400px; margin-left:50px;"
       >
-        <el-form-item label="角色名" prop="permission">
-          <el-input v-model="temp.roleName" clearable placeholder="请输入角色名" />
-        </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input v-model="temp.sort" clearable placeholder="请输入排序号" />
-        </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input
             v-model="temp.description"
@@ -127,16 +131,9 @@
             placeholder="请输入描述"
           />
         </el-form-item>
-        <el-form-item label="系统权限" prop="puuid">
-          <el-tree
-            ref="tree"
-            default-expand-all
-            class="permission-tree"
-            :data="permissionAll"
-            show-checkbox
-            node-key="uuid"
-            :props="treeProp"
-          />
+        <el-form-item label="日期" prop="validDate">
+          <el-date-picker v-model="temp.validDate" type="date" placeholder="选择日期" :picker-options="pickerOptions" @change="changeDate" />
+          <el-radio v-model="validDate" label="-1" style="margin-left:20px" @click.native.prevent="clickItem('-1')">永久有效</el-radio>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -162,13 +159,13 @@
 </template>
 
 <script>
-import { getRoles, getPermissionAll, postRoleAdd, postRoleUp, getRoleDel } from '@/api/sys'
+import { getSecreteKey, getSecreteKeyAll, postSecreteKeyAdd, postSecreteKeyUp, postSecreteKeyChange, getSecreteKeyDel } from '@/api/sys'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PButton from '@/components/PermissionBtn'
 export default {
-  name: 'Role',
+  name: 'SecretKey',
   components: { Pagination, PButton },
   directives: { waves },
   data() {
@@ -187,23 +184,21 @@ export default {
     return {
       tableKey: 0,
       list: [],
-      permissionAll: null,
       total: 0,
       listLoading: true,
       listQuery: {
         page: 1,
         limit: 20,
         orderField: undefined,
-        orderType: undefined, // desc|asc
-        roleName: undefined
+        orderType: undefined// desc|asc
       },
       statusOptions: ['published', 'draft', 'deleted'],
       temp: {
-        uuid: undefined,
-        roleName: '',
         description: '',
-        sort: 0
+        validDate: ''
       },
+      validDate: '',
+      changeFlag: false,
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -213,26 +208,47 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        roleName: [{ required: true, message: '角色名必填', trigger: 'change' },
-          { max: 30, message: '长度不能超过30字符', trigger: 'change' }],
         description: [{ max: 200, message: '长度不能超过200字符', trigger: 'change' }],
         sort: [{ validator: checkSort, trigger: 'change' }]
       },
       downloadLoading: false,
-      treeProp: {
-        children: 'children',
-        label: 'menuName'
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() + 3600 * 1000 * 24 <= Date.now()
+        }
       }
     }
+  },
+  watch: {
+
+    // validDate(){
+
+    //   if(this.changeFlag){
+    //     this.validDate = ''
+    //   }
+    // }
   },
   created() {
     this.getList()
   },
   methods: {
+    changeDate() {
+      console.log(this.temp.validDate)
+      this.changeFlag = true
+    },
+    clickItem(label) {
+      label === this.validDate ? this.validDate = '' : this.validDate = label
+      console.log(this.validDate)
+      if (this.validDate === '-1') {
+        this.temp.validDate = ''
+      } else {
+        this.temp.validDate = new Date()
+      }
+      console.log(this.temp.validDate)
+    },
     getList() {
       this.listLoading = true
-      getRoles(this.listQuery).then(response => {
-        console.log('getRoles')
+      getSecreteKey(this.listQuery).then(response => {
         console.log(response)
         this.list = response.respObj.item
         this.total = response.respObj.total
@@ -255,7 +271,8 @@ export default {
     },
     sortChange(data) { // 排序
       const { prop, order } = data
-      if (prop === 'create_date') {
+      console.log(prop)
+      if (prop === 'create_date' || 'update_date' || 'valid_date') {
         if (order === 'ascending') {
           this.listQuery.orderType = 'asc'
         } else if (order === 'descending') {
@@ -269,38 +286,12 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        uuid: undefined,
-        roleName: '',
         description: '',
-        sort: 0
-      }
-    }, checkedPermission() {
-      console.log(this.$refs.tree)
-      const checkedUuid = this.$refs.tree.getCheckedKeys()
-      if (checkedUuid.length === 0) {
-        this.$notify({
-          title: '警告',
-          message: '请选择权限',
-          type: 'warning',
-          duration: 2000
-        })
-        return []
-      }
-      return checkedUuid
-    },
-    showPermissionAll() {
-      getPermissionAll().then(response => {
-        this.permissionAll = response.respObj.item
-        console.log('permissionAll')
-
-        console.log(this.permissionAll)
-        if (this.dialogStatus === 'update') {
-          this.$refs.tree.setCheckedKeys(this.temp.permissions) // this.temp.permissions===permission的uuid
-        }
-      })
+        validDate: new Date()
+      },
+      this.validDate = ''
     },
     handleCreate() {
-      this.showPermissionAll()
       this.resetTemp()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
@@ -309,13 +300,15 @@ export default {
       })
     },
     createData() {
-      const permiUuids = this.checkedPermission()
-      if (permiUuids.length === 0) {
-        return
-      }
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          postRoleAdd(Object.assign(this.temp, { permissionList: permiUuids })).then(response => {
+          if (this.validDate == '-1') {
+            this.temp.validDate = this.validDate
+          } else {
+            this.temp.validDate = this.formatter(this.temp.validDate)
+          }
+
+          postSecreteKeyAdd(this.temp).then(response => {
             this.dialogFormVisible = false
             this.getList()
             this.$notify({
@@ -329,11 +322,10 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.showPermissionAll()
-      console.log(row)
-      this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
-      console.log(this.temp)
+      this.temp.validDate = row.validDate
+      this.temp.description = row.description
+      this.temp.uuid = row.uuid
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -341,18 +333,9 @@ export default {
       })
     },
     updateData() {
-      console.log('------updateData---')
-
-      const permiUuids = this.checkedPermission()
-      if (permiUuids.length === 0) {
-        return
-      }
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({ permissionList: permiUuids }, this.temp)
-          console.log('------tempData---')
-
-          postRoleUp(tempData).then(response => {
+          postSecreteKeyUp(this.temp).then(response => {
             // const index = this.list.findIndex(v => v.id === this.temp.id)
             // this.list.splice(index, 1, this.temp)
             this.dialogFormVisible = false
@@ -368,16 +351,40 @@ export default {
         }
       })
     },
-    handleDelete(row, index) {
-      this.$confirm('确定删除当前角色吗?', '警告', {
+    handleChange(row) {
+      this.$confirm('确定更换当前密钥吗?', '警告', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async() => {
         const param = []
         param.push(row.uuid)
-        const requestData = { uuids: param.toString() }
-        getRoleDel(requestData).then(response => {
+        const requestData = { uuids: param }
+        postSecreteKeyChange(requestData).then(response => {
+          console.log(response)
+          this.$notify({
+            title: '成功',
+            message: '更换成功',
+            type: 'success',
+            duration: 2000
+          })
+          this.getList()
+        })
+      }).catch(err => {
+
+      })
+    },
+    handleDelete(row, index) {
+      this.$confirm('确定删除当前密钥吗?', '警告', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        const param = []
+        param.push(row.uuid)
+        const requestData = { uuids: param }
+        console.log(requestData)
+        getSecreteKeyDel(requestData).then(response => {
           this.$notify({
             title: '成功',
             message: '删除成功',
@@ -391,20 +398,6 @@ export default {
 
       })
     },
-    handleDownload() {
-      this.downloadLoading = true
-          import('@/vendor/Export2Excel').then(excel => {
-            const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-            const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-            const data = this.formatJson(filterVal)
-            excel.export_json_to_excel({
-              header: tHeader,
-              data,
-              filename: 'table-list'
-            })
-            this.downloadLoading = false
-          })
-    },
     formatJson(filterVal) {
       return this.list.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
@@ -413,6 +406,15 @@ export default {
           return v[j]
         }
       }))
+    },
+    formatter(date) {
+      const dd = new Date()
+      console.log(date.getTime() - dd.getTime())
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
+      const day = date.getDate()
+      date = year + '-' + month + '-' + day
+      return date
     }
   }
 }

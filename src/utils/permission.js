@@ -23,3 +23,14 @@ export default function checkPermission(value) {
     return false
   }
 }
+export function hasBtnPermission(role, button) {
+  var hasPermission = false
+  const permission = store.getters.permission_btn
+
+  for (let i = 0; i < permission.length; i++) {
+    if (permission[i].roles === role) {
+      hasPermission = permission[i].btn.includes(button)
+      return hasPermission
+    }
+  }
+}

@@ -5,7 +5,7 @@ import user from './user'
 import role from './role'
 import article from './article'
 import search from './remote-search'
-import xayah from "./xayah";
+import xayah from "./xayah"
 
 const mocks = [
   ...user,

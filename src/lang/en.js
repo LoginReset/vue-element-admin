@@ -119,6 +119,8 @@ export default {
     remark: 'Remark',
     search: 'Search',
     add: 'Add',
+    refresh: 'Refresh',
+    change: 'Change',
     export: 'Export',
     reviewer: 'reviewer',
     id: 'ID',

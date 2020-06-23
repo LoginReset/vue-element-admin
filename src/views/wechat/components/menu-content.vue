@@ -5,14 +5,16 @@
       :animation="800"
       class="menu-content"
       group="parent-menu"
+      @start="datadragStart"
+      @add="datadragAdd"
       @end="datadragEnd"
     >
-      <div v-for="(pItem,pIndex) in listMenu" :key="pItem.uuid" class="parent-menu">
-        <div class="board-column-header" :class="'board-column-header-'+pIndex" @click="editMenu(pIndex,-1)">
+      <div v-for="(pItem,pIndex) in listMenu" :key="pItem.pIndex" class="parent-menu">
+        <div class="board-column-header" :class="'board-column-header-'+classIndex[pIndex]" @click="editMenu(pIndex,-1)">
           {{ pItem.name }}
         </div>
         <draggable
-          v-model="pItem.sub_button"
+          v-model="pItem&&pItem.sub_button"
           draggable=".item"
           :animation="800"
           group="child-menu"
@@ -21,10 +23,11 @@
           @end="datadragEnd"
           @add="datadragAdd"
         >
-          <div v-for="(cItem,cIndex) in pItem.sub_button" :key="cItem.uuid" class="board-item item" @click="editMenu(pIndex,cIndex)">
+
+          <div v-for="(cItem,cIndex) in pItem.sub_button" :key="cItem.cIndex" class="board-item item" @click="editMenu(pIndex,cIndex)">
             {{ cItem.name }}
           </div>
-          <div slot="footer" class="board-item" @click="addChildMenu(pIndex)">添加子菜单</div>
+          <div slot="footer" class="board-item" @click="addChildMenu(pIndex )">添加子菜单</div>
         </draggable>
       </div>
     </draggable>
@@ -59,7 +62,9 @@ export default {
   },
   data() {
     return {
-      copyList: null// 拖动菜单之前的数据拷贝
+      copyList: null, // 拖动菜单之前的数据拷贝
+      classIndex: [0, 1, 2],
+      isChange: false
     }
   },
   computed: {
@@ -69,8 +74,12 @@ export default {
       },
       set(val) {
         // 改变由父组件控制
+
         console.log('调用修改', val)
+        console.log('调用修改', JSON.stringify(val))
         this.$emit('on-change-list', val)
+        this.isChange = true
+        console.log(this.isChange)
       }
     }
   },
@@ -82,18 +91,29 @@ export default {
     },
     datadragUpdate(evt) {
       evt.preventDefault()
-      // console.log('拖动前的索引 :' + evt.oldIndex)
-      // console.log('拖动后的索引 :' + evt.newIndex)
+      console.log('拖动前的索引 :' + evt.oldIndex)
+      console.log('拖动后的索引 :' + evt.newIndex)
     },
     datadragStart(evt) {
-      evt.preventDefault()
+      // evt.preventDefault()
+      console.log('start')
       this.copyList = JSON.parse(JSON.stringify(this.list))
       console.log(this.copyList)
     },
     datadragEnd(evt) {
       evt.preventDefault()
+      if (this.isChange) {
+        // this.classIndex[evt.oldIndex] = evt.newIndex
+        // this.classIndex[evt.newIndex] = evt.oldIndex
+        const newIndex = this.classIndex[evt.oldIndex]
+        this.classIndex[evt.oldIndex] = this.classIndex[evt.newIndex]
+        this.classIndex[evt.newIndex] = newIndex
+        console.log(this.classIndex)
+        this.isChange = false
+      }
       console.log('拖动前的索引 :' + evt.oldIndex)
       console.log('拖动后的索引 :' + evt.newIndex)
+      console.log(this.listMenu.splice(0, 1, this.listMenu[0]))
       for (const pMenu of this.list) {
         const cList = pMenu.sub_button
         if (cList && cList.length > 5) {
@@ -112,16 +132,17 @@ export default {
     },
     datadragAdd(evt) {
       evt.preventDefault()
+      this.cDrag = true
       console.log('添加')
     },
     addPeople() {
       console.log(this.list)
     },
-    editMenu(pIndex,cIndex){//编辑菜单
-      this.$emit("editMenu",pIndex,cIndex);
+    editMenu(pIndex, cIndex) { // 编辑菜单
+      this.$emit('editMenu', pIndex, cIndex)
     },
-    addChildMenu(pIndex){
-      this.$emit("addChildMenu",pIndex);
+    addChildMenu(pIndex) {
+      this.$emit('addChildMenu', pIndex)
     }
   }
 }

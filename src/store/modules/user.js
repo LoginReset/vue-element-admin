@@ -4,11 +4,11 @@ import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
-  name: '',//姓名
-  avatar: '',//头像
-  introduction: '',//简介
-  roles: [],//权限列表
-  roleName:'',//角色名
+  name: '', // 姓名
+  avatar: '', // 头像
+  introduction: '', // 简介
+  roles: [], // 权限列表
+  roleName: ''// 角色名
 }
 
 const mutations = {
@@ -27,24 +27,28 @@ const mutations = {
   SET_ROLES: (state, roles) => {
     state.roles = roles
   },
-  SET_ROLE_NAME:(state,roleName)=>{
-    state.roleName=roleName;
+  SET_ROLE_NAME: (state, roleName) => {
+    state.roleName = roleName
   }
 }
 
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
+    console.log(889999)
+    console.log(userInfo)
+    const { username, password, browser, OS } = userInfo
     return new Promise((resolve, reject) => {
-      let formData=new FormData();
-      formData.append("account",username.trim());
-      formData.append("pwd",password);
-      formData.append("isRemember",true);
+      const formData = new FormData()
+      formData.append('account', username.trim())
+      formData.append('pwd', password)
+      formData.append('isRemember', true)
+      formData.append('browserName', browser)
+      formData.append('osName', OS)
       login(formData).then(response => {
         // const { data } = response
         // commit('SET_TOKEN', "LOGIN_SUCCESS")
-        setToken("LOGIN_SUCCESS")//本项目中没有实际意义，只是一个标志位表示登录成功了，也可以用作token值
+        setToken('LOGIN_SUCCESS')// 本项目中没有实际意义，只是一个标志位表示登录成功了，也可以用作token值
         resolve()
       }).catch(error => {
         reject(error)
@@ -62,17 +66,17 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction,roleName } = respObj;
+        const { roles, name, avatar, introduction, roleName } = respObj
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
-        commit('SET_ROLES', roles)//权限列表
-        commit('SET_NAME', name)//姓名
-        commit('SET_AVATAR', avatar)//头像
-        commit('SET_INTRODUCTION', introduction)//简介
-        commit('SET_ROLE_NAME', roleName)//角色名
+        commit('SET_ROLES', roles)// 权限列表
+        commit('SET_NAME', name)// 姓名
+        commit('SET_AVATAR', avatar)// 头像
+        commit('SET_INTRODUCTION', introduction)// 简介
+        commit('SET_ROLE_NAME', roleName)// 角色名
         resolve(respObj)
       }).catch(error => {
         reject(error)

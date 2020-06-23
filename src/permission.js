@@ -34,13 +34,14 @@ router.beforeEach(async(to, from, next) => {
         try {
           // get user info
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
+          // 获取权限名
+          console.log(store)
           const { roles } = await store.dispatch('user/getInfo')
-
           console.log(roles)
 
           // generate accessible routes map based on roles
           const accessRoutes = await store.dispatch('permission/generateRoutes', roles)
-
+          console.log(store.getters.permission_addRoutes)
           // dynamically add accessible routes
           router.addRoutes(accessRoutes)
 
@@ -52,7 +53,7 @@ router.beforeEach(async(to, from, next) => {
           await store.dispatch('user/resetToken')
           console.log(error)
           Message({
-            message:error || 'Has Error',
+            message: error || 'Has Error',
             type: 'error',
             duration: 5 * 1000
           })

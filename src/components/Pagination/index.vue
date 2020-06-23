@@ -22,7 +22,8 @@ export default {
   props: {
     total: {
       required: true,
-      type: Number
+      type: Number,
+      default: 0
     },
     page: {
       type: Number,
@@ -36,6 +37,7 @@ export default {
       type: Array,
       default() {
         return [10, 20, 30, 50]
+        // return [5, 10, 15, 20]
       }
     },
     layout: {

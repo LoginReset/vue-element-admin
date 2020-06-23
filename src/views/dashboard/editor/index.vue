@@ -3,7 +3,7 @@
     <div class=" clearfix">
       <pan-thumb :image="avatar" style="float: left">
         Your roles:
-        <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span>
+        <span class="pan-info-roles">{{ roleName }}</span>
       </pan-thumb>
       <github-corner style="position: absolute; top: 0px; border: 0; right: 0;" />
       <div class="info-container">
@@ -34,7 +34,8 @@ export default {
     ...mapGetters([
       'name',
       'avatar',
-      'roles'
+      'roles',
+      'roleName'
     ])
   }
 }

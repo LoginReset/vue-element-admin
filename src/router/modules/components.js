@@ -9,92 +9,93 @@ const componentsRouter = {
   name: 'ComponentDemo',
   meta: {
     title: 'components',
-    icon: 'component'
+    icon: 'component',
+    roles: ['components']
   },
   children: [
     {
       path: 'tinymce',
       component: () => import('@/views/components-demo/tinymce'),
       name: 'TinymceDemo',
-      meta: { title: 'tinymce' }
+      meta: { title: 'tinymce', roles: ['components-tinymce'] }
     },
     {
       path: 'markdown',
       component: () => import('@/views/components-demo/markdown'),
       name: 'MarkdownDemo',
-      meta: { title: 'markdown' }
+      meta: { title: 'markdown', roles: ['components-markdown'] }
     },
     {
       path: 'json-editor',
       component: () => import('@/views/components-demo/json-editor'),
       name: 'JsonEditorDemo',
-      meta: { title: 'jsonEditor' }
+      meta: { title: 'jsonEditor', roles: ['components-jsonEditor'] }
     },
     {
       path: 'split-pane',
       component: () => import('@/views/components-demo/split-pane'),
       name: 'SplitpaneDemo',
-      meta: { title: 'splitPane' }
+      meta: { title: 'splitPane', roles: ['components-spliPane'] }
     },
     {
       path: 'avatar-upload',
       component: () => import('@/views/components-demo/avatar-upload'),
       name: 'AvatarUploadDemo',
-      meta: { title: 'avatarUpload' }
+      meta: { title: 'avatarUpload', roles: ['components-avatarupload'] }
     },
     {
       path: 'dropzone',
       component: () => import('@/views/components-demo/dropzone'),
       name: 'DropzoneDemo',
-      meta: { title: 'dropzone' }
+      meta: { title: 'dropzone', roles: ['components-dropzone'] }
     },
     {
       path: 'sticky',
       component: () => import('@/views/components-demo/sticky'),
       name: 'StickyDemo',
-      meta: { title: 'sticky' }
+      meta: { title: 'sticky', roles: ['components-sticky'] }
     },
     {
       path: 'count-to',
       component: () => import('@/views/components-demo/count-to'),
       name: 'CountToDemo',
-      meta: { title: 'countTo' }
+      meta: { title: 'countTo', roles: ['components-countTo'] }
     },
     {
       path: 'mixin',
       component: () => import('@/views/components-demo/mixin'),
       name: 'ComponentMixinDemo',
-      meta: { title: 'componentMixin' }
+      meta: { title: 'componentMixin', roles: ['components-mixin'] }
     },
     {
       path: 'back-to-top',
       component: () => import('@/views/components-demo/back-to-top'),
       name: 'BackToTopDemo',
-      meta: { title: 'backToTop' }
+      meta: { title: 'backToTop', roles: ['components-backToTop'] }
     },
     {
       path: 'drag-dialog',
       component: () => import('@/views/components-demo/drag-dialog'),
       name: 'DragDialogDemo',
-      meta: { title: 'dragDialog' }
+      meta: { title: 'dragDialog', roles: ['components-dragDialog'] }
     },
     {
       path: 'drag-select',
       component: () => import('@/views/components-demo/drag-select'),
       name: 'DragSelectDemo',
-      meta: { title: 'dragSelect' }
+      meta: { title: 'dragSelect', roles: ['components-dragSelect'] }
     },
     {
       path: 'dnd-list',
       component: () => import('@/views/components-demo/dnd-list'),
       name: 'DndListDemo',
-      meta: { title: 'dndList' }
+      meta: { title: 'dndList', roles: ['components-dndList'] }
     },
     {
       path: 'drag-kanban',
       component: () => import('@/views/components-demo/drag-kanban'),
       name: 'DragKanbanDemo',
-      meta: { title: 'dragKanban' }
+      meta: { title: 'dragKanban', roles: ['components-dragKanban'] }
     }
   ]
 }
