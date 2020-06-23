@@ -239,16 +239,15 @@ export default {
       const { prop, order } = data
       if (prop === 'create_date') {
         if (order === 'ascending') {
-          this.listQuery.orderType = 'asc'
+          this.list.sort(function(a, b) {
+            return b.createDate < a.createDate ? 1 : -1
+          })
         } else if (order === 'descending') {
-          this.listQuery.orderType = 'desc'
-        } else {
-          this.listQuery.orderType = undefined
+          this.list.sort(function(a, b) {
+            return b.createDate < a.createDate ? -1 : 1
+          })
         }
-        this.listQuery.orderField = prop
       }
-
-      this.handleFilter()
     },
     resetTemp() {
       this.temp = {

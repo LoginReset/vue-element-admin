@@ -177,6 +177,36 @@ export const asyncRoutes = [
 
           // roles: ['admin'] // or you can only set roles in sub nav
         }
+      },{
+        path: 'msgTemp',
+        component: () => import('@/views/wechat/msgTemp'),
+        name: 'wehcat-msgTemp',
+        meta: {
+          title: '微信消息模板',
+          roles: ['wechat-menu']
+          
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },{
+        path: 'create',
+        component: () => import('@/views/wechat/msgRedirect'),
+        name: 'createMsgTemp',
+        meta: {
+          title: '创建消息模板',
+          roles: ['wechat-menu']
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },{
+        path: 'edit',
+        component: () => import('@/views/wechat/msgRedirect'),
+        name: 'editMsgTemp',
+        meta: {
+          title: '编辑消息模板',
+          roles: ['wechat-menu'],
+          activeMenu: '/wechat/msgTemp',
+          // roles: ['admin'] // or you can only set roles in sub nav
+        },
+        hidden:true,
       }
     ]
   },

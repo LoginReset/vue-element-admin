@@ -75,8 +75,7 @@ export function postAccountSave(data) {
   })
 }
 /**
-   * 保存短信平台账号
-   * @param data
+   * 获取短信平台账号
    * @returns {AxiosPromise}
    */
 export function getAccount() {

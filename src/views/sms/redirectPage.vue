@@ -309,7 +309,6 @@ export default {
     },
     getData() {
       getFieldKeyAll().then(response => {
-        console.log(9999999)
         const res = JSON.stringify(response.respObj)
         this.fieldList = JSON.parse(res)
         console.log(this.fieldList)
@@ -374,8 +373,6 @@ export default {
       }
     },
     disable(index) {
-      console.log(1111)
-      console.log(this.titleNames[index])
       this.temp.other0.templateParam[index].name = this.descriptions[index]
     },
     handleCreate() {
