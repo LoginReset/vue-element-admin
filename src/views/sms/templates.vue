@@ -1,6 +1,35 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
+      <el-input
+        v-model="listQuery.title"
+        placeholder="模板名称"
+        style="width: 200px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
+      <el-select
+        v-model="listQuery.type"
+        clearable
+        style="width: 140px"
+        class="filter-item"
+        placeholder="平台类型"
+        @change="handleFilter"
+      >
+        <el-option key="1" label="腾讯" :value="1" />
+        <el-option key="0" label="阿里云" :value="0" />
+      </el-select>
+      <el-select
+        v-model="listQuery.status"
+        clearable
+        style="width: 140px"
+        class="filter-item"
+        placeholder="请选择状态"
+        @change="handleFilter"
+      >
+        <el-option key="1" label="启用" :value="1" />
+        <el-option key="0" label="禁用" :value="0" />
+      </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
@@ -127,9 +156,9 @@ export default {
         limit: 20,
         orderField: undefined,
         orderType: undefined, // desc|asc
-        type: undefined,
+        type: null,
         title: undefined,
-        status: undefined
+        status: null
       },
       statusOptions: ['published', 'draft', 'deleted'],
       temp: {
