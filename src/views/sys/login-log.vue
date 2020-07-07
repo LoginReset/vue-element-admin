@@ -2,35 +2,35 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-        v-model="listQuery.account"
+        v-model.trim="listQuery.account"
         placeholder="管理员账号"
         style="width: 150px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
       <el-input
-        v-model="listQuery.name"
+        v-model.trim="listQuery.name"
         placeholder="管理员姓名"
         style="width: 150px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
       <el-input
-        v-model="listQuery.osName"
+        v-model.trim="listQuery.osName"
         placeholder="操作系统名"
         style="width: 150px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
       <el-input
-        v-model="listQuery.browserName"
+        v-model.trim="listQuery.browserName"
         placeholder="浏览器名"
         style="width: 150px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
       <el-select
-        v-model="listQuery.status"
+        v-model.trim="listQuery.status"
         style="width: 140px"
         class="filter-item"
         placeholder="请选择状态"
@@ -197,8 +197,6 @@ export default {
     getList() {
       this.listLoading = true
       getLoginLog(this.listQuery).then(response => {
-        console.log('getLog')
-        console.log(response)
         this.list = response.respObj.item
         this.total = response.respObj.total
         // Just to simulate the time of the request
@@ -224,11 +222,8 @@ export default {
     handleFilter() {
       const typeA = typeof this.listQuery.beginDate
       const typeB = typeof this.listQuery.endDate
-      console.log(typeA)
-      console.log(typeB)
       // 点击了日期
       if (typeA === 'object' && typeB === 'object' && this.listQuery.beginDate && this.listQuery.endDate) {
-        console.log(1)
         this.listQuery.beginDate = this.formatter(this.listQuery.beginDate)
         this.listQuery.endDate = this.formatter(this.listQuery.endDate)
       } else if (typeA == 'object' && this.listQuery.beginDate) {
@@ -237,28 +232,10 @@ export default {
         this.listQuery.endDate = this.formatter(this.listQuery.endDate)
       }
 
-      // if(this.listQuery.beginDate!=='')
-
-      // if(this.listQuery.endDate!==''){
-      // }
-      console.log(this.listQuery.beginDate)
-      console.log(this.listQuery.endDate)
-
-      // this.date = []
       this.listQuery.page = 1
       this.getList()
     },
     formatter(date) {
-      // console.log(i)
-      // const date = [this.listQuery.beginDate,this.listQuery.endDate]
-      // console.log(date)
-      // console.log(date[i])
-      // if(flag){
-      //   date = this.listQuery.beginDate
-      // }else{
-      //   date = this.listQuery.endDate
-      // }
-      console.log(date)
       const year = date.getFullYear()
       const month = date.getMonth() + 1
       const day = date.getDate()

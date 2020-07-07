@@ -70,4 +70,70 @@ export function postSynchMenu(data) {
       params:query
     })
   }
+    /**
+     * 配置微信模板
+     * @returns {AxiosPromise}
+     */
+    export function postConfigSave(data) {
+      return request({
+        url: '/config/temp/save',
+        method: 'post',
+        data
+      })
+    }
+    /**
+     * 查询配置微信模板
+     * @returns {AxiosPromise}
+     */
+    export function getConfigView(query) {
+      return request({
+        url: '/config/temp/view',
+        method: 'get',
+        params:query
+      })
+    }
+     /**
+     * 删除配置微信模板
+     * @returns {AxiosPromise}
+     */
+    export function postConfigDel(data) {
+      return request({
+        url: '/config/temp/delete',
+        method: 'post',
+        data
+      })
+    }
+    /**
+     * 修改配置微信模板
+     * @returns {AxiosPromise}
+     */
+    export function postConfigUp(data) {
+      return request({
+        url: '/config/temp/update',
+        method: 'post',
+        data
+      })
+    }
+    /**
+     * 微信模板查询
+     * @returns {AxiosPromise}
+     */
+    export function getWechatTemp(query) {
+      return request({
+        url: '/wechat/msg_temp/query',
+        method: 'get',
+        params:query
+      })
+    }
+    /**
+     * 微信模板验证
+     * @returns {AxiosPromise}
+     */
+    export function postWechatVertify(data) {
+      return request({
+        url: '/wechat/msg_temp/verify',
+        method: 'post',
+        data
+      })
+    }
   

@@ -14,7 +14,6 @@ export function getTemplateAll() {
  * @returns {AxiosPromise}
  */
 export function getTemplates(query) {
-  console.log(query)
   return request({
     url: '/sms/template/view',
     method: 'get',
@@ -40,7 +39,6 @@ export function postTemplateAdd(data) {
    * @returns {AxiosPromise}
    */
 export function postTemplateUp(data) {
-  console.log(data)
   return request({
     url: '/sms/template/up',
     method: 'post',
@@ -54,7 +52,6 @@ export function postTemplateUp(data) {
    * @returns {AxiosPromise}
    */
 export function getTemplateDel(data) {
-  console.log(data)
   return request({
     url: '/sms/template/del',
     method: 'post',
@@ -84,3 +81,25 @@ export function getAccount() {
     method: 'get'
   })
 }
+/**
+   * 获取短信平台账号
+   * @returns {AxiosPromise}
+   */
+  export function getSmsConfig() {
+    return request({
+      url: '/sms/config/view',
+      method: 'get'
+    })
+  }
+  /**
+   * 配置短信模板
+   * @returns {AxiosPromise}
+   */
+  export function postSmsConfigUp(query) {
+    return request({
+      url: '/sms/config/up',
+      method: 'post',
+      params:query
+    })
+  }
+  

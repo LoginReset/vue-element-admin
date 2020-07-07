@@ -148,9 +148,32 @@ export const asyncRoutes = [
         meta: {
           title: '文件管理',
           roles: ['file-manage']
-
+          
           // roles: ['admin'] // or you can only set roles in sub nav
         }
+      }
+    ]
+  },
+  {
+    path: '/user', 
+    component: Layout,
+    redirect: '/user/wechat',
+    name:'userManage',
+    alwaysShow: true,
+    meta:{
+      title:'用户管理',
+      icon:'user',
+      roles:['user']
+    },
+    children:[
+      {
+        path:'wechat',
+        component: () => import('@/views/userManage/weixin'),
+        name:'userManage-wechat',
+        meta: { 
+          title:'微信用户',
+          roles:['user-wechat']
+         }
       }
     ]
   },
@@ -161,7 +184,7 @@ export const asyncRoutes = [
     alwaysShow: true, // will always show the root menu
     name: 'wechat',
     meta: {
-      title: '公众号管理',
+      title: '微信管理',
       icon: 'wechat',
       roles: ['wechat']
 
@@ -213,13 +236,13 @@ export const asyncRoutes = [
   {
     path: '/sms',
     component: Layout,
-    redirect: '/sms/template',
+    redirect: '/sms/account',
     alwaysShow: true, // will always show the root menu
     name: 'sms',
     meta: {
       title: '短信管理',
       icon: 'message',
-      roles: ['template']
+      roles: ['sms']
     },
     children: [{
       path: 'account',
@@ -227,10 +250,9 @@ export const asyncRoutes = [
       name: 'account',
       meta: {
         title: '短信账号',
-        roles: ['sys-sms'],
-        buttons: ['add', 'download', 'edit', 'switch', 'select']
+        roles: ['sms-account'],
+        buttons: []
 
-        // roles: ['admin'] // or you can only set roles in sub nav
       }
     }, {
       path: 'template',
@@ -238,29 +260,81 @@ export const asyncRoutes = [
       name: 'template',
       meta: {
         title: '短信模板',
-        roles: ['sys-sms'],
+        roles: ['sms-template'],
         buttons: ['add', 'download', 'edit', 'switch', 'select']
 
-        // roles: ['admin'] // or you can only set roles in sub nav
       }
     }, {
       path: 'create',
       component: () => import('@/views/sms/redirectPage'),
       name: 'createTemplate',
       meta: {
-        title: '创建模板',
-        roles: ['sys-sms']
+        title: '创建短信模板',
+        roles: ['sms-create']
 
-        // roles: ['admin'] // or you can only set roles in sub nav
       }
     }, {
       path: 'edit',
       component: () => import('@/views/sms/redirectPage'),
       name: 'editTemplate',
       meta: {
-        title: '编辑模板', noCache: false, activeMenu: '/sms/template', roles: ['example-edit'] },
+        title: '编辑短信模板', noCache: false, activeMenu: '/sms/template', roles: ['sms-create'] },
       hidden: true
     }]
+  },
+  {
+    path:'/msgPush',
+    component:Layout,
+    redirect: '/msgPush/smsTemp',
+    alwaysShow:true,
+    name:'msgPush',
+    meta: { 
+      title:'消息推送',
+      icon:'icon-test',
+      roles:['msgPush']
+     },
+    children:[
+      {
+        path:'smsTemp',
+        component: () => import('@/views/msgPush/smsPushTemp'),
+        name: 'smsTemp',
+        meta: {
+          title: '短信推送配置',
+          roles: ['msgPush-smsTemp'],
+
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path:'wechatTemp',
+        component: () => import('@/views/msgPush/wechatPushTemp'),
+        name: 'wechatTemp',
+        meta: {
+          title: '微信推送配置',
+          roles: ['msgPush-wechatTemp'],
+
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path:'create',
+        component: () => import('@/views/msgPush/pushRedirect'),
+        name: 'create-pushTemp',
+        meta: {
+          title: '创建推送模板',
+          roles: ['msgPush-wechatTemp-create'],
+
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },{
+        path: 'edit',
+        component: () => import('@/views/msgPush/pushRedirect'),
+        name: 'edit-pushTemp',
+        meta: {
+          title: '编辑推送模板', noCache: false, activeMenu: '/msgPush/wechatTemp', roles: ['msgPush-wechatTemp-edit'] },
+        hidden: true
+      }
+    ]
   },
   {
     path: '/sys',
@@ -329,6 +403,17 @@ export const asyncRoutes = [
         meta: {
           title: '密钥管理',
           roles: ['sys-secretKey'],
+          buttons: ['add', 'download', 'edit', 'delete', 'change']
+
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },{
+        path: 'province',
+        component: () => import('@/views/sys/province'),
+        name: 'province',
+        meta: {
+          title: '省份管理',
+          roles: ['sys-province'],
           buttons: ['add', 'download', 'edit', 'delete', 'change']
 
           // roles: ['admin'] // or you can only set roles in sub nav

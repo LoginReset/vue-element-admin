@@ -1,24 +1,22 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
+
       <el-input
-        v-model="listQuery.title"
+        v-model="listQuery.template_id"
+        placeholder="微信模板ID"
+        style="width: 200px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+        />
+      <el-input
+        v-model="listQuery.template_name"
         placeholder="模板名称"
         style="width: 200px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
-      <el-select
-        v-model="listQuery.type"
-        clearable
-        style="width: 140px"
-        class="filter-item"
-        placeholder="平台类型"
-        @change="handleFilter"
-      >
-        <el-option key="1" label="腾讯" :value="1" />
-        <el-option key="0" label="阿里云" :value="0" />
-      </el-select>
+     
       <el-select
         v-model="listQuery.status"
         clearable
@@ -33,23 +31,10 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
-      <PButton
-        class="filter-item"
-        icon="el-icon-edit"
-        perms="add"
-        role="sys-user"
-        type="primary"
-        label="table.add"
-        @click="handleCreate"
-      />
-      <el-button
-        class="filter-item"
-        style="margin-left: 10px;"
-        type="success"
-        icon="el-icon-refresh"
-        @click="getList"
-      >{{ $t('table.refresh') }}
-      </el-button>
+      <PButton class="filter-item" icon="el-icon-edit" perms="add" role="sys-user" type="primary"
+        label="table.add"  @click="handleCreate"/>
+      <el-button class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-refresh" 
+        @click="getList">{{ $t('table.refresh') }}</el-button>
     </div>
     <el-table
       :key="tableKey"
@@ -63,15 +48,19 @@
       @sort-change="sortChange"
     >
       <el-table-column label="序号" prop="id" align="center" type="index" width="50" />
-      <el-table-column label="模板名称" align="center" min-width="100px">
+      <el-table-column label="模板ID" align="center" min-width="100px">
         <template slot-scope="{row}">
-          <span>{{ row.title }}</span>
+          <span>{{ row.templateId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="服务平台" align="center">
+      <el-table-column label="模板名称" align="center">
         <template slot-scope="{row}">
-          <el-tag v-show="row.type===0">阿里云短信</el-tag>
-          <el-tag v-show="row.type===1" type="success">腾讯短信</el-tag>
+          <span>{{row.templateName}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="小程序appid" align="center">
+        <template slot-scope="{row}">
+          <span>{{row.appid}}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center">
@@ -85,7 +74,6 @@
             :disabled="!hasPerms('sys-user','switch')"
             @change="statusChange($event,row)"
           />
-
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" sortable="custom" prop="create_date">
@@ -95,7 +83,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-
+          <el-button class="filter-item" style="margin-left: 10px;" type="success" size="mini" @click="handleVertify(row)">验证
+          </el-button>
           <PButton
             class="filter-item"
             perms="edit"
@@ -126,12 +115,39 @@
       :limit.sync="listQuery.limit"
       @pagination="getList"
     />
-
+    <el-dialog title="vertify" :visible.sync="dialogFormVisible">
+      <el-form ref="vertifyForm" :model="vertifyForm" 
+        label-position="left"
+        label-width="100px"
+        style="width: 400px; margin-left:50px;">
+        <el-form-item v-for="(user,index) in vertifyForm.tousers" label="微信openId" 
+          :key="user.key" :prop="'tousers.'+index+'.value'"
+          :rules="{required: true, message: '微信openId必填', trigger: 'change'}" >
+          <el-col :span="20">
+            <el-input v-model="user.value"></el-input>
+          </el-col>
+          <el-col :span="3" style="margin-left:10px">
+            <el-button @click.prevent="removeDomain(user)" type="danger">删除</el-button>
+          </el-col>
+        </el-form-item>
+          <el-button @click="addDomain" style="margin-left:100px">新增接收方</el-button>
+        <el-form-item>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          {{ $t('table.cancel') }}
+        </el-button>
+        <el-button type="primary" @click="vertify">
+          {{ $t('table.confirm') }}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getTemplateAll, getTemplates, postTemplateAdd, postTemplateUp, getTemplateDel } from '@/api/sms'
+import { postMsgTempSave, postMsgTempUpdate, postMsgTempDel, getMsgTemp,postWechatVertify } from '@/api/wechat'
 
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -140,7 +156,7 @@ import PButton from '@/components/PermissionBtn'
 import { hasBtnPermission } from '@/utils/permission'
 
 export default {
-  name: 'Template',
+  name: 'msgTemp',
   components: { Pagination, PButton },
   directives: { waves },
   data() {
@@ -148,50 +164,37 @@ export default {
       name: '',
       tableKey: 0,
       list: [],
+      vertifyForm:{
+        tousers:[{
+          value:''
+        }],
+        uuid:undefined,
+      },
       roleList: null,
       total: 0,
       listLoading: true,
       listQuery: {
         page: 1,
         limit: 20,
-        orderField: undefined,
-        orderType: undefined, // desc|asc
-        type: null,
-        title: undefined,
-        status: null
+        template_id: undefined,
+        template_name: undefined,
+        status: undefined
       },
       statusOptions: ['published', 'draft', 'deleted'],
       temp: {
         uuid: undefined,
-        type: 0,
-        title: undefined,
+        appid : undefined,
+        pagePath : undefined,
         status: 1,
-        // 阿里云
-        other0: {
-          signName: undefined,
-          templateCode: undefined,
-          smsUpExtendCode: undefined,
-          outId: undefined,
-          templateParam: [{
-            smsField: undefined,
-            name: undefined,
-            value: undefined
-          }]
-
-        },
-        // 腾讯
-        other: {
-          appid: undefined,
-          sign: undefined,
-          senderid: undefined,
-          session: undefined,
-          extendcode: undefined,
-          templateID: undefined,
-          templateParam: [{
-            name: undefined,
-            value: undefined
-          }]
-        }
+        template_id:undefined,
+        template_name:undefined,
+        url:undefined,
+        templateParams: [{
+          uuid:undefined,
+          color : undefined,
+          name: undefined,
+          value: undefined
+        }],
       },
       dialogFormVisible: false,
       innerVisible: false,
@@ -202,14 +205,12 @@ export default {
       },
       dialogPvVisible: false,
       pvData: [],
-      rules: {
-
-      },
       downloadLoading: false
     }
   },
   watch: {
     $route() {
+      // if(this.$route.path===)
       this.getList()
     }
   },
@@ -219,35 +220,13 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      this.listLoading = false
 
-      getTemplates(this.listQuery).then(response => {
+      getMsgTemp(this.listQuery).then(response => {
+        console.log(response)
         this.list = response.respObj.item
         this.total = response.respObj.total
-        // Just to simulate the time of the request
-        // setTimeout(() => {
-        // }, 1.5 * 1000)
+        this.listLoading = false
       })
-    },
-    addParam() {
-      let key = 'other0'
-      this.temp.type === 0 ? key : key = 'other'
-
-      this.temp[key].templateParam.push({
-        smsField: '',
-        name: '',
-        value: '',
-        key: Date.now()
-      })
-    },
-    removeParam(item) {
-      let key = 'other0'
-      this.temp.type === 0 ? key : key = 'other'
-
-      const index = this.temp[key].templateParam.indexOf(item)
-      if (index !== 0) {
-        this.temp[key].templateParam.splice(index, 1)
-      }
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -308,33 +287,16 @@ export default {
         }
       }
     },
-    checkedRole() {
-      const checkedUuid = this.$refs.tree.getCheckedKeys()
-      if (checkedUuid.length === 0) {
-        this.$notify({
-          title: '警告',
-          message: '请选择角色',
-          type: 'warning',
-          duration: 2000
-        })
-        return []
-      }
-      return checkedUuid
-    },
     showTemplateAll() {
       getTemplateAll().then(response => {
         this.roleList = response.respObj.item
       })
     },
-    openInner(name) {
-      this.innerVisible = true
-    },
     handleCreate() {
-      this.$router.push({ name: 'createTemplate' })
+      this.$router.push({ name: 'createMsgTemp' })
     },
     JsonData() {
       var data = {}
-
       const temp1 = JSON.stringify(this.temp)
       const temp = JSON.parse(temp1)
       if (temp.type === 0) {
@@ -369,6 +331,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const data = this.JsonData()
+
           postTemplateAdd(data).then(response => {
             this.dialogFormVisible = false
             this.getList()
@@ -383,9 +346,9 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.$router.push({ name: 'editTemplate' })
+      this.$router.push({ name: 'editMsgTemp' })
       const data = JSON.stringify(row)
-      sessionStorage.setItem('templateData', data)
+      sessionStorage.setItem('msgTempData', data)
     },
     handleDelete(row, index) {
       this.$confirm('确定删除当前模板吗?', '警告', {
@@ -396,7 +359,7 @@ export default {
         const param = []
         param.push(row.uuid)
         const requestData = { uuids: param }
-        getTemplateDel(requestData).then(response => {
+        postMsgTempDel(requestData).then(response => {
           this.$notify({
             title: '成功',
             message: '删除成功',
@@ -410,42 +373,36 @@ export default {
 
       })
     },
-    handleDownload() {
-      this.downloadLoading = true
-        import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-          const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-          const data = this.formatJson(filterVal)
-          excel.export_json_to_excel({
-            header: tHeader,
-            data,
-            filename: 'table-list'
+    handleVertify(row){
+      this.vertifyForm.uuid = row.uuid
+      this.dialogFormVisible = true
+
+    },
+    vertify(){
+      const wechatMsgParam = {
+        tousers:[],
+      }
+      this.vertifyForm.tousers.forEach(item=>{
+        wechatMsgParam.tousers.push(item.value)
+      })
+      wechatMsgParam.uuid = this.vertifyForm.uuid
+      postWechatVertify(wechatMsgParam).then(response=>{
+        if(response.code===0){
+          this.$message({
+            message:response.errorMsg,
+            type:'success'
           })
-          this.downloadLoading = false
-        })
-    },
-    formatJson(filterVal) {
-      return this.list.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
         }
-      }))
-    },
-    JsonData(tempData) {
-      const data = {}
-      data.type = tempData.type
-      data.uuid = tempData.uuid
-      data.title = tempData.title
-      data.status = tempData.status
-      tempData.txSmsParam ? data.other = tempData.txSmsParam : data.other = tempData.aliSmsParam
-      return data
+        console.log(response)
+      })
     },
     statusChange(status, row) {
-      var data = {}
-      data = this.JsonData(row)
-      postTemplateUp(data).then(response => {
+      let dataStr = JSON.stringify(row)
+      const data = JSON.parse(dataStr)
+      data.template_id = data.templateId
+      data.template_name = data.templateName
+      console.log(data)
+      postMsgTempUpdate(data).then(response => {
         this.$notify({
           title: '成功',
           message: '修改状态成功',
@@ -459,7 +416,21 @@ export default {
     hasPerms(role, perms) {
       // 根据权限标识和外部指示状态进行权限判断
       return hasBtnPermission(role, perms) // & !this.disabled
-    }
+    },
+    
+    addDomain() {
+        this.vertifyForm.tousers.push({
+          value: '',
+          key: Date.now()
+        });
+      },
+    removeDomain(item) {
+      console.log(item)
+        var index = this.vertifyForm.tousers.indexOf(item)
+        if (index !== 0) {
+          this.vertifyForm.tousers.splice(index, 1)
+        }
+      },
   }
 }
 </script>

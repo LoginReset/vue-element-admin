@@ -114,10 +114,10 @@
         style="width: 400px; margin-left:50px;"
       >
         <el-form-item label="角色名" prop="permission">
-          <el-input v-model="temp.roleName" clearable placeholder="请输入角色名" />
+          <el-input v-model.trim="temp.roleName" clearable placeholder="请输入角色名" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input v-model="temp.sort" clearable placeholder="请输入排序号" />
+          <el-input v-model.trim="temp.sort" clearable placeholder="请输入排序号" />
         </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input
@@ -232,8 +232,6 @@ export default {
     getList() {
       this.listLoading = true
       getRoles(this.listQuery).then(response => {
-        console.log('getRoles')
-        console.log(response)
         this.list = response.respObj.item
         this.total = response.respObj.total
         // Just to simulate the time of the request
@@ -275,7 +273,6 @@ export default {
         sort: 0
       }
     }, checkedPermission() {
-      console.log(this.$refs.tree)
       const checkedUuid = this.$refs.tree.getCheckedKeys()
       if (checkedUuid.length === 0) {
         this.$notify({
@@ -291,9 +288,6 @@ export default {
     showPermissionAll() {
       getPermissionAll().then(response => {
         this.permissionAll = response.respObj.item
-        console.log('permissionAll')
-
-        console.log(this.permissionAll)
         if (this.dialogStatus === 'update') {
           this.$refs.tree.setCheckedKeys(this.temp.permissions) // this.temp.permissions===permission的uuid
         }
@@ -307,6 +301,8 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+      this.temp.description = this.temp.description.trim()
+
     },
     createData() {
       const permiUuids = this.checkedPermission()
@@ -330,18 +326,17 @@ export default {
     },
     handleUpdate(row) {
       this.showPermissionAll()
-      console.log(row)
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
-      console.log(this.temp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+      this.temp.description = this.temp.description.trim()
+
     },
     updateData() {
-      console.log('------updateData---')
 
       const permiUuids = this.checkedPermission()
       if (permiUuids.length === 0) {
@@ -350,7 +345,6 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({ permissionList: permiUuids }, this.temp)
-          console.log('------tempData---')
 
           postRoleUp(tempData).then(response => {
             // const index = this.list.findIndex(v => v.id === this.temp.id)

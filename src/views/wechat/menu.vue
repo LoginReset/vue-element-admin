@@ -52,8 +52,7 @@
         :model="temp"
         label-position="left"
         label-width="100px"
-        style="width: 80%; margin-left:8%;"
-      >
+        style="width: 80%; margin-left:8%;">
         <el-form-item label="name" prop="name">
           <el-input v-model="temp.name" placeholder="请输入菜单标题" />
         </el-form-item>
@@ -144,16 +143,16 @@ export default {
         create: 'Create'
       },
       rules: {
-        name: [{ required: true, message: '请输入菜单标题', trigger: 'blur' }],
+        name: [{ required: true, message: '请输入菜单标题', trigger: 'change' }],
         url: [{ required: true, message: '请输入正确网页链接',
           // pattern:/^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/,
           pattern: /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/,
-          trigger: 'blur' }],
-        key: [{ required: true, message: '请输入菜单KEY值', trigger: 'blur' }],
-        appid: [{ required: true, message: '请输入小程序的appid', trigger: 'blur' }],
+          trigger: 'change' }],
+        key: [{ required: true, message: '请输入菜单KEY值', trigger: 'change' }],
+        appid: [{ required: true, message: '请输入小程序的appid', trigger: 'change' }],
         pagepath: [{ required: true, message: '请输入正确页面路径',
-          pattern: /^[a-zA-Z]:(((\\(?! )[^/:*?<>\""|\\]+)+\\?)|(\\)?)\s*$/, trigger: 'blur' }],
-        media_id: [{ required: true, message: '请输入media_id', trigger: 'blur' }]
+          pattern: /^[a-zA-Z]:(((\\(?! )[^/:*?<>\""|\\]+)+\\?)|(\\)?)\s*$/, trigger: 'change' }],
+        media_id: [{ required: true, message: '请输入media_id', trigger: 'change' }]
       },
       delMenuVisible: false, // 删除菜单按钮
       saveMenuLoading: false//
@@ -184,14 +183,12 @@ export default {
     getList() {
       this.listLoading = true
       getMenu().then(response => {
-        console.log(response)
         this.list = JSON.parse(response.respObj.content).button
         this.list.forEach(item => {
           if (!item.sub_button) {
             item['sub_button'] = []
           }
         })
-        console.log(this.list)
 
         // Just to simulate the time of the request
         // setTimeout(() => {
@@ -204,7 +201,6 @@ export default {
       const content = this.jsonData()
 
       data.content = content
-      console.log(data)
       postSynchMenu(data).then(response => {
         this.$notify({
           title: '成功',
@@ -267,10 +263,8 @@ export default {
       let item
       if (cIndex === -1) { // 编辑主菜单
         item = this.list[pIndex]
-        console.log(item)
       } else {
         item = this.list[pIndex].sub_button[cIndex]
-        console.log(item)
       }
       this.temp.name = item.name
       this.temp.type = item.type
@@ -289,32 +283,28 @@ export default {
       console.log(pIndex + '*' + cIndex)
     },
     delMenu() { // 删除菜单
-      console.log(this.handleMenu)
       // 删除父菜单
       if (this.handleMenu[1] === -1) {
         this.list.splice(this.handleMenu[0], 1)
       } else {
         // 删除子菜单
-        console.log(this.handleMenu[1])
         this.list[this.handleMenu[0]].sub_button.splice(this.handleMenu[1], 1)
-        console.log(JSON.stringify(this.list[0]))
+        JSON.stringify(this.list[0])
         const pObj = this.list[this.handleMenu[0]]
         this.list.splice(this.handleMenu[0], 1, pObj)
-        console.log(JSON.stringify(this.list[0]))
+        JSON.stringify(this.list[0])
 
         if (this.list[this.handleMenu[0]].sub_button.length === 0) {
           delete (this.list[this.handleMenu[0]]['sub_button'])
         }
       }
       this.dialogFormVisible = false
-      console.log(JSON.stringify(this.list))
+      JSON.stringify(this.list)
     },
     changeList(val) {
-      console.log(this.list)
       this.list = val
     },
     createData() {
-      console.log(this.list)
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           // 添加父菜单
@@ -322,13 +312,11 @@ export default {
             const plist = {}
             for (const item in this.temp) {
               if (this.temp[item] !== '') {
-                console.log(this.temp[item])
                 this.temp[item] = this.temp[item].trim()
                 plist[item] = this.temp[item]
                 plist['sub_button'] = []
               }
             }
-            console.log(this.list)
             this.list.push(plist)
 
             console.log(JSON.stringify(this.list))
@@ -356,7 +344,6 @@ export default {
               this.list[index].sub_button = []
             }
             this.list[index].sub_button.push(clist)
-            console.log(this.list[index])
             const pObj = this.list[index]
             this.list.splice(index, 1, pObj)
             console.log(JSON.stringify(this.list))
@@ -369,7 +356,6 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log(this.temp)
           const temp = {}
           for (const key in this.temp) {
             if (this.temp[key] !== undefined) {
@@ -379,7 +365,6 @@ export default {
           }
           // 子菜单修改
           if (this.cIndex !== -1) {
-            console.log(this.cIndex)
             this.list[this.pIndex].sub_button.splice(this.cIndex, 1, temp)
             const pObj = this.list[this.pIndex]
             this.list.splice(this.pIndex, 1, pObj)
@@ -395,19 +380,14 @@ export default {
     },
     saveMenu() { // 保存菜单
       var data = {}
-      console.log(data)
       // this.jsonData()
       const content = this.jsonData()
       data.content = content
-      console.log('---')
-      console.log(data)
       this.saveMenuLoading = true
       // setTimeout(() => {
       // }, 2000)
       postMenu(data).then(response => {
-        // this.getList();
         this.saveMenuLoading = false
-
         this.$notify({
           title: '成功',
           message: '保存成功',

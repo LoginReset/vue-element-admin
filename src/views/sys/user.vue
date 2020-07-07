@@ -152,22 +152,22 @@
         style="width: 400px; margin-left:50px;"
       >
         <el-form-item label="账号" prop="account">
-          <el-input v-model="temp.account" clearable placeholder="请输入账号" />
+          <el-input v-model.trim="temp.account" clearable placeholder="请输入账号" />
         </el-form-item>
         <el-form-item v-if="dialogStatus === 'create'" label="密码" prop="pwd">
-          <el-input v-model="temp.pwd" clearable placeholder="请输入密码" show-password />
+          <el-input v-model.trim="temp.pwd" clearable placeholder="请输入密码" show-password />
         </el-form-item>
         <el-form-item v-if="dialogStatus === 'create'" label="确认密码" prop="confirmPwd">
-          <el-input v-model="temp.confirmPwd" clearable placeholder="请确认密码" show-password />
+          <el-input v-model.trim="temp.confirmPwd" clearable placeholder="请确认密码" show-password />
         </el-form-item>
         <el-form-item label="姓名" prop="name">
-          <el-input v-model="temp.name" clearable placeholder="请输入姓名" />
+          <el-input v-model.trim="temp.name" clearable placeholder="请输入姓名" />
         </el-form-item>
         <el-form-item label="手机号" prop="phoneNum">
-          <el-input v-model="temp.phoneNum" clearable placeholder="请输入手机号" />
+          <el-input v-model.trim="temp.phoneNum" clearable placeholder="请输入手机号" />
         </el-form-item>
         <el-form-item label="排序" prop="sort">
-          <el-input v-model="temp.sort" clearable placeholder="请输入排序号" />
+          <el-input v-model.trim="temp.sort" clearable placeholder="请输入排序号" />
         </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input
@@ -315,7 +315,6 @@ export default {
     getList() {
       this.listLoading = true
       getUsers(this.listQuery).then(response => {
-        console.log(response)
         this.list = response.respObj.item
         this.total = response.respObj.total
         // Just to simulate the time of the request
@@ -348,7 +347,6 @@ export default {
         }
         this.listQuery.orderField = prop
       }
-      console.log(this.listQuery)
 
       this.handleFilter()
     },
@@ -394,6 +392,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+      this.temp.description = this.temp.description.trim()
     },
     createData() {
       this.$refs['dataForm'].validate((valid) => {
@@ -425,6 +424,8 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+      this.temp.description = this.temp.description.trim()
+
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {

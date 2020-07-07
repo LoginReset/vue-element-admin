@@ -233,23 +233,19 @@ export default {
   },
   methods: {
     changeDate() {
-      console.log(this.temp.validDate)
       this.changeFlag = true
     },
     clickItem(label) {
       label === this.validDate ? this.validDate = '' : this.validDate = label
-      console.log(this.validDate)
       if (this.validDate === '-1') {
         this.temp.validDate = ''
       } else {
         this.temp.validDate = new Date()
       }
-      console.log(this.temp.validDate)
     },
     getList() {
       this.listLoading = true
       getSecreteKey(this.listQuery).then(response => {
-        console.log(response)
         this.list = response.respObj.item
         this.total = response.respObj.total
         // Just to simulate the time of the request
@@ -271,7 +267,6 @@ export default {
     },
     sortChange(data) { // 排序
       const { prop, order } = data
-      console.log(prop)
       if (prop === 'create_date' || 'update_date' || 'valid_date') {
         if (order === 'ascending') {
           this.listQuery.orderType = 'asc'
@@ -298,6 +293,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+      this.temp.description = this.temp.description.trim()
     },
     createData() {
       this.$refs['dataForm'].validate((valid) => {
@@ -331,6 +327,8 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+      this.temp.description = this.temp.description.trim()
+
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
@@ -361,7 +359,6 @@ export default {
         param.push(row.uuid)
         const requestData = { uuids: param }
         postSecreteKeyChange(requestData).then(response => {
-          console.log(response)
           this.$notify({
             title: '成功',
             message: '更换成功',
@@ -383,7 +380,6 @@ export default {
         const param = []
         param.push(row.uuid)
         const requestData = { uuids: param }
-        console.log(requestData)
         getSecreteKeyDel(requestData).then(response => {
           this.$notify({
             title: '成功',
@@ -409,7 +405,6 @@ export default {
     },
     formatter(date) {
       const dd = new Date()
-      console.log(date.getTime() - dd.getTime())
       const year = date.getFullYear()
       const month = date.getMonth() + 1
       const day = date.getDate()

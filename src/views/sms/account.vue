@@ -55,7 +55,6 @@
           <el-tag type="success">{{ row.accountSecret }}</el-tag>
         </template>
       </el-table-column>
-      </el-table-column>
       <el-table-column label="状态" align="center" width="220">
         <template slot-scope="{row}">
           <el-switch
@@ -75,7 +74,7 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
+        <template slot-scope="{row}">
           <PButton
             perms="edit"
             role="sys-user"
@@ -104,16 +103,16 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="账号ID" prop="accountId">
-          <el-input v-model="temp.accountId" clearable placeholder="请输入账号ID" />
+          <el-input v-model.trim="temp.accountId" clearable placeholder="请输入账号ID" />
         </el-form-item>
         <el-form-item label="密钥" prop="accountSecret">
-          <el-input v-model="temp.accountSecret" clearable placeholder="请输入密钥" />
+          <el-input v-model.trim="temp.accountSecret" clearable placeholder="请输入密钥" />
         </el-form-item>
         <el-form-item label="状态" style="width: 300px;">
-          <el-select v-model="temp.status" placeholder="请选择状态">
-            <el-option key="1" label="启用" :value="1" />
-            <el-option key="0" label="禁用" :value="0" />
-          </el-select>
+          <el-radio-group v-model="temp.status" placeholder="请选择状态">
+            <el-radio :label="1">启用</el-radio>
+            <el-radio :label="0">禁用</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -200,11 +199,8 @@ export default {
     getList() {
       this.listLoading = true
       getAccount().then(response => {
-        console.log(response)
         this.list = response.respObj
         this.length = response.respObj.length
-        console.log(this.list[0].type)
-        console.log(this.temp.type)
         if (this.length === 1 && this.list[0].type === 0) {
           this.disableAli = true
           this.disabletx = false
@@ -261,8 +257,6 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
-      console.log(this.temp.temp)
-
       if (this.list[0].type === 0) {
         this.temp.type === 1
       } else {
@@ -272,7 +266,6 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log(this.temp)
           postAccountSave(this.temp).then(response => {
             this.dialogFormVisible = false
             this.getList()
@@ -298,7 +291,6 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log(this.temp)
           postAccountSave(this.temp).then(response => {
             this.dialogFormVisible = false
             this.$notify({

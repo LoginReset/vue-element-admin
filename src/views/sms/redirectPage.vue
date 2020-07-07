@@ -10,7 +10,7 @@
         style="width: 800px; margin-left:100px;"
       >
         <el-form-item label="模板名称" prop="title">
-          <el-input v-model="temp.title" clearable placeholder="请输入模板名称" />
+          <el-input v-model.trim="temp.title" clearable placeholder="请输入模板名称" />
         </el-form-item>
         <el-form-item label="服务平台" prop="type">
           <el-radio-group v-model="temp.type">
@@ -19,23 +19,23 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="状态" style="width: 300px;">
-          <el-select v-model="temp.status" placeholder="请选择状态">
-            <el-option key="1" label="启用" :value="1" />
-            <el-option key="0" label="禁用" :value="0" />
-          </el-select>
+          <el-radio-group v-model="temp.status">
+            <el-radio :label="1">启用</el-radio>
+            <el-radio :label="0">禁用</el-radio>
+          </el-radio-group>
         </el-form-item>
         <template v-if="temp.type===0">
           <el-form-item label="模板ID" prop="other0.templateCode">
-            <el-input v-model="temp.other0.templateCode" clearable placeholder="请输入服务商提供的模板ID" />
+            <el-input v-model.trim="temp.other0.templateCode" clearable placeholder="请输入服务商提供的模板ID" />
           </el-form-item>
           <el-form-item label="短信签名" prop="other0.signName">
-            <el-input v-model="temp.other0.signName" clearable placeholder="请输入短信签名" />
+            <el-input v-model.trim="temp.other0.signName" clearable placeholder="请输入短信签名" />
           </el-form-item>
           <el-form-item label="上行短信扩展码" prop="smsUpExtendCode">
-            <el-input v-model="temp.other0.smsUpExtendCode" clearable placeholder="请输入短信签名" />
+            <el-input v-model.trim="temp.other0.smsUpExtendCode" clearable placeholder="请输入上行短信扩展码" />
           </el-form-item>
           <el-form-item label="外部流水扩展字段" prop="outId">
-            <el-input v-model="temp.other0.outId" clearable placeholder="请输入短信签名" />
+            <el-input v-model.trim="temp.other0.outId" clearable placeholder="请输入外部流水扩展字段" />
           </el-form-item>
           <el-form-item
             v-for="(param,index) in temp.other0.templateParam"
@@ -49,7 +49,7 @@
                 :prop="'other0.templateParam.'+index+'.smsField'"
                 style="margin-right:5px"
               >
-                <el-input v-model="param.smsField" placeholder="短信模板字段" clearable />
+                <el-input v-model.trim="param.smsField" placeholder="短信模板字段" clearable />
               </el-form-item>
             </el-col>
             <el-col :span="7">
@@ -58,7 +58,7 @@
                 :prop="'other0.templateParam.'+index+'.name'"
                 style="margin-right:5px"
               >
-                <el-input v-model="param.name" placeholder="变量" clearable @click.native="changeName(index)" @keyup.native="disable(index)" />
+                <el-input v-model.trim="param.name" placeholder="变量" clearable @click.native="changeName(index)" @keyup.native="disable(index)" />
               </el-form-item>
             </el-col>
             <el-col :span="7">
@@ -68,9 +68,9 @@
                 :prop="'other0.templateParam.'+index+'.value'"
               >
                 <el-input
-                  v-model="param.value"
+                  v-model.trim="param.value"
                   placeholder="描述字段"
-                  clearabl
+                  clearable
                   prop="value"
                 />
               </el-form-item>
@@ -88,47 +88,44 @@
         </template>
         <template v-else>
           <el-form-item label="模板ID" prop="other.templateID">
-            <el-input v-model="temp.other.templateID" clearable placeholder="请输入服务商提供的模板ID" />
+            <el-input v-model.trim="temp.other.templateID" clearable placeholder="请输入服务商提供的模板ID" />
           </el-form-item>
           <el-form-item label="短信应用ID" prop="other.appid">
-            <el-input v-model="temp.other.appid" clearable placeholder="请输入短信应用ID" />
+            <el-input v-model.trim="temp.other.appid" clearable placeholder="请输入短信应用ID" />
           </el-form-item>
           <el-form-item label="短信签名" prop="other.sign">
-            <el-input v-model="temp.other.sign" clearable placeholder="请输入短信签名内容" />
+            <el-input v-model.trim="temp.other.sign" clearable placeholder="请输入短信签名内容" />
           </el-form-item>
           <el-form-item label="国际/港澳台短信" prop="senderid">
-            <el-input v-model="temp.other.senderid" clearable placeholder="请输入国际/港澳台短信" />
+            <el-input v-model.trim="temp.other.senderid" clearable placeholder="请输入国际/港澳台短信" />
           </el-form-item>
           <el-form-item label="用户session" prop="session">
-            <el-input v-model="temp.other.session" clearable placeholder="请输入用户session内容" />
+            <el-input v-model.trim="temp.other.session" clearable placeholder="请输入用户session内容" />
           </el-form-item>
           <el-form-item label="短信码号扩展号" prop="extendcode">
-            <el-input v-model="temp.other.extendcode" clearable placeholder="请输入用户session内容" />
+            <el-input v-model.trim="temp.other.extendcode" clearable placeholder="请输入用户session内容" />
           </el-form-item>
 
           <el-form-item
             v-for="(param,index) in temp.other.templateParam"
             :key="index"
-            :label="'模板参数'+(index+1)"
-          >
-
+            :label="'模板参数'+(index+1)">
             <el-col :span="8">
               <el-form-item
                 :rules="[{required: true, message: '变量必填', trigger: 'change'}]"
                 :prop="'other.templateParam.'+index+'.name'"
-                style="margin-right:10px"
-              >
-                <el-input v-model="param.name" placeholder="变量" clearable />
+                style="margin-right:10px">
+                <el-input v-model.trim="param.name" placeholder="变量" clearable @click.native="changeName(index)" @keyup.native="disable(index)" />
               </el-form-item>
             </el-col>
             <el-col :span="10">
               <el-form-item
-                v-if="showDescField"
+                v-if="showDescField[index]"
                 :rules="[{required: true, message: '描述字段必填', trigger: 'change'}]"
                 :prop="'other.templateParam.'+index+'.value'"
               >
                 <el-input
-                  v-model="param.value"
+                  v-model.trim="param.value"
                   placeholder="描述字段"
                   clearable
                   prop="value"
@@ -147,7 +144,8 @@
         </template>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">提交</el-button>
-          <el-button @click="cancel">取消</el-button>
+          <el-button @click="resetTemp">重置</el-button>
+          <el-button @click="cancel">返回</el-button>
         </el-form-item>
       </el-form>
       <div class="nameType">
@@ -230,10 +228,6 @@ export default {
       },
       innerVisible: false,
       dialogStatus: '',
-      // textMap: {
-      //   update: 'Edit',
-      //   create: 'Create'
-      // },
       downloadLoading: false,
       rules: {
         'other0.templateCode': [{ required: true, message: '短信模板ID必填', trigger: 'change' }],
@@ -256,7 +250,6 @@ export default {
       if (arrPath[arrPath.length - 1] === 'edit') {
         const t = sessionStorage.getItem('templateData')
         const data = JSON.parse(t)
-        console.log(data)
         this.temp.uuid = data.uuid
         this.temp.title = data.title
         this.temp.status = data.status
@@ -272,20 +265,18 @@ export default {
           this.temp.other.templateParam = templateParam
         } else if (data.aliSmsParam) {
           for (const k in data.aliSmsParam) {
-            console.log()
             if (k !== 'templateParam') {
               this.temp.other0[k] = data.aliSmsParam[k]
             }
           }
           var templateParam = JSON.parse(data.aliSmsParam.templateParam)
           templateParam = this.changeDescription(templateParam)
-
           this.temp.other0.templateParam = templateParam
         }
-        console.log(this.temp)
       }
     },
     changeDescription(templateParam) {
+      debugger
       if (templateParam.length > 0) {
         for (let i = 0; i < templateParam.length; i++) {
           this.fieldList.forEach(item => {
@@ -295,6 +286,7 @@ export default {
                   item1.children.forEach(item2 => {
                     if (item2.name === templateParam[i].name) {
                       templateParam[i].name = item2.description
+                      item2.descField === 1?this.showDescField[i]=true:this.showDescField[i]=false
                       this.descriptions[i] = item2.description
                       this.titleNames[i] = item2.name
                     }
@@ -311,7 +303,6 @@ export default {
       getFieldKeyAll().then(response => {
         const res = JSON.stringify(response.respObj)
         this.fieldList = JSON.parse(res)
-        console.log(this.fieldList)
         this.getList()
       })
     },
@@ -351,15 +342,12 @@ export default {
     },
     currStationChange(uuid) {
       if (uuid) {
-        console.log(typeof this.titleData)
-
         this.selectChange = true
         this.fieldList.forEach(item => {
           if (item.uuid === uuid) {
             this.titleData = item.children
           }
         })
-        console.log(this.titleData)
       } else {
         this.selectChange = false
       }
@@ -373,7 +361,11 @@ export default {
       }
     },
     disable(index) {
-      this.temp.other0.templateParam[index].name = this.descriptions[index]
+      if(this.temp.type===0){
+        this.temp.other0.templateParam[index].name = this.descriptions[index]
+      }else{
+        this.temp.other.templateParam[index].name = this.descriptions[index]
+      }
     },
     handleCreate() {
       this.resetTemp()
@@ -390,7 +382,6 @@ export default {
       const temp = JSON.parse(temp1)
       if (temp.type === 0) {
         data = {}
-        console.log(data)
         for (const key in temp) {
           if (key !== 'other') {
             if (key === 'other0') {
@@ -420,10 +411,7 @@ export default {
             if (key === 'other') {
               data.other = temp[key]
               const templateParam = JSON.stringify(temp[key].templateParam)
-              console.log(templateParam)
-
               data.other.templateParam = templateParam
-              console.log(data.other)
             } else {
               data[key] = temp[key]
             }
@@ -435,10 +423,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log(this.temp)
-
           const data = this.JsonData()
-
           postTemplateAdd(data).then(response => {
             this.$notify({
               title: '成功',
@@ -446,7 +431,11 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.resetTemp()
+            this.$store.dispatch('tagsView/delView', this.$route).then(() => {
+              this.$nextTick(() => {
+                this.$router.push({ name: 'template' })
+              })
+            })
           })
         }
       })
@@ -454,8 +443,6 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          console.log(this.temp)
-
           const data = this.JsonData()
 
           postTemplateUp(data).then(response => {
@@ -465,7 +452,11 @@ export default {
               type: 'success',
               duration: 2000
             })
-            this.$router.push({ name: 'template' })
+            this.$store.dispatch('tagsView/delView', this.$route).then(() => {
+              this.$nextTick(() => {
+                this.$router.push({ name: 'template' })
+              })
+            })
           })
         }
       })
@@ -494,16 +485,12 @@ export default {
       this.showDescField.splice(index, 1)
     },
     chooseName(titleName) {
-      console.log(titleName.name)
       let k = 'other'
       this.temp.type === 0 ? k = 'other0' : k
-      console.log(k)
       const templateParam = this.temp[k].templateParam
-      console.log(templateParam)
       templateParam[this.index].name = titleName.description
       titleName.descField === 0 ? this.showDescField[this.index] = false : this.showDescField[this.index] = true
       this.titleNames.splice(this.index, 1, titleName.name)
-      console.log(this.titleNames)
     },
     changeName(index) {
       this.index = index

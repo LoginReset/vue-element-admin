@@ -155,8 +155,6 @@ export function postPermissionUp(data) {
  * @returns {AxiosPromise}
  */
 export function getPermissionDel(data) {
-  console.log(data)
-  console.log('data')
   return request({
     url: '/b/sp/del',
     method: 'get',
@@ -218,8 +216,6 @@ export function postSecreteKeyUp(data) {
  * @returns {AxiosPromise}
  */
 export function postSecreteKeyChange(data) {
-  console.log(555555)
-  console.log(data)
   return request({
     url: '/b/secretKey/chenge',
     method: 'post',
@@ -293,7 +289,6 @@ export function postFieldKeyAdd(data) {
  * @returns {AxiosPromise}
  */
 export function postFieldKeyUp(data) {
-  console.log(data)
   return request({
     url: '/sys/fieldKey/up',
     method: 'post',
@@ -313,3 +308,42 @@ export function getFieldKeyDel(data) {
     data
   })
 }
+/**
+ * 查看省市县
+ * @returns {AxiosPromise}
+ */
+export function getProvinceView(query){
+  return request({
+    url:'/province/cities/view',
+    method: 'get',
+    params:query
+  })
+}
+/**
+ * 修改
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function postCityUp(data) {
+  return request({
+    url: '/province/cities/update',
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 修改区、县级
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function postAreaUp(data) {
+  console.log(data)
+
+  return request({
+    url: '/province/update/area',
+    method: 'post',
+    data
+  })
+}
+

@@ -27,7 +27,7 @@
       fit
       highlight-current-row
       style="width: 100%;"
-      row-key="description"
+      row-key="uuid"
       :tree-props="{children: 'children'}"
 
       @sort-change="sortChange"
@@ -39,8 +39,6 @@
         type="index"
         width="50"
       />
-
-      </el-table-column>
       <el-table-column label="描述">
         <template slot-scope="{row}">
           <span>{{ row.description }}</span>
@@ -48,9 +46,9 @@
       </el-table-column>
       <el-table-column label="变量" align="center" width="300">
         <template slot-scope="{row}">
-          <el-tag type="success">{{ row.name?row.name:'无' }}</el-tag>
+          <el-tag type="success" v-if="row.name">{{row.name}}</el-tag>
+          <el-tag type="info" v-else>无</el-tag>
         </template>
-      </el-table-column>
       </el-table-column>
       <el-table-column label="描述字段" align="center" width="300">
         <template slot-scope="{row}">
@@ -59,16 +57,13 @@
       </el-table-column>
       <el-table-column label="类型" align="center">
         <template slot-scope="{row}">
-
           <span>{{ row.type===0 ?'标题':'具体项目' }}</span>
         </template>
-      </el-table-column>
       </el-table-column>
       <el-table-column label="创建时间" align="center" sortable="custom" prop="create_date">
         <template slot-scope="{row}">
           <span>{{ row.createDate }}</span>
         </template>
-      </el-table-column>
       </el-table-column>
       <el-table-column label="操作" align="center" width="300" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
@@ -252,11 +247,6 @@ export default {
       puuid: ''
     }
   },
-  watch: {
-    // temp(){
-    //     console.log(temp.type)
-    // }
-  },
   created() {
     this.getList()
   },
@@ -272,13 +262,13 @@ export default {
         if (this.total > this.limit) {
           const start = (this.page - 1) * this.limit
           const end = this.page * this.limit
-          this.list = this.list.splice(start, end)
+          this.list = this.list.slice(start, end)
         }
 
         // 将具体项目选择禁用
         // 一级
         this.fieldNameAll.forEach(item => {
-          console.log(item.children.length)
+          item['disabled'] = true
           // 二级
           item.children.forEach(child => {
             child.children.forEach(grandson => {
@@ -361,9 +351,7 @@ export default {
           return
         }
         if (valid) {
-          console.log(this.temp)
           postFieldKeyAdd(Object.assign(this.temp, { puuid: (checkedUuid.length > 0 ? checkedUuid[0] : undefined) })).then(response => {
-            console.log(this.temp)
             this.dialogFormVisible = false
             this.getList()
             this.$notify({
@@ -377,7 +365,6 @@ export default {
       })
     },
     handleUpdate(row) {
-      console.log(row)
       this.temp = Object.assign({}, row)
 
       this.list.forEach(item => {
@@ -395,21 +382,7 @@ export default {
           })
         }
       })
-      console.log(this.puuid)
-
-      // this.getPuuid(this.list,row)
-      // this.updateKeys = []
-      // if(this.changeFlag){
-      // console.log(this.$refs.tree.getCheckedKeys())
-
-      //     this.$refs.tree.setCheckedKeys([])
-      // console.log(this.$refs.tree.getCheckedKeys())
-
-      //   }
-      // this.updateKeys.push(row.uuid)
-
       row.type === 0 ? this.disableTitle = false : this.disableTitle = true
-
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
 
@@ -421,11 +394,8 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign(this.temp, { puuid: this.puuid })
-          console.log(tempData)
 
           postFieldKeyUp(tempData).then(response => {
-            // const index = this.list.findIndex(v => v.id === this.temp.id)
-            // this.list.splice(index, 1, this.temp)
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -449,9 +419,7 @@ export default {
         const param = []
         param.push(row.uuid)
         const requestData = { uuids: param }
-        console.log(requestData)
         getFieldKeyDel(requestData).then(response => {
-          console.log(requestData)
           this.$notify({
             title: '成功',
             message: '删除成功',
@@ -475,13 +443,10 @@ export default {
       }))
     },
     treeCheck(data, status) {
-      console.log(status)
       this.$refs.tree.setCheckedKeys([])
-      console.log(data)
       if (status.checkedKeys.length !== 0) {
         this.$refs.tree.setCheckedKeys([data.uuid])
       }
-      console.log(this.$refs.tree.getCheckedKeys())
     }
   }
 }
