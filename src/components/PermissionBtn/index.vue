@@ -4,7 +4,8 @@
     :type="type"
     style="margin-left: 10px;"
     :icon="icon"
-    :disabled="!hasPerms(role,perms)"
+    :disabled="!hasPerms(perms)"
+    :loading="loading"
     @click="handleClick"
   >
     {{ $t(label) }}
@@ -48,7 +49,11 @@ export default {
     role: {
       type: String,
       default: null
-    }
+    },
+    loading: {  // 按钮加载标识
+      type: Boolean,
+      default: false
+    },
   },
   data() {
     return {
@@ -64,9 +69,9 @@ export default {
       // 按钮操作处理函数
       this.$emit('click', {})
     },
-    hasPerms: function(role, perms) {
+    hasPerms: function(perms) {
       // 根据权限标识和外部指示状态进行权限判断
-      return hasBtnPermission(role, perms) // & !this.disabled
+      return hasBtnPermission(perms) // & !this.disabled
     }
   }
 }

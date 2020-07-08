@@ -29,8 +29,7 @@
       <PButton
         class="filter-item"
         icon="el-icon-edit"
-        perms="add"
-        role="sys-permission"
+        perms="sys-permission:add"
         type="primary"
         label="table.add"
         @click="handleCreate"
@@ -101,8 +100,7 @@
 
           <PButton
             class="filter-item"
-            perms="edit"
-            role="sys-permission"
+            perms="sys-permission:edit"
             size="mini"
             type="primary"
             label="table.edit"
@@ -112,8 +110,7 @@
           <PButton
             v-if="row.status!='deleted'"
             class="filter-item"
-            perms="delete"
-            role="sys-permission"
+            perms="sys-permission:delete"
             size="mini"
             type="danger"
             label="table.delete"
@@ -163,7 +160,6 @@
         <el-form-item v-if="showPermissionAllSelect" label="菜单" prop="puuid">
           <el-tree
             ref="tree"
-            default-expand-all
             :check-strictly="checkStrictly"
             class="permission-tree"
             :data="permissionAll"

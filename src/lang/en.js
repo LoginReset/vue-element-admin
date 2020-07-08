@@ -120,6 +120,7 @@ export default {
     search: 'Search',
     add: 'Add',
     refresh: 'Refresh',
+    vertify:'Vertify',
     change: 'Change',
     export: 'Export',
     reviewer: 'reviewer',

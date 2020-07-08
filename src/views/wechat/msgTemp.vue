@@ -31,8 +31,13 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
-      <PButton class="filter-item" icon="el-icon-edit" perms="add" role="sys-user" type="primary"
-        label="table.add"  @click="handleCreate"/>
+      <PButton 
+        class="filter-item" 
+        icon="el-icon-edit" 
+        perms="wechat-msgTemp:add" 
+        type="primary"
+        label="table.add"  
+        @click="handleCreate"/>
       <el-button class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-refresh" 
         @click="getList">{{ $t('table.refresh') }}</el-button>
     </div>
@@ -83,12 +88,17 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-          <el-button class="filter-item" style="margin-left: 10px;" type="success" size="mini" @click="handleVertify(row)">验证
-          </el-button>
+          <PButton 
+            class="filter-item" 
+            perms="wechat-msgTemp:vertify"
+            type="success" 
+            size="mini" 
+            label="table.vertify"
+            @click="handleVertify(row)">
+          </PButton>
           <PButton
             class="filter-item"
-            perms="edit"
-            role="sys-permission"
+            perms="wechat-msgTemp:edit"
             size="mini"
             type="primary"
             label="table.edit"
@@ -98,8 +108,7 @@
           <PButton
             v-if="row.status!='deleted'"
             class="filter-item"
-            perms="delete"
-            role="sys-permission"
+            perms="wechat-msgTemp:delete"
             size="mini"
             type="danger"
             label="table.delete"

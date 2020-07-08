@@ -15,8 +15,7 @@
       <PButton
         class="filter-item"
         icon="el-icon-edit"
-        perms="add"
-        role="sys-role"
+        perms="sys-role:add"
         type="primary"
         label="table.add"
         @click="handleCreate"
@@ -74,8 +73,7 @@
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <PButton
-            perms="edit"
-            role="sys-role"
+            perms="sys-role:edit"
             size="mini"
             type="primary"
             label="table.edit"
@@ -84,8 +82,7 @@
           <PButton
             v-if="row.status!='deleted'"
             class="filter-item"
-            perms="delete"
-            role="sys-role"
+            perms="sys-role:delete"
             size="mini"
             type="danger"
             label="table.delete"

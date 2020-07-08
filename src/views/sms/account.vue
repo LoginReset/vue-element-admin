@@ -5,7 +5,7 @@
         v-if="length<2"
         class="filter-item"
         icon="el-icon-edit"
-        perms="add"
+        perms="sms-account:add"
         role="sys-user"
         type="primary"
         label="table.add"
@@ -63,7 +63,7 @@
             :inactive-value="Number(0)"
             active-text="启用"
             inactive-text="禁用"
-            :disabled="!hasPerms('sys-user','switch')"
+            :disabled="!hasPerms('sms-account:switch')"
             @change="statusChange($event,row)"
           />
         </template>
@@ -76,8 +76,7 @@
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <PButton
-            perms="edit"
-            role="sys-user"
+            perms="sms-account:edit"
             size="mini"
             type="primary"
             label="table.edit"

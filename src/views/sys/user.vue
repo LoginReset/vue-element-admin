@@ -39,8 +39,7 @@
       <PButton
         class="filter-item"
         icon="el-icon-edit"
-        perms="add"
-        role="sys-user"
+        perms="sys-user:add"
         type="primary"
         label="table.add"
         @click="handleCreate"
@@ -97,7 +96,7 @@
             :inactive-value="Number(0)"
             active-text="启用"
             inactive-text="禁用"
-            :disabled="!hasPerms('sys-user','switch')"
+            :disabled="!hasPerms('sys-user:switch')"
             @change="statusChange($event,row)"
           />
         </template>
@@ -118,18 +117,14 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
+        <template slot-scope="{row}">
           <PButton
-            perms="edit"
-            role="sys-user"
+            perms="sys-user:edit"
             size="mini"
             type="primary"
             label="table.edit"
             @click="handleUpdate(row)"
           />
-          <!--<el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">-->
-          <!--{{ $t('table.delete') }}-->
-          <!--</el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -277,6 +272,7 @@ export default {
         confirmPwd: '',
         phoneNum: '',
         name: '',
+        description:'',
         sort: 0,
         sysRole: undefined
       },
@@ -358,6 +354,7 @@ export default {
         confirmPwd: '',
         phoneNum: '',
         name: '',
+        description:'',
         sort: 0,
         sysRole: undefined
       }
@@ -392,6 +389,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
+      console.log(this.temp.description)
       this.temp.description = this.temp.description.trim()
     },
     createData() {
@@ -424,7 +422,7 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
-      this.temp.description = this.temp.description.trim()
+      console.log(this.temp.description)
 
     },
     updateData() {
@@ -433,6 +431,9 @@ export default {
           const roleUuids = this.checkedRole()
           if (roleUuids.length === 0) {
             return
+          }
+          if(this.temp.description){
+            this.temp.description = this.temp.description.trim()
           }
           this.temp.sysRole = roleUuids[0]
           postUserUp(this.temp).then(response => {

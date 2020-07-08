@@ -7,32 +7,7 @@ import { asyncRoutes, constantRoutes } from '@/router'
  */
 function hasPermission(roles, route) {
   if (route.meta && route.meta.roles) {
-    // 判断是否到最后一层
-    if (!route.children) {
-      // 判断是否有按钮权限
-      if (route.meta.buttons) {
-        const menuRole = route.meta.roles[0]
-        const btns = []
-        roles.filter(role => {
-          route.meta.buttons.filter(button => {
-            const arrRole = role.split(':')
-            if (arrRole[0] === menuRole && arrRole.length > 1) {
-              const rolestr = arrRole[arrRole.length - 1]
-              if (rolestr === button) {
-                btns.push(rolestr)
-              }
-            }
-          })
-        })
-        if (btns.length !== 0) {
-          state.permission.push({
-            roles: menuRole,
-            btn: btns
-          })
-        }
-      }
-    }
-    return true
+ 
     return roles.some(role => route.meta.roles.includes(role))
   } else {
     return false
@@ -63,7 +38,7 @@ export function filterAsyncRoutes(routes, roles) {
 const state = {
   routes: [],
   addRoutes: [],
-  permission: []// 按钮权限标识集合
+  // permission: []// 按钮权限标识集合
 }
 
 const mutations = {
@@ -71,10 +46,10 @@ const mutations = {
     state.addRoutes = routes
     state.routes = constantRoutes.concat(routes)
   },
-  SET_PERMISSION(state, permission) { // permission 为传入的按钮权限标识集合
-    // 传入的权限集合 赋值给状态中的 permission
-    state.permission = permission
-  }
+  // SET_PERMISSION(state, permission) { // permission 为传入的按钮权限标识集合
+  //   // 传入的权限集合 赋值给状态中的 permission
+  //   state.permission = permission
+  // }
 }
 
 const actions = {

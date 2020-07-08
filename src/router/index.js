@@ -206,7 +206,7 @@ export const asyncRoutes = [
         name: 'wehcat-msgTemp',
         meta: {
           title: '微信消息模板',
-          roles: ['wechat-menu']
+          roles: ['wechat-msgTemp']
           
           // roles: ['admin'] // or you can only set roles in sub nav
         }
@@ -216,7 +216,7 @@ export const asyncRoutes = [
         name: 'createMsgTemp',
         meta: {
           title: '创建消息模板',
-          roles: ['wechat-menu']
+          roles: ['wechat-create']
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },{
@@ -225,7 +225,7 @@ export const asyncRoutes = [
         name: 'editMsgTemp',
         meta: {
           title: '编辑消息模板',
-          roles: ['wechat-menu'],
+          roles: ['wechat-edit'],
           activeMenu: '/wechat/msgTemp',
           // roles: ['admin'] // or you can only set roles in sub nav
         },
@@ -251,8 +251,6 @@ export const asyncRoutes = [
       meta: {
         title: '短信账号',
         roles: ['sms-account'],
-        buttons: []
-
       }
     }, {
       path: 'template',
@@ -261,8 +259,6 @@ export const asyncRoutes = [
       meta: {
         title: '短信模板',
         roles: ['sms-template'],
-        buttons: ['add', 'download', 'edit', 'switch', 'select']
-
       }
     }, {
       path: 'create',
@@ -271,7 +267,6 @@ export const asyncRoutes = [
       meta: {
         title: '创建短信模板',
         roles: ['sms-create']
-
       }
     }, {
       path: 'edit',
@@ -279,8 +274,8 @@ export const asyncRoutes = [
       name: 'editTemplate',
       meta: {
         title: '编辑短信模板', noCache: false, activeMenu: '/sms/template', roles: ['sms-create'] },
-      hidden: true
-    }]
+        hidden: true
+      }]
   },
   {
     path:'/msgPush',
@@ -301,7 +296,6 @@ export const asyncRoutes = [
         meta: {
           title: '短信推送配置',
           roles: ['msgPush-smsTemp'],
-
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
@@ -312,7 +306,6 @@ export const asyncRoutes = [
         meta: {
           title: '微信推送配置',
           roles: ['msgPush-wechatTemp'],
-
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
@@ -322,8 +315,7 @@ export const asyncRoutes = [
         name: 'create-pushTemp',
         meta: {
           title: '创建推送模板',
-          roles: ['msgPush-wechatTemp-create'],
-
+          roles: ['msgPush-create'],
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },{
@@ -331,8 +323,11 @@ export const asyncRoutes = [
         component: () => import('@/views/msgPush/pushRedirect'),
         name: 'edit-pushTemp',
         meta: {
-          title: '编辑推送模板', noCache: false, activeMenu: '/msgPush/wechatTemp', roles: ['msgPush-wechatTemp-edit'] },
-        hidden: true
+          title: '编辑推送模板', 
+          noCache: false, 
+          activeMenu: '/msgPush/wechatTemp', 
+          roles: ['msgPush-edit'] },
+          hidden: true
       }
     ]
   },
@@ -346,7 +341,6 @@ export const asyncRoutes = [
       title: '系统管理',
       icon: 'lock',
       roles: ['sys']
-
       // roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
@@ -357,9 +351,6 @@ export const asyncRoutes = [
         meta: {
           title: '系统管理员',
           roles: ['sys-user'],
-          buttons: ['add', 'download', 'edit', 'switch', 'select']
-
-          // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
       {
@@ -369,8 +360,6 @@ export const asyncRoutes = [
         meta: {
           title: '管理员角色',
           roles: ['sys-role'],
-          buttons: ['add', 'download', 'edit', 'delete']
-
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
@@ -381,8 +370,6 @@ export const asyncRoutes = [
         meta: {
           title: '系统权限',
           roles: ['sys-permission'],
-          buttons: ['add', 'download', 'delete', 'edit']
-
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       }, {
@@ -392,8 +379,6 @@ export const asyncRoutes = [
         meta: {
           title: '全局字段',
           roles: ['sys-fieldName'],
-          buttons: []
-
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       }, {
@@ -403,9 +388,6 @@ export const asyncRoutes = [
         meta: {
           title: '密钥管理',
           roles: ['sys-secretKey'],
-          buttons: ['add', 'download', 'edit', 'delete', 'change']
-
-          // roles: ['admin'] // or you can only set roles in sub nav
         }
       },{
         path: 'province',
@@ -414,9 +396,6 @@ export const asyncRoutes = [
         meta: {
           title: '省份管理',
           roles: ['sys-province'],
-          buttons: ['add', 'download', 'edit', 'delete', 'change']
-
-          // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
       {
@@ -426,9 +405,6 @@ export const asyncRoutes = [
         meta: {
           title: '登录日志',
           roles: ['sys-login-log'],
-          buttons: []
-
-          // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
       {
@@ -438,7 +414,6 @@ export const asyncRoutes = [
         meta: {
           title: '操作日志',
           roles: ['sys-operation-log']
-          // roles: ['admin'] // or you can only set roles in sub nav
         }
       }
     ]
@@ -453,7 +428,6 @@ export const asyncRoutes = [
       title: 'permission',
       icon: 'lock',
       roles: ['permission']
-      // roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
       {
@@ -464,7 +438,6 @@ export const asyncRoutes = [
           title: 'pagePermission',
           roles: ['permission-page']
 
-          // roles: ['admin'] or you can only set roles in sub nav
         }
       },
       {
@@ -474,7 +447,6 @@ export const asyncRoutes = [
         meta: {
           title: 'directivePermission',
           roles: ['permission-directive']
-
           // if do not set roles, means: this page does not require permission
         }
       },

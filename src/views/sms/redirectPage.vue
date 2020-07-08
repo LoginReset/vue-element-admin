@@ -250,6 +250,7 @@ export default {
       if (arrPath[arrPath.length - 1] === 'edit') {
         const t = sessionStorage.getItem('templateData')
         const data = JSON.parse(t)
+        console.log(data)
         this.temp.uuid = data.uuid
         this.temp.title = data.title
         this.temp.status = data.status
@@ -276,7 +277,6 @@ export default {
       }
     },
     changeDescription(templateParam) {
-      debugger
       if (templateParam.length > 0) {
         for (let i = 0; i < templateParam.length; i++) {
           this.fieldList.forEach(item => {
@@ -377,7 +377,6 @@ export default {
     },
     JsonData() {
       var data = {}
-
       const temp1 = JSON.stringify(this.temp)
       const temp = JSON.parse(temp1)
       if (temp.type === 0) {
@@ -395,7 +394,6 @@ export default {
                   i++
                 })
               }
-
               data.other = temp[key]
               const templateParam = JSON.stringify(temp[key].templateParam)
               data.other.templateParam = templateParam
@@ -409,6 +407,17 @@ export default {
         for (const key in temp) {
           if (key !== 'other0') {
             if (key === 'other') {
+              //处理变量
+              if(temp[key].templateParam.length>0){
+                let i = 0
+                temp[key].templateParam.forEach(item=>{
+                  if(item.key){
+                    delete item['key']
+                  }
+                  item.name = this.titleNames[i]
+                  i++
+                })
+              }
               data.other = temp[key]
               const templateParam = JSON.stringify(temp[key].templateParam)
               data.other.templateParam = templateParam
@@ -444,7 +453,6 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const data = this.JsonData()
-
           postTemplateUp(data).then(response => {
             this.$notify({
               title: '成功',
@@ -517,7 +525,7 @@ export default {
       width:100%;
   }
   .box-card {
-    width: 300px;
+    width: 450px;
   }
   .title-box{
       margin-bottom:20px;

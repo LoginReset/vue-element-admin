@@ -1,13 +1,12 @@
 <template>
   <div class="components-container board">
-    <el-button
-      style="margin-left: 10px;margin-bottom: 30px"
+    <PButton
+      class="addBtn" 
+      icon="el-icon-plus" 
+      perms="wechat-menu:add" 
       type="success"
-      icon="el-icon-plus"
-      @click="handleParentMenu"
-    >
-      添加菜单
-    </el-button>
+      label="table.addMenu"  
+      @click="handleParentMenu"/>
     <!--    微信菜单主体-->
 
     <menuContent
@@ -21,28 +20,26 @@
       title="确定将菜单同步到微信公众号吗？"
       @onConfirm="synch2wechat"
     >
-      <el-button
-        slot="reference"
-        style="margin-left: 10px;margin-top: 30px"
-        type="primary"
-        icon="el-icon-refresh"
-      >
-        同步到微信
-      </el-button>
+ 
+      <PButton 
+      slot="reference"
+      icon="el-icon-refresh" 
+      perms="wechat-menu:sync" 
+      type="primary"
+      label="table.syncWechat"/>
     </el-popconfirm>
     <el-popconfirm
       title="确定将菜单保存吗？"
       @onConfirm="saveMenu"
     >
-      <el-button
-        slot="reference"
-        style="margin-left: 10px;margin-top: 30px"
-        type="success"
-        icon="el-icon-upload"
-        :loading="saveMenuLoading"
-      >
-        保存菜单
-      </el-button>
+    
+      <PButton 
+      slot="reference"
+      icon="el-icon-upload" 
+      perms="wechat-menu:save" 
+      type="success"
+      label="table.saveMenu"
+      :loading="saveMenuLoading"/>
     </el-popconfirm>
     <!--form表单-->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
@@ -109,12 +106,14 @@
 
 <script>
 import menuContent from './components/menu-content'
+import PButton from '@/components/PermissionBtn'
 import { postMenu, getMenu, postSynchMenu } from '@/api/wechat'
 
 export default {
   name: 'Menu',
   components: {
-    menuContent
+    menuContent,
+    PButton
   },
   data() {
     return {
@@ -415,6 +414,9 @@ export default {
 </script>
 
 <style lang="scss">
+  .addBtn{
+    margin-bottom: 30px;
+  }
   /*.board {*/
   /*width: 1000px;*/
   /*margin-left: 20px;*/

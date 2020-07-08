@@ -151,9 +151,6 @@ export default {
       dialogStatus: '',
       downloadLoading: false,
       rules: {
-        // url: [],
-        // appid : [],
-        // pagePath : [],
         url: [{ required: false, message: '请输入正确跳转页面地址',
           pattern: /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/,
           trigger: 'change' }],
@@ -365,7 +362,7 @@ export default {
       width:100%;
   }
   .box-card {
-    width: 300px;
+    width: 450px;
   }
   .title-box{
       margin-bottom:20px;

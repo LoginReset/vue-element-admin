@@ -35,8 +35,7 @@
         <template slot-scope="{row}">
           <PButton
             class="filter-item"
-            perms="edit"
-            role="sys-permission"
+            perms="msgPush-smsTemp:edit"
             size="mini"
             type="primary"
             label="table.edit"

@@ -23,14 +23,22 @@ export default function checkPermission(value) {
     return false
   }
 }
-export function hasBtnPermission(role, button) {
-  var hasPermission = false
-  const permission = store.getters.permission_btn
-
-  for (let i = 0; i < permission.length; i++) {
-    if (permission[i].roles === role) {
-      hasPermission = permission[i].btn.includes(button)
-      return hasPermission
-    }
+export function hasBtnPermission(button) {
+  // var hasPermission = false
+  
+  const permission = store.getters.roles
+  if(permission.includes(button)){
+    return true
+  }else{
+    return false
   }
+
+  // for (let i = 0; i < permission.length; i++) {
+  //   if (permission[i].roles === role) {
+  //     hasPermission = permission[i].btn.includes(button)
+  //     return hasPermission
+  //   }
+  // }
 }
+
+

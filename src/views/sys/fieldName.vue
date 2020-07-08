@@ -4,8 +4,7 @@
       <PButton
         class="filter-item"
         icon="el-icon-edit"
-        perms="add"
-        role="sys-secretKey"
+        perms="sys-secretKey:add"
         type="primary"
         label="table.add"
         @click="handleCreate"
@@ -69,8 +68,7 @@
         <template slot-scope="{row,$index}">
 
           <PButton
-            perms="edit"
-            role="sys-secretKey"
+            perms="sys-secretKey:edit"
             size="mini"
             type="primary"
             label="table.edit"
@@ -79,8 +77,7 @@
           <PButton
             v-if="row.status!='deleted'"
             class="filter-item"
-            perms="delete"
-            role="sys-secretKey"
+            perms="sys-secretKey:delete"
             size="mini"
             type="danger"
             label="table.delete"

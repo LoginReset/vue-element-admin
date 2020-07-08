@@ -22,8 +22,7 @@
       <PButton
         class="filter-item"
         icon="el-icon-edit"
-        perms="add"
-        role="sys-permission"
+        perms="sys-province:add"
         type="primary"
         label="table.add"
         @click="handleCreate"
@@ -79,22 +78,18 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-
           <PButton
             class="filter-item"
-            perms="edit"
-            role="sys-permission"
+            perms="sys-province:edit"
             size="mini"
             type="primary"
             label="table.edit"
             @click="handleUpdate(row,$index)"
           />
-
           <PButton
             v-if="row.status!='deleted'"
             class="filter-item"
-            perms="delete"
-            role="sys-permission"
+            perms="sys-province:delete"
             size="mini"
             type="danger"
             label="table.delete"
@@ -109,40 +104,35 @@
       :total="total"
       :page.sync="listQuery.page"
       :limit.sync="listQuery.limit"
-      @pagination="getList"
-    />
-
+      @pagination="getList"/>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
         :model="temp"
         label-position="left"
-        label-width="70px"
-        style="width: 400px; margin-left:50px;"
-      >
-            <el-form-item label="地区名" prop="name">
-                <el-input v-model.trim="temp.name" clearable placeholder="请输入地区名" />
-            </el-form-item>
-            <el-form-item label="行政编码" prop="divisionCode">
-                <el-input v-model.trim="temp.divisionCode" clearable placeholder="请输入行政编码" />
-            </el-form-item>
-            <el-form-item label="所属地区" v-if="this.showProvinceList">
-                <el-cascader
-                    v-model="province"
-                    :options="showList"
-                    :props="provinceProps"
-                    @change="handleChange">
-                </el-cascader>
-            </el-form-item>
-        <el-form-item label="状态">
-            <el-radio-group v-model="temp.status">
-                <el-radio :label="1">显示</el-radio>
-                <el-radio :label="0">隐藏</el-radio>
-            </el-radio-group>
+        label-width="80px"
+        style="width: 400px; margin-left:50px;">
+        <el-form-item label="地区名" prop="name">
+          <el-input v-model.trim="temp.name" clearable placeholder="请输入地区名" />
         </el-form-item>
-        
-        
+        <el-form-item label="行政编码" prop="divisionCode">
+          <el-input v-model.trim="temp.divisionCode" clearable placeholder="请输入行政编码" />
+        </el-form-item>
+        <el-form-item label="所属地区" v-if="this.showProvinceList" prop="pid">
+          <el-cascader
+            v-model="temp.pid"
+            :options="showList"
+            :props="provinceProps"
+            @change="handleChange">
+          </el-cascader>
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-radio-group v-model="temp.status">
+            <el-radio :label="1">显示</el-radio>
+            <el-radio :label="0">隐藏</el-radio>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancel">
@@ -154,21 +144,12 @@
       </div>
     </el-dialog>
 
-    <el-dialog :visible.sync="dialogPvVisible" title="Reading statistics">
-      <el-table :data="pvData" border fit highlight-current-row style="width: 100%">
-        <el-table-column prop="key" label="Channel" />
-        <el-table-column prop="pv" label="Pv" />
-      </el-table>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">{{ $t('table.confirm') }}</el-button>
-      </span>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import store from '@/store'
-import {getProvinceView,postCityUp} from '@/api/sys'
+import {getProvinceView,postCityUpm,postCitieAdd} from '@/api/sys'
 // import { getProvinceView } from '@/api/user'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -181,7 +162,6 @@ export default {
   components: { Pagination, PButton },
   directives: { waves },
   data() {
-  
     return {
       tableKey: 0,
       province:[],
@@ -189,7 +169,6 @@ export default {
       loadData:[],
       provinceList:[],
       showList:[],
-      maps:new Map(),
       provinceProps: {
         value: 'divisionCode',
         label: 'name',
@@ -209,16 +188,11 @@ export default {
         code: undefined
       },
       statusOptions: ['published', 'draft', 'deleted'],
-      showReviewer: false,
-      createTemp:{
-          name:undefined,
-          code:undefined
-      },
       temp: {
-        uuid: undefined,
         name: undefined,
         divisionCode:undefined,
         status:1,
+        pid:[],
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -229,14 +203,11 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        // permission: [{ required: true, message: '权限名必填', trigger: 'change' },
-        //   { max: 50, message: '长度不能超过50字符', trigger: 'change' }],
-        // menuName: [{ required: true, message: '菜单名必填', trigger: 'change' },
-        //   { max: 30, message: '长度不能超过30字符', trigger: 'change' }],
-        // filterUrl: [{ required: true, message: '路径必填', trigger: 'change' },
-        //   { max: 50, message: '长度不能超过50字符', trigger: 'change' }],
-        // description: [{ max: 200, message: '长度不能超过200字符', trigger: 'change' }],
-        // sort: [{ validator: checkSort, trigger: 'change' }]
+        name: [{ required: true, message: '地区名必填', trigger: 'change' },
+          { max: 25, message: '长度不能超过25字符', trigger: 'change' }],
+        divisionCode: [{ required: true, message: '行政编码必填', trigger: 'change' },
+          { pattern:/^\d{6}$/, message: '行政编码必须为6位数字', trigger: 'change' }],
+        pid: [{ required: true, message: '省份城市必选', trigger: 'change' }],
       },
       downloadLoading: false,
       checkStrictly: true,
@@ -257,20 +228,6 @@ export default {
         if(this.totalAdd===true){
           this.totalAdd = response.respObj.total
         }
-        console.log(this.list)
-        // const data = JSON.parse(list.replace(/cities/g,"areas"))
-        // this.list = data
-        // data.forEach(item=>{
-        //   item.areas = []
-        //   item.hasChildren = true
-        // })
-        // console.log(data)
-        // this.list = data
-        
-        // list = list.replace(/provinceName/g,"areaName")
-        // list = list.replace(/cityName/g,"areaName")
-        // list = list.replace(/cities/g,"areas")
-        // this.provinceList = JSON.parse(list)
         this.listLoading = false
       })
     },
@@ -302,14 +259,11 @@ export default {
     resetTemp() {
       this.temp = {
         uuid: undefined,
-        provinceName: undefined,
-        cityName:undefined,
-        areaName:undefined,
-        cityName:undefined,
-        provinceCode:undefined,
-        cityCode:undefined,
-        areaCode:undefined,
+        name: undefined,
+        divisionCode:undefined,
+        pid:undefined,
         status:1,
+
       }
       this.province = []
     },
@@ -338,7 +292,6 @@ export default {
 
     },
     handleCreate() {
-    console.log(this.temp)
       this.showProvince()
       this.showProvinceList = true
       this.resetTemp()
@@ -349,27 +302,27 @@ export default {
       })
     },
     createData() {
-        console.log(this.createTemp)
-    //   this.$refs['dataForm'].validate((valid) => {
-    //     if (valid) {
-    //       postPermissionAdd(Object.assign(this.temp, { puuid: (checkedUuid.length > 0 ? checkedUuid[0] : undefined) })).then(response => {
-    //         this.dialogFormVisible = false
-    //         this.getList()
-    //         this.$notify({
-    //           title: '成功',
-    //           message: '创建成功',
-    //           type: 'success',
-    //           duration: 2000
-    //         })
-    //       })
-    //     }
-    //   })
+      this.temp.pid = this.temp.pid[this.temp.pid.length-1]
+      console.log(this.temp)
+      return
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          postCitieAdd(this.temp).then(response => {
+            this.dialogFormVisible = false
+            this.getList()
+            this.$notify({
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
     },
     handleUpdate(row,index) {
       this.index = index
-      console.log(row)
       this.temp = Object.assign({}, row) // copy obj
-      // this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -391,8 +344,6 @@ export default {
               duration: 2000
             })
             this.getList()
-                // this.list.splice(this.index,1,this.temp)
-
           })
         }
       })
@@ -421,21 +372,6 @@ export default {
       })
     },
     
-    formatJson(filterVal) {
-      return this.list.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
-    },
-    treeCheck(data, status) {
-      this.$refs.tree.setCheckedKeys([])
-      if (status.checkedKeys.length !== 0) {
-        this.$refs.tree.setCheckedKeys([data.uuid])
-      }
-    },
     cancel(){
         this.resetTemp();
         this.dialogFormVisible = false
@@ -464,8 +400,6 @@ export default {
         })
       //  this.loadData.push(response.respObj[0].cities)
       console.log(response.respObj)
-
-
         resolve(response.respObj[0].cities)
       })
 

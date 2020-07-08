@@ -333,15 +333,15 @@ export function postCityUp(data) {
 }
 
 /**
- * 修改区、县级
+ * 添加区、县级
  * @param data
  * @returns {AxiosPromise}
  */
-export function postAreaUp(data) {
+export function postCitieAdd(data) {
   console.log(data)
 
   return request({
-    url: '/province/update/area',
+    url: '/province/cities/add',
     method: 'post',
     data
   })

@@ -30,7 +30,7 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
-      <PButton class="filter-item" icon="el-icon-edit" perms="add" role="sys-user" type="primary"
+      <PButton class="filter-item" icon="el-icon-edit" perms="msgPush-wechatTemp:add" type="primary"
         label="table.add"  @click="handleCreate"/>
       <el-button class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-refresh" 
         @click="getList">{{ $t('table.refresh') }}</el-button>
@@ -73,8 +73,7 @@
 
           <PButton
             class="filter-item"
-            perms="edit"
-            role="sys-permission"
+            perms="msgPush-wechatTemp:edit"
             size="mini"
             type="primary"
             label="table.edit"
@@ -84,8 +83,7 @@
           <PButton
             v-if="row.status!='deleted'"
             class="filter-item"
-            perms="delete"
-            role="sys-permission"
+            perms="msgPush-wechatTemp:delete"
             size="mini"
             type="danger"
             label="table.delete"
