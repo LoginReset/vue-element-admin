@@ -132,7 +132,7 @@ export const asyncRoutes = [
   {
     path: '/ctl',
     component: Layout,
-    redirect: '/ctl/device-list/panel',
+    redirect: '/ctl/device-list',
     alwaysShow: true, // will always show the root menu
     name: 'ctl',
     meta: {
@@ -149,18 +149,44 @@ export const asyncRoutes = [
           title: '控制面板',
           roles: ['file-manage']
           // roles: ['admin'] // or you can only set roles in sub nav
-        }, children: [
-          {
-            path: 'panel',
-            component: () => import('@/views/wechat/ctlPanel'),
-            name: 'panel',
-            meta: {
-              title: '控制面板',
-              roles: ['file-manage']
-              // roles: ['admin'] // or you can only set roles in sub nav
-            },
-          }
-        ]
+        }
+        // children: [
+        //   {
+        //     path: 'panel',
+        //     component: () => import('@/views/wechat/ctlPanel'),
+        //     name: 'panel',
+        //     meta: {
+        //       title: '控制面板',
+        //       roles: ['file-manage']
+        //       // roles: ['admin'] // or you can only set roles in sub nav
+        //     },
+        //     // hidden: true
+        //   },
+        //   {
+        //     path: 'superSet',
+        //     component: () => import('@/views/wechat/ctlPanel/superSet'),
+        //     name: 'panel',
+        //     meta: {
+        //       title: '控制面板',
+        //       roles: ['file-manage']
+        //       // roles: ['admin'] // or you can only set roles in sub nav
+        //     },
+        //     hidden: true,
+        //     activeMenu: '/ctl'
+        //   },
+        //   {
+        //     path: 'sysSet',
+        //     component: () => import('@/views/wechat/ctlPanel/sysSet'),
+        //     name: 'panel',
+        //     meta: {
+        //       title: '控制面板',
+        //       roles: ['file-manage']
+        //       // roles: ['admin'] // or you can only set roles in sub nav
+        //     },
+        //     hidden: true,
+        //     activeMenu: '/ctl/device-list'
+        //   }
+        // ]
 
       }
     ]
@@ -194,22 +220,22 @@ export const asyncRoutes = [
     path: '/user',
     component: Layout,
     redirect: '/user/wechat',
-    name:'userManage',
+    name: 'userManage',
     alwaysShow: true,
-    meta:{
-      title:'用户管理',
-      icon:'user',
-      roles:['user']
+    meta: {
+      title: '用户管理',
+      icon: 'user',
+      roles: ['user']
     },
-    children:[
+    children: [
       {
-        path:'wechat',
+        path: 'wechat',
         component: () => import('@/views/userManage/weixin'),
-        name:'userManage-wechat',
+        name: 'userManage-wechat',
         meta: {
-          title:'微信用户',
-          roles:['user-wechat']
-         }
+          title: '微信用户',
+          roles: ['user-wechat']
+        }
       }
     ]
   },
@@ -236,7 +262,7 @@ export const asyncRoutes = [
 
           // roles: ['admin'] // or you can only set roles in sub nav
         }
-      },{
+      }, {
         path: 'msgTemp',
         component: () => import('@/views/wechat/msgTemp'),
         name: 'wehcat-msgTemp',
@@ -246,7 +272,7 @@ export const asyncRoutes = [
 
           // roles: ['admin'] // or you can only set roles in sub nav
         }
-      },{
+      }, {
         path: 'create',
         component: () => import('@/views/wechat/msgRedirect'),
         name: 'createMsgTemp',
@@ -255,17 +281,17 @@ export const asyncRoutes = [
           roles: ['wechat-menu']
           // roles: ['admin'] // or you can only set roles in sub nav
         }
-      },{
+      }, {
         path: 'edit',
         component: () => import('@/views/wechat/msgRedirect'),
         name: 'editMsgTemp',
         meta: {
           title: '编辑消息模板',
           roles: ['wechat-menu'],
-          activeMenu: '/wechat/msgTemp',
+          activeMenu: '/wechat/msgTemp'
           // roles: ['admin'] // or you can only set roles in sub nav
         },
-        hidden:true,
+        hidden: true
       }
     ]
   },
@@ -319,50 +345,50 @@ export const asyncRoutes = [
     }]
   },
   {
-    path:'/msgPush',
-    component:Layout,
+    path: '/msgPush',
+    component: Layout,
     redirect: '/msgPush/smsTemp',
-    alwaysShow:true,
-    name:'msgPush',
+    alwaysShow: true,
+    name: 'msgPush',
     meta: {
-      title:'消息推送',
-      icon:'icon-test',
-      roles:['msgPush']
-     },
-    children:[
+      title: '消息推送',
+      icon: 'icon-test',
+      roles: ['msgPush']
+    },
+    children: [
       {
-        path:'smsTemp',
+        path: 'smsTemp',
         component: () => import('@/views/msgPush/smsPushTemp'),
         name: 'smsTemp',
         meta: {
           title: '短信推送配置',
-          roles: ['msgPush-smsTemp'],
+          roles: ['msgPush-smsTemp']
 
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
       {
-        path:'wechatTemp',
+        path: 'wechatTemp',
         component: () => import('@/views/msgPush/wechatPushTemp'),
         name: 'wechatTemp',
         meta: {
           title: '微信推送配置',
-          roles: ['msgPush-wechatTemp'],
+          roles: ['msgPush-wechatTemp']
 
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
       {
-        path:'create',
+        path: 'create',
         component: () => import('@/views/msgPush/pushRedirect'),
         name: 'create-pushTemp',
         meta: {
           title: '创建推送模板',
-          roles: ['msgPush-wechatTemp-create'],
+          roles: ['msgPush-wechatTemp-create']
 
           // roles: ['admin'] // or you can only set roles in sub nav
         }
-      },{
+      }, {
         path: 'edit',
         component: () => import('@/views/msgPush/pushRedirect'),
         name: 'edit-pushTemp',
@@ -371,7 +397,7 @@ export const asyncRoutes = [
           noCache: false,
           activeMenu: '/msgPush/wechatTemp',
           roles: ['msgPush-edit'] },
-          hidden: true
+        hidden: true
       }
     ]
   },
@@ -395,7 +421,7 @@ export const asyncRoutes = [
         name: 'user',
         meta: {
           title: '系统管理员',
-          roles: ['sys-user'],
+          roles: ['sys-user']
         }
       },
       {
@@ -404,7 +430,7 @@ export const asyncRoutes = [
         name: 'role',
         meta: {
           title: '管理员角色',
-          roles: ['sys-role'],
+          roles: ['sys-role']
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },
@@ -414,7 +440,7 @@ export const asyncRoutes = [
         name: 'permission',
         meta: {
           title: '系统权限',
-          roles: ['sys-permission'],
+          roles: ['sys-permission']
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       }, {
@@ -423,7 +449,7 @@ export const asyncRoutes = [
         name: 'secretKey',
         meta: {
           title: '全局字段',
-          roles: ['sys-fieldName'],
+          roles: ['sys-fieldName']
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       }, {
@@ -432,15 +458,15 @@ export const asyncRoutes = [
         name: 'secretKey',
         meta: {
           title: '密钥管理',
-          roles: ['sys-secretKey'],
+          roles: ['sys-secretKey']
         }
-      },{
+      }, {
         path: 'province',
         component: () => import('@/views/sys/province'),
         name: 'province',
         meta: {
           title: '省份管理',
-          roles: ['sys-province'],
+          roles: ['sys-province']
         }
       },
       {
@@ -449,7 +475,7 @@ export const asyncRoutes = [
         name: 'login-log',
         meta: {
           title: '登录日志',
-          roles: ['sys-login-log'],
+          roles: ['sys-login-log']
         }
       },
       {
