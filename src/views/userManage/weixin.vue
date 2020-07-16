@@ -24,11 +24,11 @@
        class="filter-item"
 
        @keyup.enter.native="handleFilter"/>
-      
+
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-refresh" 
+      <el-button class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-refresh"
         @click="getList">{{ $t('table.refresh') }}</el-button>
     </div>
     <el-table
@@ -118,7 +118,7 @@
                 @change="handleChange">
               </el-cascader>
             </el-form-item>
-            
+
         </el-form>
         <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">
@@ -132,7 +132,7 @@
   </div>
 </template>
 <script>
-   import {getWechatUser,postWechatUserUp,getProvinceView} from '@/api/user' 
+   import {getWechatUser,postWechatUserUp,getProvinceView} from '@/api/user'
    import waves from '@/directive/waves' // waves directive
    import { parseTime } from '@/utils'
    import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -184,6 +184,7 @@
     },
     created(){
         this.getList();
+        console.log("created")
     },
     methods:{
         getList(){
@@ -192,19 +193,6 @@
                 this.list = response.respObj.item
                 this.total = response.respObj.total
                 this.listLoading = false
-            })
-            getProvinceView().then(response=>{
-              console.log(response.respObj)
-              let list = JSON.stringify(response.respObj) 
-              this.provinceList = JSON.parse(list)
-              this.provinceList.forEach(item=>{
-                  const cities = item.cities
-                  item.areas = cities
-                  delete item.cities
-                  
-              })
-              console.log(11111)
-              console.log(this.provinceList)
             })
         },
         handleFilter(){

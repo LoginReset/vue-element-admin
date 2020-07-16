@@ -144,7 +144,7 @@ export const asyncRoutes = [
       {
         path: 'device-list',
         component: () => import('@/views/wechat/components/device-list'),
-        name: 'device-list',
+        name: 'DeviceList',
         meta: {
           title: '控制面板',
           roles: ['file-manage']
@@ -206,7 +206,7 @@ export const asyncRoutes = [
       {
         path: 'manage',
         component: () => import('@/views/file/index'),
-        name: 'manage',
+        name: 'Index',
         meta: {
           title: '文件管理',
           roles: ['file-manage']
@@ -231,7 +231,7 @@ export const asyncRoutes = [
       {
         path: 'wechat',
         component: () => import('@/views/userManage/weixin'),
-        name: 'userManage-wechat',
+        name: 'user-weixin',
         meta: {
           title: '微信用户',
           roles: ['user-wechat']

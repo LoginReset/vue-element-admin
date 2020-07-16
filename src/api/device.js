@@ -8,3 +8,11 @@ export function userInfo(query) {
     params: query
   })
 }
+
+export function getList(query) {
+  return request({
+    url: '/b/device_info/view',
+    method: 'get',
+    params: query
+  })
+}
