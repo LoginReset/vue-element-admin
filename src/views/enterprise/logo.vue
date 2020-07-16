@@ -246,8 +246,7 @@ export default {
     submitUpload() {
         this.$refs.upload.submit();
       },
-    upload: function() {
-      debugger
+    upload() {
       let fd = new FormData()
       console.log(this.mode)
       fd.append('File', this.mode)
@@ -255,13 +254,6 @@ export default {
       postImgUpload(fd).then(response=>{
         console.log(response)
       })
-      // axios.post('/api/reportRule', fd, {
-      //    headers: {
-      //     'Content-Type': 'multipart/form-data'
-      //   }
-      // }).then(response => {
-      //   console.log(response.data);
-      // })
     },
   }
 }
