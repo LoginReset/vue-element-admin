@@ -62,8 +62,7 @@
       fit
       highlight-current-row
       style="width: 100%;"
-      row-key="permission"
-      :tree-props="{children: 'children'}"
+      row-key="uuid"
       @sort-change="sortChange"
     >
       <el-table-column
@@ -117,13 +116,20 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
+        <template slot-scope="{row,$index}">
           <PButton
             perms="sys-user:edit"
             size="mini"
             type="primary"
             label="table.edit"
             @click="handleUpdate(row)"
+          />
+          <PButton
+            perms="sys-user:delete"
+            size="mini"
+            type="danger"
+            label="table.delete"
+            @click="handleDelete(row,$index)"
           />
         </template>
       </el-table-column>
@@ -138,53 +144,53 @@
     />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form
+        <el-form
         ref="dataForm"
         :rules="rules"
         :model="temp"
         label-position="left"
         label-width="100px"
-        style="width: 400px; margin-left:50px;"
-      >
-        <el-form-item label="账号" prop="account">
-          <el-input v-model.trim="temp.account" clearable placeholder="请输入账号" />
-        </el-form-item>
-        <el-form-item v-if="dialogStatus === 'create'" label="密码" prop="pwd">
-          <el-input v-model.trim="temp.pwd" clearable placeholder="请输入密码" show-password />
-        </el-form-item>
-        <el-form-item v-if="dialogStatus === 'create'" label="确认密码" prop="confirmPwd">
-          <el-input v-model.trim="temp.confirmPwd" clearable placeholder="请确认密码" show-password />
-        </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model.trim="temp.name" clearable placeholder="请输入姓名" />
-        </el-form-item>
-        <el-form-item label="手机号" prop="phoneNum">
-          <el-input v-model.trim="temp.phoneNum" clearable placeholder="请输入手机号" />
-        </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input v-model.trim="temp.sort" clearable placeholder="请输入排序号" />
-        </el-form-item>
-        <el-form-item label="描述" prop="description">
-          <el-input
-            v-model="temp.description"
-            :autosize="{ minRows: 2, maxRows: 10}"
-            type="textarea"
-            placeholder="请输入描述"
-          />
-        </el-form-item>
-        <el-form-item label="角色" prop="puuid">
-          <el-tree
-            ref="tree"
-            default-expand-all
-            class="role-tree"
-            :data="roleList"
-            show-checkbox
-            node-key="uuid"
-            :props="treeProp"
-            @check="treeCheck"
-          />
-        </el-form-item>
-      </el-form>
+        style="width: 400px; margin-left:50px;">
+          <el-form-item label="账号" prop="account">
+            <el-input v-model.trim="temp.account" clearable placeholder="请输入账号" />
+          </el-form-item>
+          <el-form-item v-if="dialogStatus === 'create'" label="密码" prop="pwd">
+            <el-input v-model.trim="temp.pwd" clearable placeholder="请输入密码" show-password />
+          </el-form-item>
+          <el-form-item v-if="dialogStatus === 'create'" label="确认密码" prop="confirmPwd">
+            <el-input v-model.trim="temp.confirmPwd" clearable placeholder="请确认密码" show-password />
+          </el-form-item>
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model.trim="temp.name" clearable placeholder="请输入姓名" />
+          </el-form-item>
+          <el-form-item label="手机号" prop="phoneNum">
+            <el-input v-model.trim="temp.phoneNum" clearable placeholder="请输入手机号" />
+          </el-form-item>
+          <el-form-item label="排序" prop="sort">
+            <el-input v-model.trim="temp.sort" clearable placeholder="请输入排序号" />
+          </el-form-item>
+          <el-form-item label="描述" prop="description">
+            <el-input
+              v-model="temp.description"
+              :autosize="{ minRows: 2, maxRows: 10}"
+              type="textarea"
+              placeholder="请输入描述"
+            />
+          </el-form-item>
+          <el-form-item label="角色" prop="puuid">
+            <el-tree
+              ref="tree"
+              default-expand-all
+              class="role-tree"
+              :data="roleList"
+              show-checkbox
+              node-key="uuid"
+              :props="treeProp"
+              @check="treeCheck"
+            />
+          </el-form-item>
+        </el-form>
+      
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           {{ $t('table.cancel') }}
@@ -208,7 +214,7 @@
 </template>
 
 <script>
-import { getRoles, getUsers, postUserAdd, postUserUp, postUserStatus } from '@/api/sys'
+import { getRoles, getUsers, postUserAdd, postUserUp, postUserStatus,postUserDel } from '@/api/sys'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -251,6 +257,7 @@ export default {
     return {
       tableKey: 0,
       list: [],
+      deviceData:[],
       roleList: null,
       total: 0,
       listLoading: true,
@@ -280,7 +287,8 @@ export default {
       dialogStatus: '',
       textMap: {
         update: 'Edit',
-        create: 'Create'
+        create: 'Create',
+        device: 'Device'
       },
       dialogPvVisible: false,
       pvData: [],
@@ -452,15 +460,15 @@ export default {
       })
     },
     handleDelete(row, index) {
-      this.$confirm('确定删除当前角色吗?', '警告', {
+      this.$confirm('确定删除当前管理员吗?', '警告', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async() => {
         const param = []
         param.push(row.uuid)
-        const requestData = { uuids: param.toString() }
-        getRoleDel(requestData).then(response => {
+        const requestData = { uuids: param }
+        postUserDel(requestData).then(response => {
           this.$notify({
             title: '成功',
             message: '删除成功',
@@ -488,6 +496,12 @@ export default {
           this.downloadLoading = false
         })
     },
+    // handleDevice(row){
+    //   this.deviceData = row.devices
+    //   console.log(this.deviceData)
+    //   this.dialogStatus = 'device'
+    //   this.dialogFormVisible = true
+    // },
     formatJson(filterVal) {
       return this.list.map(v => filterVal.map(j => {
         if (j === 'timestamp') {

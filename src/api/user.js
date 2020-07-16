@@ -30,21 +30,15 @@ export function logout() {
 
 export function getWechatUser(query){
    return request({
-     url:'/wechat/user/view',
+     url:'/b/wechat/user/view',
      method: 'get',
      params:query
    })
 }
 export function postWechatUserUp(data){
   return request({
-    url:'/wechat/user/update',
+    url:'/b/wechat/user/update',
     method: 'post',
     data
-  })
-}
-export function getProvinceView(){
-  return request({
-    url:'/province/view',
-    method: 'get'
   })
 }

@@ -123,13 +123,12 @@
           <el-input v-model="temp.name" clearable placeholder="请输入变量" />
         </el-form-item>
         <el-form-item label="描述" prop="description">
-          <el-input v-model="temp.description" clearable placeholder="请输入描述" />
+          <el-input type="textarea" v-model="temp.description" clearable placeholder="请输入描述" />
         </el-form-item>
 
         <el-form-item v-show="dialogStatus==='create'&&temp.type===0" label="分类" prop="puuid">
           <el-tree
             ref="tree"
-            default-expand-all
             :check-strictly="checkStrictly"
             class="fieldName-tree"
             :data="fieldNameSelect"

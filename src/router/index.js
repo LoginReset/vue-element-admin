@@ -164,6 +164,99 @@ export const asyncRoutes = [
 
       }
     ]
+  }, {
+    path:'/device',
+    component:Layout,
+    redirect: '/device/manage',
+    alwaysShow: true, // will always show the root menu
+    name: 'device',
+    meta:{
+      title:'设备管理',
+      icon: 'excel',
+      roles:['device']
+    },children:[
+      {
+        path: 'manage',
+        component: () => import('@/views/device/manage'),
+        name: 'device-manage',
+        meta: {
+          noCache:true,
+          title: '设备管理',
+          roles: ['device-manage']
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },{
+        path: 'user',
+        component: () => import('@/views/device/user'),
+        name: 'device-user',
+        meta: {
+          noCache:true,
+          title: '用户设备',
+          roles: ['device-user']
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }
+    ]
+
+
+},{
+    path: '/enterprise',
+    component: Layout,
+    redirect: '/enterprise/manage',
+    alwaysShow: true, // will always show the root menu
+    name: 'enterprise',
+    meta: {
+      title: '企业管理',
+      icon: 'excel',
+      roles: ['enterprise']
+      // roles: ['admin', 'editor'] // you can set roles in root nav
+    }, children: [
+      {
+        path: 'manage',
+        component: () => import('@/views/enterprise/manage'),
+        name: 'enterprise-manage',
+        meta: {
+          noCache:true,
+          title: '企业管理',
+          roles: ['enterprise-manage']
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
+      {
+        path: 'logo',
+        component: () => import('@/views/enterprise/logo'),
+        name: 'enterprise-logo',
+        meta: {
+          title: 'logo管理',
+          roles: ['enterprise-logo']
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }
+    ]
+  },{
+      path:'/advertise',
+      component:Layout,
+      redirect: '/advertise/manage',
+      alwaysShow: true, // will always show the root menu
+      name: 'advertise',
+      meta:{
+        title:'广告管理',
+        icon: 'course',
+        roles:['advertise']
+      },children:[
+        {
+          path: 'manage',
+          component: () => import('@/views/advertise/manage'),
+          name: 'advertise-manage',
+          meta: {
+            title: '广告管理',
+            roles: ['advertise-manage']
+            // roles: ['admin'] // or you can only set roles in sub nav
+          }
+        }
+      ]
+
+
   },
   {
     path: '/file',
@@ -184,7 +277,6 @@ export const asyncRoutes = [
         meta: {
           title: '文件管理',
           roles: ['file-manage']
-
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       }
@@ -204,8 +296,8 @@ export const asyncRoutes = [
     children:[
       {
         path:'wechat',
-        component: () => import('@/views/userManage/weixin'),
-        name:'userManage-wechat',
+        component: () => import('@/views/user/wechat'),
+        name:'user-wechat',
         meta: {
           title:'微信用户',
           roles:['user-wechat']
@@ -287,8 +379,6 @@ export const asyncRoutes = [
       meta: {
         title: '短信账号',
         roles: ['sms-account'],
-        buttons: []
-
       }
     }, {
       path: 'template',
@@ -358,7 +448,7 @@ export const asyncRoutes = [
         name: 'create-pushTemp',
         meta: {
           title: '创建推送模板',
-          roles: ['msgPush-wechatTemp-create'],
+          roles: ['msgPush-create'],
 
           // roles: ['admin'] // or you can only set roles in sub nav
         }
@@ -440,6 +530,7 @@ export const asyncRoutes = [
         name: 'province',
         meta: {
           title: '省份管理',
+          noCache: false,
           roles: ['sys-province'],
         }
       },

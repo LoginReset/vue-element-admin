@@ -16,6 +16,7 @@ export default {
       return this.$store.state.tagsView.cachedViews
     },
     key() {
+      console.log(this.$route.path)
       return this.$route.path
     }
   }

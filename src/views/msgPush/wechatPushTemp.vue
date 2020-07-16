@@ -235,13 +235,9 @@ export default {
           this.list.splice(index, 1)
         })
       }).catch(err => {
-
+        console.log(err)
       })
     },
-    hasPerms(role, perms) {
-      // 根据权限标识和外部指示状态进行权限判断
-      return hasBtnPermission(role, perms) // & !this.disabled
-    }
   }
 }
 </script>

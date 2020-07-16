@@ -7,7 +7,6 @@
         style="width: 200px;"
         class="filter-item"
         clearable
-
         @keyup.enter.native="handleFilter"/>
       <el-input
         v-model="listQuery.phone"
@@ -42,9 +41,12 @@
       row-key="openId"
       @sort-change="sortChange">
       <el-table-column label="序号" prop="id" align="center" type="index" width="50" />
-      <el-table-column label="头像" align="center" width="60">
+      <el-table-column label="头像" align="center" width="100">
         <template slot-scope="{row}">
-          <el-avatar shape="square" size="large" :src="row.headimgurl" @error="errorHandler"></el-avatar>
+          <el-image 
+            :src="row.headimgurl" 
+            :preview-src-list="srcList">
+          </el-image>
         </template>
       </el-table-column>
       <el-table-column label="昵称" align="center">
@@ -73,11 +75,10 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
+        <template slot-scope="{row}">
           <PButton
             class="filter-item"
-            perms="edit"
-            role="sys-permission"
+            perms="user-wechat:edit"
             size="mini"
             type="primary"
             label="table.edit"
@@ -110,15 +111,6 @@
             <el-form-item label="用户名" prop="username">
               <el-input v-model="temp.username" clearable placeholder="请输入用户名" />
             </el-form-item>
-            <el-form-item label="地址" prop="province">
-              <el-cascader
-                v-model="province"
-                :options="provinceList"
-                :props="provinceProps"
-                @change="handleChange">
-              </el-cascader>
-            </el-form-item>
-            
         </el-form>
         <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">
@@ -132,28 +124,22 @@
   </div>
 </template>
 <script>
-   import {getWechatUser,postWechatUserUp,getProvinceView} from '@/api/user' 
+   import {getWechatUser,postWechatUserUp} from '@/api/user' 
    import waves from '@/directive/waves' // waves directive
    import { parseTime } from '@/utils'
    import Pagination from '@/components/Pagination' // secondary package based on el-pagination
    import PButton from '@/components/PermissionBtn'
    import { hasBtnPermission } from '@/utils/permission'
    export default {
-      name:'user-weixin',
+      name:'user-wechat',
       components: { Pagination, PButton },
       directives: { waves },
       data() {
         return {
-        province:[],
-        provinceList:[],
-        provinceProps: {
-          value: 'uuid',
-          label: 'provinceName',
-          children: 'areas'
-        },
         name: '',
         tableKey: 0,
         list: [],
+        srcList:[],
         total: 0,
         listLoading: true,
         listQuery: {
@@ -192,20 +178,11 @@
                 this.list = response.respObj.item
                 this.total = response.respObj.total
                 this.listLoading = false
+                this.list.forEach(item=>{
+                  this.srcList.push(item.headimgurl)
+                })
             })
-            getProvinceView().then(response=>{
-              console.log(response.respObj)
-              let list = JSON.stringify(response.respObj) 
-              this.provinceList = JSON.parse(list)
-              this.provinceList.forEach(item=>{
-                  const cities = item.cities
-                  item.areas = cities
-                  delete item.cities
-                  
-              })
-              console.log(11111)
-              console.log(this.provinceList)
-            })
+            
         },
         handleFilter(){
             this.listQuery.page = 1
@@ -262,9 +239,6 @@
         errorHandler() {
           return true
         },
-        handleChange(province) {
-          console.log(province);
-        }
     }
  }
 </script>

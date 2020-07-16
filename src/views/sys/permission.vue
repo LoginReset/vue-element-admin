@@ -85,11 +85,6 @@
           <span>{{ row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="排序" align="center" sortable="custom" prop="sort">
-        <template slot-scope="{row}">
-          <span>{{ row.sort }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="创建时间" align="center" sortable="custom" prop="create_date">
         <template slot-scope="{row}">
           <span>{{ row.createDate }}</span>
@@ -145,9 +140,6 @@
         </el-form-item>
         <el-form-item label="路径" prop="filterUrl">
           <el-input v-model.trim="temp.filterUrl" clearable placeholder="请输入路径" />
-        </el-form-item>
-        <el-form-item label="排序" prop="sort">
-          <el-input v-model.trim="temp.sort" clearable placeholder="请输入排序号" />
         </el-form-item>
         <el-form-item label="描述" prop="description">
           <el-input
@@ -449,6 +441,8 @@ export default {
       }))
     },
     treeCheck(data, status) {
+      console.log(data)
+      console.log(status)
       this.$refs.tree.setCheckedKeys([])
       if (status.checkedKeys.length !== 0) {
         this.$refs.tree.setCheckedKeys([data.uuid])
@@ -463,5 +457,8 @@ export default {
 <style scoped>
   .permission-tree {
     margin-bottom: 30px;
+  }
+  .el-tag{
+    font-size:14px;
   }
 </style>

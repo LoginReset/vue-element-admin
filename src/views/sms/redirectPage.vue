@@ -163,7 +163,7 @@
                 {{ title.description }}
               </div>
               <div v-show="title.children.length>0" class="title-name">
-                <el-tag v-for="titleName in title.children" :key="titleName.uuid" class="tag text-muted" @click="chooseName(titleName)">{{ titleName.description }}</el-tag>
+                <el-tag v-for="titleName in title.children" :key="titleName.uuid" class="tag text-muted" @click="chooseName(titleName)">{{ titleName.description.length<=20 ? titleName.description :titleName.description.slice(0,20)+'...' }}</el-tag>
               </div>
             </div>
           </template>
@@ -525,7 +525,7 @@ export default {
       width:100%;
   }
   .box-card {
-    width: 450px;
+    width: 400px;
   }
   .title-box{
       margin-bottom:20px;

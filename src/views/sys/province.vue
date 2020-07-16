@@ -149,7 +149,7 @@
 
 <script>
 import store from '@/store'
-import {getProvinceView,postCityUpm,postCitieAdd} from '@/api/sys'
+import {getProvinceView,postCityUp,postCitieAdd} from '@/api/sys'
 // import { getProvinceView } from '@/api/user'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -158,7 +158,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import PButton from '@/components/PermissionBtn'
 
 export default {
-  name: 'Permission',
+  name: 'province',
   components: { Pagination, PButton },
   directives: { waves },
   data() {
@@ -317,6 +317,8 @@ export default {
               duration: 2000
             })
           })
+          this.getList()
+
         }
       })
     },
@@ -349,7 +351,7 @@ export default {
       })
     },
     handleDelete(row, index) {
-      this.$confirm('确定删除当前权限及子孙权限?', '警告', {
+      this.$confirm('确定删除当前权限及子孙省份?', '警告', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'

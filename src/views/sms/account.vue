@@ -315,9 +315,9 @@ export default {
         row.status = status === 1 ? 0 : 1
       })
     },
-    hasPerms(role, perms) {
+    hasPerms(perms) {
       // 根据权限标识和外部指示状态进行权限判断
-      return hasBtnPermission(role, perms) // & !this.disabled
+      return hasBtnPermission(perms) // & !this.disabled
     }
   }
 }

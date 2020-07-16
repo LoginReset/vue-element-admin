@@ -133,6 +133,8 @@
             show-checkbox
             node-key="uuid"
             :props="treeProp"
+            @check="treeCheck"
+
           />
         </el-form-item>
       </el-form>
@@ -184,6 +186,7 @@ export default {
     return {
       tableKey: 0,
       list: [],
+      keys:[],
       permissionAll: null,
       total: 0,
       listLoading: true,
@@ -269,8 +272,15 @@ export default {
         description: '',
         sort: 0
       }
-    }, checkedPermission() {
-      const checkedUuid = this.$refs.tree.getCheckedKeys()
+    }, 
+    treeCheck(data, status) {
+      this.keys = []
+      this.keys = status.checkedKeys.concat(status.halfCheckedKeys)
+    },
+    checkedPermission() {
+      // console.log(this.$refs.tree.getCheckedKeys())
+      // const checkedUuid = this.$refs.tree.getCheckedKeys()
+      const checkedUuid = this.keys
       if (checkedUuid.length === 0) {
         this.$notify({
           title: '警告',
@@ -334,7 +344,6 @@ export default {
 
     },
     updateData() {
-
       const permiUuids = this.checkedPermission()
       if (permiUuids.length === 0) {
         return

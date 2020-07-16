@@ -30,7 +30,7 @@ export function postSynchMenu(data) {
    */
   export function postMsgTempSave(data) {
     return request({
-      url: '/wechat/msg_temp/save',
+      url: '/b/wechat/msg_temp/save',
       method: 'post',
       data
     })
@@ -42,7 +42,7 @@ export function postSynchMenu(data) {
    */
   export function postMsgTempUpdate(data) {
     return request({
-      url: '/wechat/msg_temp/update',
+      url: '/b/wechat/msg_temp/update',
       method: 'post',
       data
     })
@@ -54,7 +54,7 @@ export function postSynchMenu(data) {
    */
   export function postMsgTempDel(data) {
     return request({
-      url: '/wechat/msg_temp/delete',
+      url: '/b/wechat/msg_temp/delete',
       method: 'post',
       data
     })
@@ -65,7 +65,7 @@ export function postSynchMenu(data) {
      */
   export function getMsgTemp(query) {
     return request({
-      url: '/wechat/msg_temp/view',
+      url: '/b/wechat/msg_temp/view',
       method: 'get',
       params:query
     })
@@ -76,7 +76,7 @@ export function postSynchMenu(data) {
      */
     export function postConfigSave(data) {
       return request({
-        url: '/config/temp/save',
+        url: '/b/config/temp/save',
         method: 'post',
         data
       })
@@ -87,7 +87,7 @@ export function postSynchMenu(data) {
      */
     export function getConfigView(query) {
       return request({
-        url: '/config/temp/view',
+        url: '/b/config/temp/view',
         method: 'get',
         params:query
       })
@@ -98,7 +98,7 @@ export function postSynchMenu(data) {
      */
     export function postConfigDel(data) {
       return request({
-        url: '/config/temp/delete',
+        url: '/b/config/temp/delete',
         method: 'post',
         data
       })
@@ -109,7 +109,7 @@ export function postSynchMenu(data) {
      */
     export function postConfigUp(data) {
       return request({
-        url: '/config/temp/update',
+        url: '/b/config/temp/update',
         method: 'post',
         data
       })
@@ -120,7 +120,7 @@ export function postSynchMenu(data) {
      */
     export function getWechatTemp(query) {
       return request({
-        url: '/wechat/msg_temp/query',
+        url: '/b/wechat/msg_temp/query',
         method: 'get',
         params:query
       })
@@ -131,7 +131,7 @@ export function postSynchMenu(data) {
      */
     export function postWechatVertify(data) {
       return request({
-        url: '/wechat/msg_temp/verify',
+        url: '/b/wechat/msg_temp/verify',
         method: 'post',
         data
       })

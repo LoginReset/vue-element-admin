@@ -47,6 +47,17 @@ export function postUserStatus(data) {
     data
   })
 }
+/**
+ * 删除管理员
+ * @param data
+ */
+export function postUserDel(data) {
+  return request({
+    url: '/b/su/delete',
+    method: 'post',
+    data
+  })
+}
 
 /**
  * 获取角色列表
@@ -314,7 +325,7 @@ export function getFieldKeyDel(data) {
  */
 export function getProvinceView(query){
   return request({
-    url:'/province/cities/view',
+    url:'/b/province/cities/view',
     method: 'get',
     params:query
   })
@@ -326,7 +337,7 @@ export function getProvinceView(query){
  */
 export function postCityUp(data) {
   return request({
-    url: '/province/cities/update',
+    url: '/b/province/cities/update',
     method: 'post',
     data
   })
@@ -341,7 +352,7 @@ export function postCitieAdd(data) {
   console.log(data)
 
   return request({
-    url: '/province/cities/add',
+    url: '/b/province/cities/add',
     method: 'post',
     data
   })
