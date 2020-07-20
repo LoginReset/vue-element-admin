@@ -138,7 +138,7 @@ export const asyncRoutes = [
     meta: {
       title: '控制面板',
       icon: 'excel',
-      roles: ['file']
+      roles: ['ctl']
       // roles: ['admin', 'editor'] // you can set roles in root nav
     }, children: [
       {
@@ -147,7 +147,7 @@ export const asyncRoutes = [
         name: 'DeviceList',
         meta: {
           title: '控制面板',
-          roles: ['file-manage']
+          roles: ['ctl-manage']
           // roles: ['admin'] // or you can only set roles in sub nav
         }
         // children: [
@@ -198,7 +198,7 @@ export const asyncRoutes = [
     name: 'device',
     meta:{
       title:'设备管理',
-      icon: 'excel',
+      icon: 'devices',
       roles:['device']
     },children:[
       {

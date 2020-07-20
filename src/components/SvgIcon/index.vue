@@ -30,6 +30,7 @@ export default {
     },
     svgClass() {
       if (this.className) {
+        console.log(this.className)
         return 'svg-icon ' + this.className
       } else {
         return 'svg-icon'
@@ -52,6 +53,10 @@ export default {
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;
+}
+.device{
+  width: 1.2em;
+  height: 1.2em;
 }
 
 .svg-external-icon {

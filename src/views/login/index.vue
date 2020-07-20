@@ -192,19 +192,21 @@ export default {
     } else if (this.loginForm.password === '') {
       this.$refs.password.focus()
     }
-    console.log(this.$refs.username)
     this.width = this.$refs.dragVerifySize.$el.clientWidth
     this.height = this.$refs.username.$el.clientHeight
-
     /* 当窗口改变触发*/
     window.onresize = () => {
-      return (() => {
-        this.width = this.$refs.dragVerifySize.$el.clientWidth
-        this.height = this.$refs.username.$el.clientHeight
-      })()
+        return (() => {
+          this.width = this.$refs.dragVerifySize.$el.clientWidth
+          this.height = this.$refs.username.$el.clientHeight
+        })()
+        
     }
+    
+    
   },
   destroyed() {
+    window.onresize = null
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
