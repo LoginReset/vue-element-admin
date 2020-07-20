@@ -21,10 +21,12 @@ export function getInfo(token) {
   })
 }
 
-export function logout() {
+export function logout(data) {
+  console.log(data)
   return request({
     url: '/b/logout',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 

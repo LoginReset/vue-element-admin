@@ -141,9 +141,6 @@
                 <el-radio :label="0">禁用</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="选择图片" prop="imgUrl">
-            <el-input v-model.trim="temp.imgUrl" clearable placeholder="请输入公司地址" />
-          </el-form-item>
           <el-form-item label="选择图片" prop="companyTitle">
             <el-upload
               ref="upload"
@@ -157,7 +154,7 @@
               >
               <el-button slot="trigger" size="small" type="primary">选取图片</el-button>
             </el-upload>
-            <el-button @click="submitUpload">点击上传文件</el-button>
+            <!-- <el-button @click="submitUpload">点击上传文件</el-button> -->
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -245,6 +242,7 @@ export default {
   },
   methods:{
     getList(){
+      this.srcList = []
       this.listLoading = true
       getAdvertsView(this.listQuery).then(response=>{
         this.list = response.respObj.item
@@ -403,14 +401,13 @@ export default {
       fd.append('file', this.mode)// 文件对象
       console.log(fd.get('file'))
       postImgUpload(fd).then(response=>{
-        console.log(response)
+        this.temp.imgUrl = response.respObj
       })
     },
     fileChange(file, fileList) {
       this.modeList = []
       this.modeList.push(file)
       this.submitUpload()
-      console.log(this.modeList)
 
     },
   }

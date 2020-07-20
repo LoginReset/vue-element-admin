@@ -5,10 +5,10 @@
         Your roles:
         <span class="pan-info-roles">{{ roleName }}</span>
       </pan-thumb>
-      <github-corner style="position: absolute; top: 0px; border: 0; right: 0;" />
+      <!-- <github-corner style="position: absolute; top: 0px; border: 0; right: 0;" /> -->
       <div class="info-container">
-        <span class="display_name">{{ name }}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's Dashboard</span>
+        <span class="display_name">{{ name}}</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">后台管理系统</span>
       </div>
     </div>
     <div>
@@ -64,9 +64,9 @@ export default {
       height: 150px;
       line-height: 200px;
       .display_name {
-        font-size: 48px;
-        line-height: 48px;
-        color: #212121;
+        font-size: 40px;
+        line-height: 40px;
+        color: #525669;
         position: absolute;
         top: 25px;
       }

@@ -23,11 +23,11 @@
        class="filter-item"
 
        @keyup.enter.native="handleFilter"/>
-      
+
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-refresh" 
+      <el-button class="filter-item" style="margin-left: 10px;" type="success" icon="el-icon-refresh"
         @click="getList">{{ $t('table.refresh') }}</el-button>
     </div>
     <el-table
@@ -170,6 +170,7 @@
     },
     created(){
         this.getList();
+        console.log("created")
     },
     methods:{
         getList(){
@@ -182,7 +183,6 @@
                   this.srcList.push(item.headimgurl)
                 })
             })
-            
         },
         handleFilter(){
             this.listQuery.page = 1

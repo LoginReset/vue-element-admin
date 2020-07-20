@@ -1,5 +1,5 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken,getOS, setOS, removeOS } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
 const state = {
@@ -8,7 +8,9 @@ const state = {
   avatar: '', // 头像
   introduction: '', // 简介
   roles: [], // 权限列表
-  roleName: ''// 角色名
+  roleName: '',// 角色名
+  osName:'',
+  browserName:''
 }
 
 const mutations = {
@@ -29,13 +31,19 @@ const mutations = {
   },
   SET_ROLE_NAME: (state, roleName) => {
     state.roleName = roleName
+  },
+  SET_OSNAME: (state, osName) => {
+    state.osName = osName
+  },
+  SET_BROWSERNAME: (state, browserName) => {
+    state.browserName = browserName
   }
+
 }
 
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    console.log(889999)
     console.log(userInfo)
     const { username, password, browser, OS } = userInfo
     return new Promise((resolve, reject) => {
@@ -48,6 +56,11 @@ const actions = {
       login(formData).then(response => {
         // const { data } = response
         // commit('SET_TOKEN', "LOGIN_SUCCESS")
+        const data = {
+          browser,
+          OS
+        }
+        setOS(data)
         setToken('LOGIN_SUCCESS')// 本项目中没有实际意义，只是一个标志位表示登录成功了，也可以用作token值
         resolve()
       }).catch(error => {
@@ -87,7 +100,12 @@ const actions = {
   // user logout
   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
-      logout().then(() => {
+      console.log(JSON.parse(getOS()))
+      const data = new FormData()
+      data.append('osName',JSON.parse(getOS()).OS)
+      data.append('browserName',JSON.parse(getOS()).browser)
+      console.log(data)
+      logout(data).then(() => {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
         removeToken()

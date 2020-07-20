@@ -88,6 +88,18 @@ export function getAdviceView(query){
       params:query
     })
   }
+    /**
+   * 具体设备查询
+   * @param data
+   * @returns {AxiosPromise}
+   */
+  export function getSelectDevice(query) {
+    return request({
+      url: '/b/su/select',
+      method: 'get',
+      params:query
+    })
+  }
   /**
    * 用户设备解绑
    * @param data
@@ -100,3 +112,20 @@ export function getAdviceView(query){
       data
     })
   }
+export function userInfo(query) {
+  return request({
+    // todo
+    url: '/b/el',
+    // url: 'http://localhost:9527/mock/device/userInfo.json',
+    method: 'get',
+    params: query
+  })
+}
+
+export function getList(query) {
+  return request({
+    url: '/b/device_info/view',
+    method: 'get',
+    params: query
+  })
+}

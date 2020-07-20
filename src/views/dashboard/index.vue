@@ -23,10 +23,9 @@ export default {
     ])
   },
   created() {
-    console.log(11111)
     console.log(this.roleName)
     if (this.roleName.includes('admin')) {
-      this.currentRole = 'adminDashboard'
+      this.currentRole = 'editorDashboard'
     }else{
       this.currentRole = 'editorDashboard'
 

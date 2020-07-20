@@ -80,7 +80,7 @@
       :page.sync="listQuery.page"
       :limit.sync="listQuery.limit"
       @pagination="getList"/>
-      <el-dialog title="Edit" :visible.sync="dialogFormVisible">
+      <el-dialog title="Edit" :visible.sync="dialogFormVisible" height="100%">
         <el-form
           ref="dataForm"
           :rules="rules"
@@ -103,7 +103,29 @@
               :auto-upload="false">
               <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             </el-upload>
-            <el-button @click="submitUpload">点击上传文件</el-button>
+            <VueCropper
+              ref="cropper"
+              :img="option.img"
+              :outputSize="option.size"
+              :outputType="option.outputType"
+              :info="true"
+              :canScale="option.canScale"
+              :autoCrop="option.autoCrop"
+              :autoCropWidth="option.autoCropWidth"
+              :autoCropHeight="option.autoCropHeight"
+              :fixedBox="option.fixedBox"
+              :fixed="option.fixed"
+              :fixedNumber="option.fixedNumber"
+              :canMove="option.canMove"
+              :canMoveBox="option.canMoveBox"
+              :original="option.original"
+              :centerBox="option.centerBox"
+              :infoTrue="option.infoTrue"
+              :full="option.full"
+              :enlarge="option.enlarge"
+              :mode="option.mode">
+          </VueCropper>
+            <!-- <el-button @click="submitUpload">点击上传文件</el-button> -->
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -125,13 +147,17 @@ import waves from '@/directive/waves' // waves directive
 
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
+import Vue from 'vue'
+import {VueCropper} from 'vue-cropper' 
+Vue.use(VueCropper)
 
 export default {
   name:'enterprise-logo',
   directives:{waves},
   components:{
     PButton,
-    Pagination
+    Pagination,
+    VueCropper
   },
   data(){
     return{
@@ -155,6 +181,27 @@ export default {
       },
       listLoading:false,
       dialogFormVisible: false,
+      option: {
+        img: '', // 裁剪图片的地址
+        size: 0.8, // 裁剪生成图片的质量
+        outputType: 'png', // 裁剪生成图片的格式
+        // info: true, // 裁剪框的大小信息
+        canScale: false, // 图片是否允许滚轮缩放
+        autoCrop: true, // 是否默认生成截图框
+        autoCropWidth: 159, // 默认生成截图框宽度
+        autoCropHeight: 91, // 默认生成截图框高度
+        fixedBox: true, // 固定截图框大小 不允许改变
+        fixed: true, // 是否开启截图框宽高固定比例
+        fixedNumber: [1, 1], // 截图框的宽高比例
+        canMove: true, // 上传图片是否可以移动
+        canMoveBox: false, // 截图框能否拖动
+        original: false, // 上传图片按照原始比例渲染
+        centerBox: true, // 截图框是否被限制在图片里面
+        infoTrue: true, // true 为展示真实输出图片宽高 false 展示看到的截图框宽高
+        full: false, // 是否输出原图比例的截图
+        enlarge: '0.5', // 图片根据截图框输出比例倍数
+        mode: 'contain' // 图片默认渲染方式
+      },
       rules:{
       }
     }
@@ -164,6 +211,7 @@ export default {
   },
   methods:{
     getList(){
+      this.srcList = []
       this.listLoading = true
       getEnterpriseView(this.listQuery).then(response=>{
         this.list = response.respObj.item
@@ -172,7 +220,7 @@ export default {
         })
         this.total = response.respObj.total
         console.log(this.listQuery)
-        this.listLoading = false
+        this.listLoading = false 
       })
     },
     handleFilter(){
@@ -180,6 +228,8 @@ export default {
       this.getList()
     },
     handleUpdate(row){
+      this.option.img = row.companyImg
+      console.log(this.option.img)
       console.log(row)
       this.temp = Object.assign({}, row)
 
@@ -233,6 +283,10 @@ export default {
       console.log(fd.get('file'))
       postImgUpload(fd).then(response=>{
         console.log(response)
+        console.log(response.respObj)
+        this.temp.companyImg = response.respObj
+        this.option.img = response.respObj
+        console.log(this.temp.companyImg)
       })
       
     },
@@ -242,6 +296,7 @@ export default {
       // console.log(file.raw)
       this.modeList = []
       this.modeList.push(file)
+      this.submitUpload()
     },
     submitUpload() {
         this.$refs.upload.submit();
@@ -252,14 +307,15 @@ export default {
       fd.append('File', this.mode)
       console.log(fd)
       postImgUpload(fd).then(response=>{
-        console.log(response)
+        console.log(response.respObj)
       })
     },
   }
 }
 </script>
-<style>
+<style lang="scss" scoped>
   .el-tag{
     font-size: 14px;
   }
+
 </style>

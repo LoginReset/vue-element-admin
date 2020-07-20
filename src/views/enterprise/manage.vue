@@ -222,9 +222,9 @@ export default {
         name:[{ required: true, message: '公司名称必填', trigger: 'change' }],
         address:[{required:true, message:'公司地址必填', trigger:'change'}],
         // companyTel:[{required:true, message:'公司电话必填', trigger:'change'}],
-        // linkman:[{required:true, message:'公司联系人必填', trigger:'change'}],
-        phone:[{ pattern:/^[1]([3-9])[0-9]{9}$/,message:'请输入正确电话号码', trigger:'change'}],
-        // qrCodeType:[{required:true, validator: checkSort,trigger:'change'}],
+        linkman:[{required:true, message:'公司联系人必填', trigger:'change'}],
+        phone:[{ required:true, pattern:/^[1]([3-9]patter)[0-9]{9}$/,message:'请输入正确电话号码', trigger:'change'}],
+        qrCodeType:[{required:true, validator: checkSort,trigger:'change'}],
       }
     }
   },

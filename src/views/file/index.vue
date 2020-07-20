@@ -34,17 +34,17 @@ export default {
       ],
       urls: {
         // index: '/dev-api/vue-element-admin/xayah/file/list',    //获取文件地址
-        index: 'http://localhost:8080/b/xayah', // 获取文件地址
+        index: process.env.VUE_APP_BASE_API+'/b/xayah', // 获取文件地址
         // upload: '/dev-api/vue-element-admin/xayah/create',   //上传地址
-        upload: 'http://localhost:8080/b/xayah/upload', // 上传地址
+        upload: process.env.VUE_APP_BASE_API+'/b/xayah/upload', // 上传地址
         // create: '/dev-api/vue-element-admin/xayah/create',   //创建目录地址
-        create: 'http://localhost:8080/b/xayah/create', // 创建目录地址
+        create: process.env.VUE_APP_BASE_API+'/b/xayah/create', // 创建目录地址
         check: '', // 检查文件唯一
-        policy: 'http://localhost:8080/b/xayah/policy', // 获取上传策略地址
-        delete: 'http://localhost:8080/b/xayah/delete', // 删除文件或目录地址
-        return: 'http://localhost:8080/b/xayah/return', // 本地回调地址
-        visible: 'http://localhost:8080/b/xayah/visible',
-        rename: 'http://localhost:8080/b/xayah/rename',
+        policy: process.env.VUE_APP_BASE_API+'/b/xayah/policy', // 获取上传策略地址
+        delete: process.env.VUE_APP_BASE_API+'/b/xayah/delete', // 删除文件或目录地址
+        return: process.env.VUE_APP_BASE_API+'/b/xayah/return', // 本地回调地址
+        visible: process.env.VUE_APP_BASE_API+'/b/xayah/visible',
+        rename: process.env.VUE_APP_BASE_API+'/b/xayah/rename',
       },
       id: 'editorImage',
       max: 5,

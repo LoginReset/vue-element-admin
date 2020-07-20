@@ -12,7 +12,7 @@
       <el-input
         v-model.trim="listQuery.deviceName"
         clearable
-        placeholder="设备名称"
+        placeholder="deviceName"
         style="width: 150px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
@@ -28,7 +28,7 @@
       <el-input
         v-model.trim="listQuery.title"
         clearable
-        placeholder="设备使用地方名称"
+        placeholder="标题"
         style="width: 170px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
@@ -96,7 +96,7 @@
         width="50"
       />
       
-      <el-table-column label="设备名称" align="center">
+      <el-table-column label="deviceName" align="center">
         <template slot-scope="{row}">
           <el-tag>{{row.deviceName}}</el-tag>
         </template>
@@ -106,7 +106,7 @@
           <span>{{row.deviceNumber}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="使用地方名称" width="150" align="center">
+      <el-table-column label="标题" width="150" align="center">
         <template slot-scope="{row}">
           <span>{{row.title}}</span>
         </template>
@@ -164,7 +164,6 @@
           </el-option>
       </el-select> -->
     <pagination
-      v-show="total>0"
       :total="total"
       :page.sync="listQuery.page"
       :limit.sync="listQuery.limit"
@@ -205,13 +204,13 @@
             </el-form-item>
           </template>
           <template v-else>
-            <el-form-item label="设备名称" prop="deviceName" v-show="dialogStatus==='create'">
+            <el-form-item label="deviceName" prop="deviceName" v-show="dialogStatus==='create'">
             <el-input v-model.trim="temp.deviceName" clearable placeholder="请输入设备名称" />
             </el-form-item>
             <el-form-item label="设备编号" prop="deviceNumber" v-show="dialogStatus==='create'">
                 <el-input v-model.trim="temp.deviceNumber " clearable placeholder="请输入设备编号" />
             </el-form-item>
-            <el-form-item label="使用地址" prop="title">
+            <el-form-item label="标题" prop="title">
                 <el-input v-model.trim="temp.title " clearable placeholder="请输入使用地址名称" />
             </el-form-item>
             <el-form-item label="版本号" prop="version">
@@ -301,7 +300,10 @@ export default {
       rules:{
         sort: [{ validator: checkSort, trigger: 'change' }],
         deviceName:[{required:true, message:'设备名称必填', trigger:'change'}],
-        deviceNumber:[{required:true, message:'设备编号必填', trigger:'change'}],
+        deviceNumber:[{required:true, message:'设备编号必填', trigger:'change'},
+        // { pattern:/^[0-9]+$/, message:'设备编号为数字', trigger:'change'}
+        ],
+        version:[{pattern:/^[1-9]+\.?[0-9]*$/, message:'请输入正确设备版本号', trigger:'change'}],
       }
     }
   },
@@ -312,6 +314,8 @@ export default {
   },
   methods:{
     getList(){
+      this.allCheck = false
+      this.multipleSelection = []
       this.listLoading = true
       getAdviceView(this.listQuery).then(response=>{
         this.list = response.respObj.item
@@ -319,18 +323,18 @@ export default {
         this.listLoading = false
         let query = JSON.stringify(this.listQuery)
         query = JSON.parse(query) 
-        query.limit = this.total
+        if(this.total>0){
+          query.limit = this.total
+        }
         query.page = 1
         getAdviceView(query).then(response=>{
           this.listAll = response.respObj.item       
         })
-
       })
       const listQuery = {
         page:1,
         limit:20
       }
-      console.log(listQuery)
       getUsers(listQuery).then(response=>{
         this.userTotal = response.respObj.total
         console.log(this.userTotal)
@@ -379,6 +383,8 @@ export default {
       })
     },
     handleImport(){
+      this.modeList = []
+      console.log(this.modeList)
       this.dialogStatus = 'import'
       this.dialogFormVisible = true
       this.$nextTick(()=>{

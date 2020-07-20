@@ -103,7 +103,7 @@
             <el-input v-model.trim="temp.other.session" clearable placeholder="请输入用户session内容" />
           </el-form-item>
           <el-form-item label="短信码号扩展号" prop="extendcode">
-            <el-input v-model.trim="temp.other.extendcode" clearable placeholder="请输入用户session内容" />
+            <el-input v-model.trim="temp.other.extendcode" clearable placeholder="请输入短信码号扩展号" />
           </el-form-item>
 
           <el-form-item
