@@ -185,7 +185,7 @@
               return;
             }
             if (this.device.fjStatus === 1) {
-              this.$emit('sendMsg', mqttCmd.set(2));
+              this.$emit('sendMsg', mqttCmd.setFj(2));
             } else if (this.device.fjStatus === 2) {
               this.$emit('sendMsg', mqttCmd.setFj(3));
             } else if (this.device.fjStatus === 3) {
