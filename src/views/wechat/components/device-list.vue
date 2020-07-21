@@ -107,41 +107,41 @@
         />
         <!--添加 更新-->
         <!--<el-dialog title="edit" :visible.sync="dialogFormVisible">-->
-          <!--<el-form-->
-            <!--ref="dataForm"-->
-            <!--:rules="rules"-->
-            <!--:model="temp"-->
-            <!--label-position="left"-->
-            <!--label-width="80px"-->
-            <!--style="width: 400px; margin-left:50px;"-->
-          <!--&gt;-->
-            <!--<el-form-item label="地址" prop="address">-->
-              <!--<el-input v-model="temp.address" clearable placeholder="请输入地址"/>-->
-            <!--</el-form-item>-->
-            <!--<el-form-item label="手机号" prop="phone">-->
-              <!--<el-input v-model="temp.phone" clearable placeholder="请输入手机号"/>-->
-            <!--</el-form-item>-->
-            <!--<el-form-item label="用户名" prop="username">-->
-              <!--<el-input v-model="temp.username" clearable placeholder="请输入用户名"/>-->
-            <!--</el-form-item>-->
-            <!--<el-form-item label="地址" prop="province">-->
-              <!--<el-cascader-->
-                <!--v-model="province"-->
-                <!--:options="provinceList"-->
-                <!--:props="provinceProps"-->
-                <!--@change="handleChange"-->
-              <!--/>-->
-            <!--</el-form-item>-->
+        <!--<el-form-->
+        <!--ref="dataForm"-->
+        <!--:rules="rules"-->
+        <!--:model="temp"-->
+        <!--label-position="left"-->
+        <!--label-width="80px"-->
+        <!--style="width: 400px; margin-left:50px;"-->
+        <!--&gt;-->
+        <!--<el-form-item label="地址" prop="address">-->
+        <!--<el-input v-model="temp.address" clearable placeholder="请输入地址"/>-->
+        <!--</el-form-item>-->
+        <!--<el-form-item label="手机号" prop="phone">-->
+        <!--<el-input v-model="temp.phone" clearable placeholder="请输入手机号"/>-->
+        <!--</el-form-item>-->
+        <!--<el-form-item label="用户名" prop="username">-->
+        <!--<el-input v-model="temp.username" clearable placeholder="请输入用户名"/>-->
+        <!--</el-form-item>-->
+        <!--<el-form-item label="地址" prop="province">-->
+        <!--<el-cascader-->
+        <!--v-model="province"-->
+        <!--:options="provinceList"-->
+        <!--:props="provinceProps"-->
+        <!--@change="handleChange"-->
+        <!--/>-->
+        <!--</el-form-item>-->
 
-          <!--</el-form>-->
-          <!--<div slot="footer" class="dialog-footer">-->
-            <!--<el-button @click="dialogFormVisible = false">-->
-              <!--{{ $t('table.cancel') }}-->
-            <!--</el-button>-->
-            <!--<el-button type="primary" @click="updateData()">-->
-              <!--{{ $t('table.confirm') }}-->
-            <!--</el-button>-->
-          <!--</div>-->
+        <!--</el-form>-->
+        <!--<div slot="footer" class="dialog-footer">-->
+        <!--<el-button @click="dialogFormVisible = false">-->
+        <!--{{ $t('table.cancel') }}-->
+        <!--</el-button>-->
+        <!--<el-button type="primary" @click="updateData()">-->
+        <!--{{ $t('table.confirm') }}-->
+        <!--</el-button>-->
+        <!--</div>-->
         <!--</el-dialog>-->
 
       </div>
@@ -209,8 +209,8 @@
           deviceNumber: undefined,
           deviceName: undefined,
           title: undefined,
-          orderType:undefined,
-          orderField:undefined
+          orderType: undefined,
+          orderField: undefined
         },
         // temp: {
         //   openId: undefined,
@@ -278,7 +278,6 @@
         })
         // 接收消息处理
         client.on('message', (topic, message) => {
-          console.log(debug)
           try {
             if (debug) {
               console.log('收到topic=', topic, '的消息=', message)
@@ -288,6 +287,7 @@
             if (this.index.currentDevice !== deviceName) {
               return
             }
+            this.lastReceiveMsgTs = new Date().getTime() / 1000
             if (message.toString() === 'online') { // online 设备在线 [111, 102, 102, 108, 105, 110, 101]
               this.dStatus(1)
               return
@@ -295,9 +295,8 @@
               this.dStatus(2)
               return
             }
-            this.lastReceiveMsgTs = new Date().getTime() / 1000
             if (message[0] === 0x20 && message[1] === 0x20 && message[2] === 0x05 && message[3] === 0x17 &&
-              message.length === parseInt(message[4].toString(16) + this.formatLengthTox(message[5].toString(16), 2), 16)) { // 包头验证
+              message.length === parseInt(message[4].toString(16) + tools.formatLengthTox(message[5].toString(16), 2), 16)) { // 包头验证
               if (message[6] === 0x10 && message[7] === 0x00 && message[8] === 0x14) { // 心跳反馈指令
                 const version = message[9]
                 const checkedStatus = message[10]
@@ -400,7 +399,7 @@
         this.subTopic = '/' + this.index.appKey + '/' + this.index.currentDevice + '&TX'
         client.subscribe(this.subTopic, (error) => {
           if (!error) {
-
+            this.sendMSG(this.pubTopic, "getState")
           } else {
             // TODO 订阅失败
           }
@@ -408,9 +407,10 @@
       },
       sendMSG: function (topic, msg) { // 发送消息 msg=操作码+值长度+值
         if (typeof (msg) === 'string') {
-          if (!debug) {
-            client.publish(topic, msg)
+          if (debug) {
+            console.log('发送主题' + topic + '，HEX消息' + msg)
           }
+          client.publish(topic, msg)
         } else {
           const msgLength = 4 + 2 + msg.length + 2// 包头+包长+msg+crc
           const msgTemp = [0x20, 0x20, 0x05, 0x16].concat([msgLength >> 8, msgLength % 256]).concat(msg)// 未加crc的协议
@@ -463,11 +463,11 @@
       },
       getList() {
         this.listLoading = true;
-        getList(this.listQuery).then(response=>{
+        getList(this.listQuery).then(response => {
           this.list = response.respObj.item
           this.total = response.respObj.total
           this.listLoading = false
-        }).catch(error=>{
+        }).catch(error => {
           console.log(error)
           this.listLoading = false
         })
@@ -501,13 +501,16 @@
         //   this.$refs['dataForm'].clearValidate()
         // })
 
+        if(this.index.currentDevice){//先解除之前的设备
+          client.unsubscribe('/' + this.index.appKey + '/' + this.index.currentDevice + '&TX')
+        }
         this.index.currentName = row.title;
         this.index.currentDevice = row.deviceName;
         this.dStatus(4);
         this.lastReceiveMsgTs = 0;
         if (this.monitorDeviceStatusTimer) {
           clearInterval(this.monitorDeviceStatusTimer);
-          this.monitorDeviceStatusTimer=null;
+          this.monitorDeviceStatusTimer = null;
         }
         this.monitorDeviceStatus();
         this.subAndObtainStatus();
@@ -551,7 +554,7 @@
             // this.list.sort(function (a, b) {
             //   return b.createDate < a.createDate ? -1 : 1
             // })
-          }else{
+          } else {
             this.listQuery.orderType = undefined
           }
           this.handleFilter();

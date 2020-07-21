@@ -185,7 +185,7 @@
               return;
             }
             if (this.device.fjStatus === 1) {
-              this.$emit('sendMsg', mqttCmd.set(2));
+              this.$emit('sendMsg', mqttCmd.setFj(2));
             } else if (this.device.fjStatus === 2) {
               this.$emit('sendMsg', mqttCmd.setFj(3));
             } else if (this.device.fjStatus === 3) {
@@ -251,7 +251,7 @@
               Toast.fail("请先选择设备！");
               return;
             }
-            this.editValue = this.index.currentDevice
+            this.editValue = this.index.currentName
             this.placeholder = '请输入设备名';
             this.editDialogShow = true;
             break;
