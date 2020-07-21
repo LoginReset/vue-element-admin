@@ -86,7 +86,7 @@
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-            <template slot-scope="{row,$index}">
+            <template slot-scope="{row}">
               <el-button
                 class="filter-item"
                 size="mini"

@@ -206,8 +206,8 @@ export default {
       this.getList()
     },
     handleUpdate(row){
-      this.option.img = row.companyImg
-      console.log(this.option.img)
+      // this.option.img = row.companyImg
+      // console.log(this.option.img)
       console.log(row)
       this.temp = Object.assign({}, row)
 
@@ -263,7 +263,6 @@ export default {
         console.log(response)
         console.log(response.respObj)
         this.temp.companyImg = response.respObj
-        this.option.img = response.respObj
         console.log(this.temp.companyImg)
       })
       

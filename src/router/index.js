@@ -137,7 +137,7 @@ export const asyncRoutes = [
     name: 'ctl',
     meta: {
       title: '控制面板',
-      icon: 'excel',
+      icon: 'ctl',
       roles: ['ctl']
       // roles: ['admin', 'editor'] // you can set roles in root nav
     }, children: [
@@ -198,7 +198,7 @@ export const asyncRoutes = [
     name: 'device',
     meta:{
       title:'设备管理',
-      icon: 'devices',
+      icon: 'shebei2',
       roles:['device']
     },children:[
       {
@@ -233,7 +233,7 @@ export const asyncRoutes = [
     name: 'enterprise',
     meta: {
       title: '企业管理',
-      icon: 'excel',
+      icon: '111',
       roles: ['enterprise']
       // roles: ['admin', 'editor'] // you can set roles in root nav
     }, children: [
@@ -267,7 +267,7 @@ export const asyncRoutes = [
       name: 'advertise',
       meta:{
         title:'广告管理',
-        icon: 'course',
+        icon: 'guanggao',
         roles:['advertise']
       },children:[
         {
@@ -578,51 +578,51 @@ export const asyncRoutes = [
       }
     ]
   },
-  {
-    path: '/permission',
-    component: Layout,
-    redirect: '/permission/page',
-    alwaysShow: true, // will always show the root menu
-    name: 'Permission',
-    meta: {
-      title: 'permission',
-      icon: 'lock',
-      roles: ['permission']
-    },
-    children: [
-      {
-        path: 'page',
-        component: () => import('@/views/permission/page'),
-        name: 'PagePermission',
-        meta: {
-          title: 'pagePermission',
-          roles: ['permission-page']
+  // {
+  //   path: '/permission',
+  //   component: Layout,
+  //   redirect: '/permission/page',
+  //   alwaysShow: true, // will always show the root menu
+  //   name: 'Permission',
+  //   meta: {
+  //     title: 'permission',
+  //     icon: 'lock',
+  //     roles: ['permission']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'page',
+  //       component: () => import('@/views/permission/page'),
+  //       name: 'PagePermission',
+  //       meta: {
+  //         title: 'pagePermission',
+  //         roles: ['permission-page']
 
-        }
-      },
-      {
-        path: 'directive',
-        component: () => import('@/views/permission/directive'),
-        name: 'DirectivePermission',
-        meta: {
-          title: 'directivePermission',
-          roles: ['permission-directive']
+  //       }
+  //     },
+  //     {
+  //       path: 'directive',
+  //       component: () => import('@/views/permission/directive'),
+  //       name: 'DirectivePermission',
+  //       meta: {
+  //         title: 'directivePermission',
+  //         roles: ['permission-directive']
 
-          // if do not set roles, means: this page does not require permission
-        }
-      },
-      {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
-        meta: {
-          title: 'rolePermission',
-          roles: ['permission-role']
+  //         // if do not set roles, means: this page does not require permission
+  //       }
+  //     },
+  //     {
+  //       path: 'role',
+  //       component: () => import('@/views/permission/role'),
+  //       name: 'RolePermission',
+  //       meta: {
+  //         title: 'rolePermission',
+  //         roles: ['permission-role']
 
-        }
-      }
-    ]
-  },
+  //       }
+  //     }
+  //   ]
+  // },
 
   {
     path: '/icon',
