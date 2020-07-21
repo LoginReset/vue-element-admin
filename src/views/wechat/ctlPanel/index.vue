@@ -251,7 +251,7 @@
               Toast.fail("请先选择设备！");
               return;
             }
-            this.editValue = this.index.currentDevice
+            this.editValue = this.index.currentName
             this.placeholder = '请输入设备名';
             this.editDialogShow = true;
             break;
