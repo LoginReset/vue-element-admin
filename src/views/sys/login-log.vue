@@ -139,7 +139,7 @@ import PButton from '@/components/PermissionBtn'
 import waves from '@/directive/waves' // waves directive
 
 export default {
-  name: 'LoginLog',
+  name: 'loginLog',
   components: { Pagination, PButton },
   directives: { waves },
 
@@ -258,5 +258,8 @@ export default {
 <style scoped>
   .permission-tree {
     margin-bottom: 30px;
+  }
+  .el-tag{
+    font-size: 14px;
   }
 </style>

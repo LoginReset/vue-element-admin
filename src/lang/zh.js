@@ -123,6 +123,7 @@ export default {
     assign:'指派',
     selectAll:'全选',
     add: '添加',
+    override:'重构权限',
     addMenu:'添加菜单',
     saveMenu:'保存菜单',
     syncWechat:'同步到微信',

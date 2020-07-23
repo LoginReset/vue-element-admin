@@ -222,7 +222,7 @@ import PButton from '@/components/PermissionBtn'
 import { hasBtnPermission } from '@/utils/permission'
 
 export default {
-  name: 'User',
+  name: 'user',
   components: { Pagination, PButton },
   directives: { waves },
   data() {

@@ -34,6 +34,14 @@
         label="table.add"
         @click="handleCreate"
       />
+      <PButton
+        class="filter-item"
+        icon="el-icon-refresh"
+        perms="sys-permission:add"
+        type="primary"
+        label="table.override"
+        @click="handleOverride"
+      />
       <el-button
         class="filter-item"
         style="margin-left: 10px;"
@@ -66,8 +74,10 @@
       />
       <el-table-column label="权限名" align="left" min-width="250px">
         <template slot-scope="{row}">
-          <el-tag v-if="row.filterUrl.split('/').length%2===0" type="success">{{ row.permission }}</el-tag>
-          <el-tag v-if="row.filterUrl.split('/').length%2===1">{{ row.permission }}</el-tag>
+          <!-- <el-tag v-if="row.description=='冲突'" type="danger">{{ row.permission }}</el-tag>
+          <el-tag v-else-if="row.description=='1'">{{ row.permission }}</el-tag> -->
+          <el-tag  type="success">{{ row.permission }}</el-tag>
+
         </template>
       </el-table-column>
       <el-table-column label="菜单名" align="center" min-width="150px">
@@ -77,7 +87,7 @@
       </el-table-column>
       <el-table-column label="路径" align="center" min-width="150px">
         <template slot-scope="{row}">
-          <span>{{ row.filterUrl }}</span>
+          <span>{{ row.filterUrl?row.filterUrl:'无' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="描述" align="center">
@@ -186,7 +196,7 @@
 
 <script>
 import store from '@/store'
-import { getPermissions, getPermissionAll, postPermissionAdd, postPermissionUp, getPermissionDel } from '@/api/sys'
+import { getPermissions, getPermissionAll, postPermissionAdd,postPermissionOver, postPermissionUp, getPermissionDel } from '@/api/sys'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -194,7 +204,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import PButton from '@/components/PermissionBtn'
 
 export default {
-  name: 'Permission',
+  name: 'permission',
   components: { Pagination, PButton },
   directives: { waves },
   data() {
@@ -248,8 +258,8 @@ export default {
           { max: 50, message: '长度不能超过50字符', trigger: 'change' }],
         menuName: [{ required: true, message: '菜单名必填', trigger: 'change' },
           { max: 30, message: '长度不能超过30字符', trigger: 'change' }],
-        filterUrl: [{ required: true, message: '路径必填', trigger: 'change' },
-          { max: 50, message: '长度不能超过50字符', trigger: 'change' }],
+        // filterUrl: [{ required: true, message: '路径必填', trigger: 'change' },
+        //   { max: 50, message: '长度不能超过50字符', trigger: 'change' }],
         description: [{ max: 200, message: '长度不能超过200字符', trigger: 'change' }],
         sort: [{ validator: checkSort, trigger: 'change' }]
       },
@@ -378,6 +388,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.temp.filterUrl === '' ? this.temp.filterUrl = undefined : this.temp.filterUrl
           const tempData = Object.assign({}, this.temp)
           postPermissionUp(tempData).then(response => {
             // const index = this.list.findIndex(v => v.id === this.temp.id)
@@ -417,6 +428,25 @@ export default {
 
       })
     },
+    handleOverride(){
+      this.$confirm('确定重构权限?', '警告', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        postPermissionOver().then(response=>{
+          console.log(response)
+          this.$notify({
+            title: '成功',
+            message: '重构成功',
+            type: 'success',
+            duration: 2000
+          })
+        })
+      }).catch(err => {
+
+      })
+    },
     handleDownload() {
       this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
@@ -431,6 +461,7 @@ export default {
           this.downloadLoading = false
         })
     },
+
     formatJson(filterVal) {
       return this.list.map(v => filterVal.map(j => {
         if (j === 'timestamp') {

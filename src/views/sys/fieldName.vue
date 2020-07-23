@@ -4,7 +4,7 @@
       <PButton
         class="filter-item"
         icon="el-icon-edit"
-        perms="sys-secretKey:add"
+        perms="sys-fieldName:add"
         type="primary"
         label="table.add"
         @click="handleCreate"
@@ -68,7 +68,7 @@
         <template slot-scope="{row,$index}">
 
           <PButton
-            perms="sys-secretKey:edit"
+            perms="sys-fieldName:edit"
             size="mini"
             type="primary"
             label="table.edit"
@@ -77,7 +77,7 @@
           <PButton
             v-if="row.status!='deleted'"
             class="filter-item"
-            perms="sys-secretKey:delete"
+            perms="sys-fieldName:delete"
             size="mini"
             type="danger"
             label="table.delete"
@@ -176,7 +176,7 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PButton from '@/components/PermissionBtn'
 export default {
-  name: 'SecretKey',
+  name: 'fieldName',
   components: { Pagination, PButton },
   directives: { waves },
   data() {

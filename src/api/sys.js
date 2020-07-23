@@ -79,7 +79,7 @@ export function getRoles(query) {
  */
 export function postRoleAdd(data) {
   return request({
-    url: '/b/sr',
+    url: '/b/sr/add',
     method: 'post',
     data
   })
@@ -141,12 +141,22 @@ export function getPermissionAll() {
  */
 export function postPermissionAdd(data) {
   return request({
-    url: '/b/sp',
+    url: '/b/sp/add',
     method: 'post',
     data
   })
 }
-
+/**
+ * 重构系统权限
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function postPermissionOver() {
+  return request({
+    url: '/b/sp/override',
+    method: 'get'
+  })
+}
 /**
  * 更新系统权限
  * @param data

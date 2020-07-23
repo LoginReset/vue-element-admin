@@ -83,31 +83,31 @@ export const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/documentation',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'documentation', icon: 'documentation'}
-      }
-    ]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'guide', icon: 'guide', noCache: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/documentation',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/documentation/index'),
+  //       name: 'Documentation',
+  //       meta: { title: 'documentation', icon: 'documentation'}
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/guide',
+  //   component: Layout,
+  //   redirect: '/guide/index',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/guide/index'),
+  //       name: 'Guide',
+  //       meta: { title: 'guide', icon: 'guide', noCache: true }
+  //     }
+  //   ]
+  // },
   {
     path: '/profile',
     component: Layout,
@@ -284,53 +284,53 @@ export const asyncRoutes = [
 
 
   },
-  {
-    path: '/file',
-    component: Layout,
-    redirect: '/file/manage',
-    alwaysShow: true, // will always show the root menu
-    name: 'file',
-    meta: {
-      title: '文件管理',
-      icon: 'excel',
-      roles: ['file']
-      // roles: ['admin', 'editor'] // you can set roles in root nav
-    }, children: [
-      {
-        path: 'manage',
-        component: () => import('@/views/file/index'),
-        name: 'Index',
-        meta: {
-          title: '文件管理',
-          roles: ['file-manage']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      }
-    ]
-  },
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/wechat',
-    name: 'userManage',
-    alwaysShow: true,
-    meta: {
-      title: '用户管理',
-      icon: 'user',
-      roles: ['user']
-    },
-    children: [
-      {
-        path:'wechat',
-        component: () => import('@/views/user/wechat'),
-        name:'user-wechat',
-        meta: {
-          title: '微信用户',
-          roles: ['user-wechat']
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/file',
+  //   component: Layout,
+  //   redirect: '/file/manage',
+  //   alwaysShow: true, // will always show the root menu
+  //   name: 'file',
+  //   meta: {
+  //     title: '文件管理',
+  //     icon: 'excel',
+  //     roles: ['file']
+  //     // roles: ['admin', 'editor'] // you can set roles in root nav
+  //   }, children: [
+  //     {
+  //       path: 'manage',
+  //       component: () => import('@/views/file/index'),
+  //       name: 'Index',
+  //       meta: {
+  //         title: '文件管理',
+  //         roles: ['file-manage']
+  //         // roles: ['admin'] // or you can only set roles in sub nav
+  //       }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/user',
+  //   component: Layout,
+  //   redirect: '/user/wechat',
+  //   name: 'userManage',
+  //   alwaysShow: true,
+  //   meta: {
+  //     title: '用户管理',
+  //     icon: 'user',
+  //     roles: ['user']
+  //   },
+  //   children: [
+  //     {
+  //       path:'wechat',
+  //       component: () => import('@/views/user/wechat'),
+  //       name:'user-wechat',
+  //       meta: {
+  //         title: '微信用户',
+  //         roles: ['user-wechat']
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: '/wechat',
     component: Layout,
@@ -354,142 +354,143 @@ export const asyncRoutes = [
 
           // roles: ['admin'] // or you can only set roles in sub nav
         }
-      }, {
-        path: 'msgTemp',
-        component: () => import('@/views/wechat/msgTemp'),
-        name: 'wehcat-msgTemp',
-        meta: {
-          title: '微信消息模板',
-          roles: ['wechat-menu']
+      },
+      //  {
+      //   path: 'msgTemp',
+      //   component: () => import('@/views/wechat/msgTemp'),
+      //   name: 'wehcat-msgTemp',
+      //   meta: {
+      //     title: '微信消息模板',
+      //     roles: ['wechat-menu']
 
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      }, {
-        path: 'create',
-        component: () => import('@/views/wechat/msgRedirect'),
-        name: 'createMsgTemp',
-        meta: {
-          title: '创建消息模板',
-          roles: ['wechat-menu']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      }, {
-        path: 'edit',
-        component: () => import('@/views/wechat/msgRedirect'),
-        name: 'editMsgTemp',
-        meta: {
-          title: '编辑消息模板',
-          roles: ['wechat-menu'],
-          activeMenu: '/wechat/msgTemp'
-          // roles: ['admin'] // or you can only set roles in sub nav
-        },
-        hidden: true
-      }
+      //     // roles: ['admin'] // or you can only set roles in sub nav
+      //   }
+      // }, {
+      //   path: 'create',
+      //   component: () => import('@/views/wechat/msgRedirect'),
+      //   name: 'createMsgTemp',
+      //   meta: {
+      //     title: '创建消息模板',
+      //     roles: ['wechat-menu']
+      //     // roles: ['admin'] // or you can only set roles in sub nav
+      //   }
+      // }, {
+      //   path: 'edit',
+      //   component: () => import('@/views/wechat/msgRedirect'),
+      //   name: 'editMsgTemp',
+      //   meta: {
+      //     title: '编辑消息模板',
+      //     roles: ['wechat-menu'],
+      //     activeMenu: '/wechat/msgTemp'
+      //     // roles: ['admin'] // or you can only set roles in sub nav
+      //   },
+      //   hidden: true
+      // }
     ]
   },
-  {
-    path: '/sms',
-    component: Layout,
-    redirect: '/sms/account',
-    alwaysShow: true, // will always show the root menu
-    name: 'sms',
-    meta: {
-      title: '短信管理',
-      icon: 'message',
-      roles: ['sms']
-    },
-    children: [{
-      path: 'account',
-      component: () => import('@/views/sms/account'),
-      name: 'account',
-      meta: {
-        title: '短信账号',
-        roles: ['sms-account'],
-      }
-    }, {
-      path: 'template',
-      component: () => import('@/views/sms/templates'),
-      name: 'template',
-      meta: {
-        title: '短信模板',
-        roles: ['sms-template'],
-        buttons: ['add', 'download', 'edit', 'switch', 'select']
+  // {
+  //   path: '/sms',
+  //   component: Layout,
+  //   redirect: '/sms/account',
+  //   alwaysShow: true, // will always show the root menu
+  //   name: 'sms',
+  //   meta: {
+  //     title: '短信管理',
+  //     icon: 'message',
+  //     roles: ['sms']
+  //   },
+  //   children: [{
+  //     path: 'account',
+  //     component: () => import('@/views/sms/account'),
+  //     name: 'account',
+  //     meta: {
+  //       title: '短信账号',
+  //       roles: ['sms-account'],
+  //     }
+  //   }, {
+  //     path: 'template',
+  //     component: () => import('@/views/sms/templates'),
+  //     name: 'template',
+  //     meta: {
+  //       title: '短信模板',
+  //       roles: ['sms-template'],
+  //       buttons: ['add', 'download', 'edit', 'switch', 'select']
 
-      }
-    }, {
-      path: 'create',
-      component: () => import('@/views/sms/redirectPage'),
-      name: 'createTemplate',
-      meta: {
-        title: '创建短信模板',
-        roles: ['sms-create']
+  //     }
+  //   }, {
+  //     path: 'create',
+  //     component: () => import('@/views/sms/redirectPage'),
+  //     name: 'createTemplate',
+  //     meta: {
+  //       title: '创建短信模板',
+  //       roles: ['sms-create']
 
-      }
-    }, {
-      path: 'edit',
-      component: () => import('@/views/sms/redirectPage'),
-      name: 'editTemplate',
-      meta: {
-        title: '编辑短信模板', noCache: false, activeMenu: '/sms/template', roles: ['sms-create'] },
-      hidden: true
-    }]
-  },
-  {
-    path: '/msgPush',
-    component: Layout,
-    redirect: '/msgPush/smsTemp',
-    alwaysShow: true,
-    name: 'msgPush',
-    meta: {
-      title: '消息推送',
-      icon: 'icon-test',
-      roles: ['msgPush']
-    },
-    children: [
-      {
-        path: 'smsTemp',
-        component: () => import('@/views/msgPush/smsPushTemp'),
-        name: 'smsTemp',
-        meta: {
-          title: '短信推送配置',
-          roles: ['msgPush-smsTemp']
+  //     }
+  //   }, {
+  //     path: 'edit',
+  //     component: () => import('@/views/sms/redirectPage'),
+  //     name: 'editTemplate',
+  //     meta: {
+  //       title: '编辑短信模板', noCache: false, activeMenu: '/sms/template', roles: ['sms-edit'] },
+  //     hidden: true
+  //   }]
+  // },
+  // {
+  //   path: '/msgPush',
+  //   component: Layout,
+  //   redirect: '/msgPush/smsTemp',
+  //   alwaysShow: true,
+  //   name: 'msgPush',
+  //   meta: {
+  //     title: '消息推送',
+  //     icon: 'icon-test',
+  //     roles: ['msgPush']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'smsTemp',
+  //       component: () => import('@/views/msgPush/smsPushTemp'),
+  //       name: 'smsTemp',
+  //       meta: {
+  //         title: '短信推送配置',
+  //         roles: ['msgPush-smsTemp']
 
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'wechatTemp',
-        component: () => import('@/views/msgPush/wechatPushTemp'),
-        name: 'wechatTemp',
-        meta: {
-          title: '微信推送配置',
-          roles: ['msgPush-wechatTemp']
+  //         // roles: ['admin'] // or you can only set roles in sub nav
+  //       }
+  //     },
+  //     {
+  //       path: 'wechatTemp',
+  //       component: () => import('@/views/msgPush/wechatPushTemp'),
+  //       name: 'wechatTemp',
+  //       meta: {
+  //         title: '微信推送配置',
+  //         roles: ['msgPush-wechatTemp']
 
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/msgPush/pushRedirect'),
-        name: 'create-pushTemp',
-        meta: {
-          title: '创建推送模板',
-          roles: ['msgPush-create'],
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      }, {
-        path: 'edit',
-        component: () => import('@/views/msgPush/pushRedirect'),
-        name: 'edit-pushTemp',
-        meta: {
-          title: '编辑推送模板',
-          noCache: false,
-          activeMenu: '/msgPush/wechatTemp',
-          roles: ['msgPush-edit'] },
-        hidden: true
-      }
-    ]
-  },
+  //         // roles: ['admin'] // or you can only set roles in sub nav
+  //       }
+  //     },
+  //     {
+  //       path: 'create',
+  //       component: () => import('@/views/msgPush/pushRedirect'),
+  //       name: 'create-pushTemp',
+  //       meta: {
+  //         title: '创建推送模板',
+  //         roles: ['msgPush-create'],
+  //         // roles: ['admin'] // or you can only set roles in sub nav
+  //       }
+  //     }, {
+  //       path: 'edit',
+  //       component: () => import('@/views/msgPush/pushRedirect'),
+  //       name: 'edit-pushTemp',
+  //       meta: {
+  //         title: '编辑推送模板',
+  //         noCache: false,
+  //         activeMenu: '/msgPush/wechatTemp',
+  //         roles: ['msgPush-edit'] },
+  //       hidden: true
+  //     }
+  //   ]
+  // },
   {
     path: '/sys',
     component: Layout,
@@ -527,41 +528,43 @@ export const asyncRoutes = [
         path: 'permission',
         component: () => import('@/views/sys/permission'),
         name: 'permission',
+        
         meta: {
           title: '系统权限',
           roles: ['sys-permission']
           // roles: ['admin'] // or you can only set roles in sub nav
         }
-      }, {
-        path: 'fieldName',
-        component: () => import('@/views/sys/fieldName'),
-        name: 'secretKey',
-        meta: {
-          title: '全局字段',
-          roles: ['sys-fieldName']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      }, {
-        path: 'secretKey',
-        component: () => import('@/views/sys/secretKey'),
-        name: 'secretKey',
-        meta: {
-          title: '密钥管理',
-          roles: ['sys-secretKey']
-        }
-      }, {
-        path: 'province',
-        component: () => import('@/views/sys/province'),
-        name: 'province',
-        meta: {
-          title: '省份管理',
-          roles: ['sys-province']
-        }
-      },
+       },
+      // {
+      //   path: 'fieldName',
+      //   component: () => import('@/views/sys/fieldName'),
+      //   name: 'fieldName',
+      //   meta: {
+      //     title: '全局字段',
+      //     roles: ['sys-fieldName']
+      //     // roles: ['admin'] // or you can only set roles in sub nav
+      //   }
+      // }, {
+      //   path: 'secretKey',
+      //   component: () => import('@/views/sys/secretKey'),
+      //   name: 'secretKey',
+      //   meta: {
+      //     title: '密钥管理',
+      //     roles: ['sys-secretKey']
+      //   }
+      // }, {
+      //   path: 'province',
+      //   component: () => import('@/views/sys/province'),
+      //   name: 'province',
+      //   meta: {
+      //     title: '省份管理',
+      //     roles: ['sys-province']
+      //   }
+      // },
       {
         path: 'login-log',
         component: () => import('@/views/sys/login-log'),
-        name: 'login-log',
+        name: 'loginLog',
         meta: {
           title: '登录日志',
           roles: ['sys-login-log']
@@ -624,21 +627,21 @@ export const asyncRoutes = [
   //   ]
   // },
 
-  {
-    path: '/icon',
-    component: Layout,
-    meta: {
-      roles: ['icon']
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/icons/index'),
-        name: 'Icons',
-        meta: { title: 'icons', icon: 'icon', roles: ['icon'], noCache: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/icon',
+  //   component: Layout,
+  //   meta: {
+  //     roles: ['icon']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/icons/index'),
+  //       name: 'Icons',
+  //       meta: { title: 'icons', icon: 'icon', roles: ['icon'], noCache: true }
+  //     }
+  //   ]
+  // },
 
   /** when your routing map is too long, you can split it into small modules **/
   componentsRouter,
@@ -646,80 +649,80 @@ export const asyncRoutes = [
   nestedRouter,
   tableRouter,
 
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/list',
-    name: 'Example',
-    meta: {
-      title: 'example',
-      icon: 'example',
-      roles: ['example']
-    },
-    children: [
-      {
-        path: 'create',
-        component: () => import('@/views/example/create'),
-        name: 'CreateArticle',
-        meta: { title: 'createArticle', icon: 'edit', roles: ['example-create'] }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: () => import('@/views/example/edit'),
-        name: 'EditArticle',
-        meta: { title: 'editArticle', noCache: true, activeMenu: '/example/list', roles: ['example-edit'] },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/example/list'),
-        name: 'ArticleList',
-        meta: { title: 'articleList', icon: 'list', roles: ['example-list'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/example',
+  //   component: Layout,
+  //   redirect: '/example/list',
+  //   name: 'Example',
+  //   meta: {
+  //     title: 'example',
+  //     icon: 'example',
+  //     roles: ['example']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'create',
+  //       component: () => import('@/views/example/create'),
+  //       name: 'CreateArticle',
+  //       meta: { title: 'createArticle', icon: 'edit', roles: ['example-create'] }
+  //     },
+  //     {
+  //       path: 'edit/:id(\\d+)',
+  //       component: () => import('@/views/example/edit'),
+  //       name: 'EditArticle',
+  //       meta: { title: 'editArticle', noCache: true, activeMenu: '/example/list', roles: ['example-edit'] },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'list',
+  //       component: () => import('@/views/example/list'),
+  //       name: 'ArticleList',
+  //       meta: { title: 'articleList', icon: 'list', roles: ['example-list'] }
+  //     }
+  //   ]
+  // },
 
-  {
-    path: '/tab',
-    component: Layout,
-    meta: {
-      roles: ['tab']
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/tab/index'),
-        name: 'Tab',
-        meta: { title: 'tab', icon: 'tab', roles: ['tab'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/tab',
+  //   component: Layout,
+  //   meta: {
+  //     roles: ['tab']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/tab/index'),
+  //       name: 'Tab',
+  //       meta: { title: 'tab', icon: 'tab', roles: ['tab'] }
+  //     }
+  //   ]
+  // },
 
-  {
-    path: '/error',
-    component: Layout,
-    redirect: 'noRedirect',
-    name: 'ErrorPages',
-    meta: {
-      title: 'errorPages',
-      icon: '404',
-      roles: ['error']
-    },
-    children: [
-      {
-        path: '401',
-        component: () => import('@/views/error-page/401'),
-        name: 'Page401',
-        meta: { title: 'page401', noCache: true, roles: ['error-401'] }
-      },
-      {
-        path: '404',
-        component: () => import('@/views/error-page/404'),
-        name: 'Page404',
-        meta: { title: 'page404', noCache: true, roles: ['error-404'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/error',
+  //   component: Layout,
+  //   redirect: 'noRedirect',
+  //   name: 'ErrorPages',
+  //   meta: {
+  //     title: 'errorPages',
+  //     icon: '404',
+  //     roles: ['error']
+  //   },
+  //   children: [
+  //     {
+  //       path: '401',
+  //       component: () => import('@/views/error-page/401'),
+  //       name: 'Page401',
+  //       meta: { title: 'page401', noCache: true, roles: ['error-401'] }
+  //     },
+  //     {
+  //       path: '404',
+  //       component: () => import('@/views/error-page/404'),
+  //       name: 'Page404',
+  //       meta: { title: 'page404', noCache: true, roles: ['error-404'] }
+  //     }
+  //   ]
+  // },
 
   {
     path: '/error-log',
@@ -737,43 +740,43 @@ export const asyncRoutes = [
     ]
   },
 
-  {
-    path: '/excel',
-    component: Layout,
-    redirect: '/excel/export-excel',
-    name: 'Excel',
-    meta: {
-      title: 'excel',
-      icon: 'excel',
-      roles: ['excel']
-    },
-    children: [
-      {
-        path: 'export-excel',
-        component: () => import('@/views/excel/export-excel'),
-        name: 'ExportExcel',
-        meta: { title: 'exportExcel', roles: ['export-excel'] }
-      },
-      {
-        path: 'export-selected-excel',
-        component: () => import('@/views/excel/select-excel'),
-        name: 'SelectExcel',
-        meta: { title: 'selectExcel', roles: ['export-selected-excel'] }
-      },
-      {
-        path: 'export-merge-header',
-        component: () => import('@/views/excel/merge-header'),
-        name: 'MergeHeader',
-        meta: { title: 'mergeHeader', roles: ['export-merge-header'] }
-      },
-      {
-        path: 'upload-excel',
-        component: () => import('@/views/excel/upload-excel'),
-        name: 'UploadExcel',
-        meta: { title: 'uploadExcel', roles: ['upload-excel'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/excel',
+  //   component: Layout,
+  //   redirect: '/excel/export-excel',
+  //   name: 'Excel',
+  //   meta: {
+  //     title: 'excel',
+  //     icon: 'excel',
+  //     roles: ['excel']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'export-excel',
+  //       component: () => import('@/views/excel/export-excel'),
+  //       name: 'ExportExcel',
+  //       meta: { title: 'exportExcel', roles: ['export-excel'] }
+  //     },
+  //     {
+  //       path: 'export-selected-excel',
+  //       component: () => import('@/views/excel/select-excel'),
+  //       name: 'SelectExcel',
+  //       meta: { title: 'selectExcel', roles: ['export-selected-excel'] }
+  //     },
+  //     {
+  //       path: 'export-merge-header',
+  //       component: () => import('@/views/excel/merge-header'),
+  //       name: 'MergeHeader',
+  //       meta: { title: 'mergeHeader', roles: ['export-merge-header'] }
+  //     },
+  //     {
+  //       path: 'upload-excel',
+  //       component: () => import('@/views/excel/upload-excel'),
+  //       name: 'UploadExcel',
+  //       meta: { title: 'uploadExcel', roles: ['upload-excel'] }
+  //     }
+  //   ]
+  // },
 
   {
     path: '/zip',
@@ -851,14 +854,14 @@ export const asyncRoutes = [
     path: '/i18n',
     component: Layout,
     meta: {
-      roles: ['i18n']
+      // roles: ['i18n']
     },
     children: [
       {
         path: 'index',
         component: () => import('@/views/i18n-demo/index'),
         name: 'I18n',
-        meta: { title: 'i18n', icon: 'international', roles: ['i18n'] }
+        meta: { title: 'i18n', icon: 'international' }
       }
     ]
   },

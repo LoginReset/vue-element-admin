@@ -167,7 +167,7 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PButton from '@/components/PermissionBtn'
 export default {
-  name: 'Role',
+  name: 'role',
   components: { Pagination, PButton },
   directives: { waves },
   data() {

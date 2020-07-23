@@ -128,7 +128,7 @@
           />
         </el-form-item>
         <el-form-item label="日期" prop="validDate">
-          <el-date-picker v-model="temp.validDate" type="date" placeholder="选择日期" :picker-options="pickerOptions" @change="changeDate"  />
+          <el-date-picker v-model="temp.validDate" type="date" placeholder="选择日期" :picker-options="pickerOptions" @change="changeDate(temp.validDate)"  />
           <el-radio v-model="validDate" label="-1" style="margin-left:20px" @click.native.prevent="clickItem('-1')">永久有效</el-radio>
         </el-form-item>
       </el-form>
@@ -161,7 +161,7 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PButton from '@/components/PermissionBtn'
 export default {
-  name: 'SecretKey',
+  name: 'secretKey',
   components: { Pagination, PButton },
   directives: { waves },
   data() {
@@ -228,8 +228,11 @@ export default {
     this.getList()
   },
   methods: {
-    changeDate() {
+    changeDate(validDate) {
       this.changeFlag = true
+      if(typeof validDate === 'object'){
+        this.validDate = ''
+      }
     },
     clickItem(label) {
       console.log(label === this.validate)
@@ -239,9 +242,6 @@ export default {
       } else {
         this.temp.validDate = new Date()
       }
-    },
-    test(){
-      console.log(111111111111)
     },
     getList() {
       this.listLoading = true
@@ -319,11 +319,12 @@ export default {
     },
     handleUpdate(row) {
       this.resetTemp()
-
-      // this.temp.timestamp = new Date(this.temp.timestamp)
-      this.temp.validDate = row.validDate
-      this.validDate = row.validDate
-      this.temp.description = row.description
+      this.temp = Object.assign({},row)
+      //为永久有效时
+      if(row.validDate === '-1'){
+        this.validDate = '-1'
+        this.temp.validDate = ''
+      }
       this.temp.uuid = row.uuid
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
@@ -413,6 +414,10 @@ export default {
       }))
     },
     formatter(date) {
+      //进入编辑时非永久有效不操作则直接返回
+      if(typeof date ==='string'){
+        return date
+      }
       const dd = new Date()
       const year = date.getFullYear()
       const month = date.getMonth() + 1

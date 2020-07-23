@@ -26,7 +26,7 @@
       <PButton
         class="filter-item"
         icon="el-icon-edit"
-        perms="enterprise-manage:add"
+        perms="advertise-manage:add"
         type="primary"
         label="table.add"
         @click="handleCreate"
@@ -153,6 +153,7 @@
               :auto-upload="false"
               >
               <el-button slot="trigger" size="small" type="primary">选取图片</el-button>
+              <div slot="tip" class="el-upload__tip">图片宽高比推荐为18:10</div>
             </el-upload>
             <!-- <el-button @click="submitUpload">点击上传文件</el-button> -->
           </el-form-item>
@@ -413,3 +414,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .el-upload__tip{
+    font-size: 14px;
+    color:#fb2121;
+  }
+</style>

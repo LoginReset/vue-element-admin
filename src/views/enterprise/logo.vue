@@ -65,7 +65,7 @@
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <PButton
-            perms="enterprise-manage:edit"
+            perms="enterprise-logo:edit"
             size="mini"
             type="primary"
             label="table.edit"
@@ -102,6 +102,7 @@
               list-type="picture"
               :auto-upload="false">
               <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <div slot="tip" class="el-upload__tip">图片宽高比推荐为17:10</div>
             </el-upload>
             <!-- <el-button @click="submitUpload">点击上传文件</el-button> -->
           </el-form-item>
@@ -294,5 +295,8 @@ export default {
   .el-tag{
     font-size: 14px;
   }
-
+  .el-upload__tip{
+    font-size: 14px;
+    color:#fb2121;
+  }
 </style>

@@ -10,7 +10,7 @@ export function getMenu() {
 
 export function postMenu(data) {
   return request({
-    url: '/b/wechat/menu',
+    url: '/b/wechat/menu/add',
     method: 'post',
     data
   })
