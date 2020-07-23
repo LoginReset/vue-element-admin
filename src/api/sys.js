@@ -17,8 +17,9 @@ export function getUsers(query) {
  * @param data
  */
 export function postUserAdd(data) {
+  console.log(data)
   return request({
-    url: '/b/su',
+    url: '/b/su/add',
     method: 'post',
     data
   })

@@ -57,7 +57,7 @@
                     <el-option v-for="item in smsList" 
                     :key="item.uuid" :label="item.title" :value="item.uuid">
                     </el-option>
-                    </el-select>
+                </el-select>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

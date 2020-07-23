@@ -201,6 +201,7 @@ export default {
       callback()
     }
     return{
+      baseUrl:process.env.VUE_APP_BASE_API+'/',
       tableKey:0,
       list:[],
       srcList:[],
@@ -272,6 +273,7 @@ export default {
     },
     createData(){
       console.log(this.temp)
+      
       this.$refs['dataForm'].validate((valid) => {
       if(valid){
         postAdvertsAdd(this.temp).then(response=>{
@@ -402,7 +404,8 @@ export default {
       fd.append('file', this.mode)// 文件对象
       console.log(fd.get('file'))
       postImgUpload(fd).then(response=>{
-        this.temp.imgUrl = response.respObj
+        this.temp.imgUrl = response.respObj.relUrl
+        console.log(response.respObj)
       })
     },
     fileChange(file, fileList) {

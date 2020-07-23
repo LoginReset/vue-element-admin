@@ -127,7 +127,6 @@
         <el-form-item label="系统权限" prop="puuid">
           <el-tree
             ref="tree"
-            default-expand-all
             class="permission-tree"
             :data="permissionAll"
             show-checkbox

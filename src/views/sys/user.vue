@@ -177,6 +177,13 @@
               placeholder="请输入描述"
             />
           </el-form-item>
+          <el-form-item label="选择公司" v-if="roleName.includes('admin')" prop="companyUuid">
+            <el-select v-model="temp.companyUuid" filterable placeholder="请选择公司"  style="width:100%">
+                <el-option v-for="item in companyList" 
+                  :key="item.uuid" :label="item.name" :value="item.uuid">
+                </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="角色" prop="puuid">
             <el-tree
               ref="tree"
@@ -215,7 +222,9 @@
 
 <script>
 import { getRoles, getUsers, postUserAdd, postUserUp, postUserStatus,postUserDel } from '@/api/sys'
+import { getEnterpriseView } from '@/api/enterprise'
 import waves from '@/directive/waves' // waves directive
+import { mapGetters } from 'vuex'
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PButton from '@/components/PermissionBtn'
@@ -258,8 +267,10 @@ export default {
       tableKey: 0,
       list: [],
       deviceData:[],
+      companyList:[],
       roleList: null,
       total: 0,
+      cTotal: 0,
       listLoading: true,
       listQuery: {
         page: 1,
@@ -279,6 +290,7 @@ export default {
         confirmPwd: '',
         phoneNum: '',
         name: '',
+        companyUuid:'',
         description:'',
         sort: 0,
         sysRole: undefined
@@ -294,7 +306,7 @@ export default {
       pvData: [],
       rules: {
         account: [{ required: true, message: '账号必填', trigger: 'change' },
-          { min: 6, max: 20, message: '长度范围[6,20]字符', trigger: 'change' }],
+          { min: 8, max: 20, message: '长度范围[8,20]字符', trigger: 'change' }],
         pwd: [{ required: true, message: '密码必填', trigger: 'change' },
           { min: 6, max: 100, message: '长度范围[6,100]字符', trigger: 'change' }],
         confirmPwd: [{ required: true, message: '请确认密码', trigger: 'change' },
@@ -312,6 +324,11 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters([
+      'roles', 'roleName'
+    ])
+  },
   created() {
     this.getList()
   },
@@ -325,6 +342,19 @@ export default {
         // setTimeout(() => {
         this.listLoading = false
         // }, 1.5 * 1000)
+        const query = {
+          page:1,
+          limit:20
+        }
+        getEnterpriseView(query).then(response=>{
+          this.cTotal = response.respObj.total
+          if(this.cTotal>0){
+            query.limit = this.cTotal
+          }
+          getEnterpriseView(query).then(response=>{
+            this.companyList = response.respObj.item
+          })
+        })
       })
     },
     handleFilter() {
@@ -363,6 +393,7 @@ export default {
         phoneNum: '',
         name: '',
         description:'',
+        companyUuid:'',
         sort: 0,
         sysRole: undefined
       }
@@ -408,6 +439,7 @@ export default {
             return
           }
           this.temp.sysRole = roleUuids[0]
+          console.log(this.temp)
           postUserAdd(this.temp).then(response => {
             this.dialogFormVisible = false
             this.getList()

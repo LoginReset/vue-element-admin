@@ -261,10 +261,7 @@ export default {
       fd.append('file', this.mode)// 文件对象
       console.log(fd.get('file'))
       postImgUpload(fd).then(response=>{
-        console.log(response)
-        console.log(response.respObj)
-        this.temp.companyImg = response.respObj
-        console.log(this.temp.companyImg)
+        this.temp.companyImg = response.respObj.relUrl
       })
       
     },
@@ -279,15 +276,15 @@ export default {
     submitUpload() {
         this.$refs.upload.submit();
       },
-    upload() {
-      let fd = new FormData()
-      console.log(this.mode)
-      fd.append('File', this.mode)
-      console.log(fd)
-      postImgUpload(fd).then(response=>{
-        console.log(response.respObj)
-      })
-    },
+    // upload() {
+    //   let fd = new FormData()
+    //   console.log(this.mode)
+    //   fd.append('File', this.mode)
+    //   console.log(fd)
+    //   postImgUpload(fd).then(response=>{
+    //     console.log(response.respObj)
+    //   })
+    // },
   }
 }
 </script>

@@ -105,9 +105,27 @@ export default {
       if (this.isChange) {
         // this.classIndex[evt.oldIndex] = evt.newIndex
         // this.classIndex[evt.newIndex] = evt.oldIndex
-        const newIndex = this.classIndex[evt.oldIndex]
-        this.classIndex[evt.oldIndex] = this.classIndex[evt.newIndex]
-        this.classIndex[evt.newIndex] = newIndex
+        if(evt.oldIndex+1 === evt.newIndex || evt.oldIndex-1 === evt.newIndex){
+          let newIndex = this.classIndex[evt.oldIndex]
+          this.classIndex[evt.oldIndex] = this.classIndex[evt.newIndex]
+          this.classIndex[evt.newIndex] = newIndex
+        }else{
+          console.log(this.classIndex)
+          const arr = []
+          
+          let first = this.classIndex[0]
+          let last = this.classIndex[2]
+          if(evt.oldIndex === 0){
+            this.classIndex[0] = this.classIndex[1]
+            this.classIndex[1] = this.classIndex[2]
+            this.classIndex[2] = first
+          }else{
+            this.classIndex[2] = this.classIndex[0]
+            this.classIndex[1] = this.classIndex[2]
+            this.classIndex[0] = last
+          }
+        }
+        
         console.log(this.classIndex)
         this.isChange = false
       }

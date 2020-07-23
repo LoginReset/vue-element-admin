@@ -124,6 +124,7 @@ export default {
   components: { LangSelect, SocialSign, DragVerify },
   data() {
     const validateUsername = (rule, value, callback) => {
+      console.log(value)
       if (!validUsername(value)) {
         callback(new Error('Please enter the correct user name'))
       } else {

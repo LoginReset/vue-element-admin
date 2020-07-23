@@ -223,7 +223,7 @@ export default {
         address:[{required:true, message:'公司地址必填', trigger:'change'}],
         // companyTel:[{required:true, message:'公司电话必填', trigger:'change'}],
         linkman:[{required:true, message:'公司联系人必填', trigger:'change'}],
-        phone:[{ required:true, pattern:/^[1]([3-9]patter)[0-9]{9}$/,message:'请输入正确电话号码', trigger:'change'}],
+        // phone:[{ required:true, pattern:/^[1]([3-9]patter)[0-9]{9}$/,message:'请输入正确电话号码', trigger:'change'}],
         qrCodeType:[{required:true, validator: checkSort,trigger:'change'}],
       }
     }
@@ -262,7 +262,7 @@ export default {
         postEnterpriseAdd(this.temp).then(response=>{
           this.dialogFormVisible = false
           console.log(response)
-          this.$$notify({
+          this.$notify({
             title: '成功',
             message: '创建成功',
             type: 'success',
