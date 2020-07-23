@@ -287,14 +287,15 @@
             if (this.index.currentDevice !== deviceName) {
               return
             }
-            this.lastReceiveMsgTs = new Date().getTime() / 1000
             if (message.toString() === 'online') { // online 设备在线 [111, 102, 102, 108, 105, 110, 101]
+              this.lastReceiveMsgTs = new Date().getTime() / 1000
               this.dStatus(1)
               return
             } else if (message.toString() === 'offline') { // offline 设备离线 [111, 110, 108, 105, 110, 101]
               this.dStatus(2)
               return
             }
+            this.lastReceiveMsgTs = new Date().getTime() / 1000
             if (message[0] === 0x20 && message[1] === 0x20 && message[2] === 0x05 && message[3] === 0x17 &&
               message.length === parseInt(message[4].toString(16) + tools.formatLengthTox(message[5].toString(16), 2), 16)) { // 包头验证
               if (message[6] === 0x10 && message[7] === 0x00 && message[8] === 0x14) { // 心跳反馈指令
@@ -501,7 +502,7 @@
         //   this.$refs['dataForm'].clearValidate()
         // })
 
-        if(this.index.currentDevice){//先解除之前的设备
+        if (this.index.currentDevice) {//先解除之前的设备
           client.unsubscribe('/' + this.index.appKey + '/' + this.index.currentDevice + '&TX')
         }
         this.index.currentName = row.title;
