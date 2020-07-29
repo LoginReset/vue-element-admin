@@ -138,9 +138,6 @@
           <el-form-item label="公司地址" prop="address">
             <el-input v-model.trim="temp.address" clearable placeholder="请输入公司地址" />
           </el-form-item>
-          <el-form-item label="公司电话" prop="companyTel">
-            <el-input v-model.trim="temp.companyTel" clearable placeholder="请输入公司电话" />
-          </el-form-item>
           <el-form-item label="公司联系人" prop="linkman">
             <el-input v-model.trim="temp.linkman" clearable placeholder="请输入公司联系人" />
           </el-form-item>
@@ -149,6 +146,9 @@
           </el-form-item>
           <el-form-item label="二维码类型" prop="qrCodeType">
             <el-input v-model.trim="temp.qrCodeType" clearable placeholder="请输入二维码类型" />
+          </el-form-item>
+          <el-form-item label="公司电话" prop="companyTel">
+            <el-input v-model.trim="temp.companyTel" clearable placeholder="请输入公司电话" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -223,7 +223,7 @@ export default {
         address:[{required:true, message:'公司地址必填', trigger:'change'}],
         // companyTel:[{required:true, message:'公司电话必填', trigger:'change'}],
         linkman:[{required:true, message:'公司联系人必填', trigger:'change'}],
-        // phone:[{ required:true, pattern:/^[1]([3-9]patter)[0-9]{9}$/,message:'请输入正确电话号码', trigger:'change'}],
+        phone:[{required:true,pattern:/^[1]([3-9])[0-9]{9}$/,message:'请输入正确电话号码', trigger:'change'}],
         qrCodeType:[{required:true, validator: checkSort,trigger:'change'}],
       }
     }

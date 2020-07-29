@@ -242,7 +242,6 @@ export const asyncRoutes = [
         component: () => import('@/views/enterprise/manage'),
         name: 'enterprise-manage',
         meta: {
-          noCache:true,
           title: '企业管理',
           roles: ['enterprise-manage']
           // roles: ['admin'] // or you can only set roles in sub nav
@@ -341,7 +340,6 @@ export const asyncRoutes = [
       title: '微信管理',
       icon: 'wechat',
       roles: ['wechat']
-
       // roles: ['admin', 'editor'] // you can set roles in root nav
     }, children: [
       {
@@ -351,7 +349,6 @@ export const asyncRoutes = [
         meta: {
           title: '自定义菜单',
           roles: ['wechat-menu']
-
           // roles: ['admin'] // or you can only set roles in sub nav
         }
       },

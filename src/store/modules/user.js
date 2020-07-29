@@ -37,6 +37,9 @@ const mutations = {
   },
   SET_BROWSERNAME: (state, browserName) => {
     state.browserName = browserName
+  },
+  SET_ADMIN:(state, admin) => {
+    state.admin = admin
   }
 
 }
@@ -79,7 +82,7 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction, roleName } = respObj
+        const { roles, name, avatar, introduction, roleName,admin } = respObj
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -90,6 +93,7 @@ const actions = {
         commit('SET_AVATAR', avatar)// 头像
         commit('SET_INTRODUCTION', introduction)// 简介
         commit('SET_ROLE_NAME', roleName)// 角色名
+        commit('SET_ADMIN', admin)// 是否为超级管理员
         resolve(respObj)
       }).catch(error => {
         reject(error)

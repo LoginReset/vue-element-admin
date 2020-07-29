@@ -130,6 +130,7 @@
             class="permission-tree"
             :data="permissionAll"
             show-checkbox
+            check-strictly
             node-key="uuid"
             :props="treeProp"
             @check="treeCheck"

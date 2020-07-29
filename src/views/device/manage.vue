@@ -52,14 +52,13 @@
         label="table.import"
         @click="handleImport"
       />
-      <el-button
+      <PButton
         class="filter-item"
-        style="margin-left: 10px;"
-        type="success"
         icon="el-icon-right"
+        perms="device-manage:assign"
+        type="success"
         @click="handleAssign"
-      >{{ $t('table.assign') }}
-      </el-button>
+        label="table.assign"/>
       <el-button
         class="filter-item"
         style="margin-left: 10px;"
@@ -79,6 +78,7 @@
       highlight-current-row
       style="width: 100%;"
       row-key="uuid"
+      @select="select"
       @selection-change="handleSelectionChange"
       @sort-change="sortChange"
     >
@@ -307,15 +307,28 @@ export default {
       }
     }
   },
+  watch:{
+    list: {
+      handler (value) {
+        console.log('list监听')
+        if (this.allCheck&&this.multipleSelection.length < this.total) {
+          this.list.forEach(row => {
+            if (row) {
+              this.$refs['tableData'].toggleRowSelection(row, true)
+
+            }
+          });
+        }
+      }
+    }
+  },
   created(){
     this.getList();
   },
-  watch:{
-  },
   methods:{
     getList(){
-      this.allCheck = false
-      this.multipleSelection = []
+      console.log(this.multipleSelection)
+      // this.multipleSelection = []
       this.listLoading = true
       getAdviceView(this.listQuery).then(response=>{
         this.list = response.respObj.item
@@ -328,7 +341,7 @@ export default {
         }
         query.page = 1
         getAdviceView(query).then(response=>{
-          this.listAll = response.respObj.item       
+          this.listAll = response.respObj.item   
         })
       })
       const listQuery = {
@@ -337,12 +350,11 @@ export default {
       }
       getUsers(listQuery).then(response=>{
         this.userTotal = response.respObj.total
-        console.log(this.userTotal)
         if(this.userTotal>0){
           listQuery.limit = this.userTotal
         }
         getUsers(listQuery).then(response=>{
-        this.options = response.respObj.item
+          this.options = response.respObj.item
         })
       })
      
@@ -408,25 +420,28 @@ export default {
       })
     },
     selectAll(){
+      //取消全选清空
       if(!this.allCheck){
         this.$refs['tableData'].clearSelection()
       }else{
-      this.list.forEach(row=>{
-          this.$refs['tableData'].toggleRowSelection(row,true)
-      })
-      console.log(this.$refs.tableData)
-      this.$nextTick(()=>{
-        for(let i=this.list.length;i<this.listAll.length;i++){
-          this.$refs['tableData'].toggleRowSelection(this.listAll[i],true)
-        }
-      })
+        //点击全选但此时并不是都为空
+        // if(this.multipleSelection.length>0&&this.multipleSelection.length<this.listAll.length){
+        //   this.$refs['tableData'].clearSelection()
+        // }
+        // 这里实际仅选中了当前页的所有数据,在watch中监听分页后继续选中
+        this.list.forEach(row=>{
+            this.$refs['tableData'].toggleRowSelection(row,true)
+            this.reduceSame(this.multipleSelection)
+        })
       }
       
     },
     AssignData(){
-      console.log(this.optionUuid)
-      console.log(this.multipleSelection)
       const uuids = []
+      //点击了全选没有切换数据不全时
+      if(this.allCheck&&this.multipleSelection.length<this.total){
+        this.multipleSelection = this.listAll
+      }
       this.multipleSelection.forEach(item=>{
         uuids.push(item.uuid)
       })
@@ -434,19 +449,18 @@ export default {
         uuid:this.optionUuid,
         uuids:uuids
       }
-    postAssignDevice(data).then(response=>{
-        this.dialogFormVisible = false
-        this.multipleSelection = []
-        this.$refs['tableData'].clearSelection()
-        this.$notify({
-          title: '成功',
-          message: '设备指派成功',
-          type: 'success',
-          duration: 2000
+      postAssignDevice(data).then(response=>{
+          this.dialogFormVisible = false
+          this.multipleSelection = []
+          this.allCheck = false
+          this.$refs['tableData'].clearSelection()
+          this.$notify({
+            title: '成功',
+            message: '设备指派成功',
+            type: 'success',
+            duration: 2000
+          })
         })
-        console.log(response)
-
-      })
 
     },
     handleUpdate(row){
@@ -575,15 +589,33 @@ export default {
       this.modeList.push(file)
 
     },
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
-      console.log(val)
-      if(this.multipleSelection.length!==this.listAll.length){
-        this.allCheck = false
-      }else{
+    //勾选数据去重
+    reduceSame(arr) {
+      let obj = {};
+      return arr.reduce(function (prev, item) {
+        obj[item.uuid] ? "" : (obj[item.uuid] = 1 && prev.push(item))
+        return prev;
+      }, []);
+    },
+    select(val,row){
+      // 点击某一行复选框时
+      this.multipleSelection = this.reduceSame(val);
+      console.log('去重后')
+      if(this.multipleSelection.length === this.total){
         this.allCheck = true
+      }else{
+        this.allCheck = false
       }
-      
+      console.log(this.multipleSelection)
+    },
+    handleSelectionChange(val) {
+      //当表格复选框改变时
+      this.multipleSelection = this.reduceSame(val);
+      if(this.multipleSelection.length === this.total){
+        this.allCheck = true
+      }else{
+        this.allCheck = false
+      }
     }
   }
 }

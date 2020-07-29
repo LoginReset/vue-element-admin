@@ -181,7 +181,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 
 
 export default {
-  name:'enterprise-manage',
+  name:'advertise-manage',
   directives:{waves},
   components:{
     PButton,
@@ -252,7 +252,6 @@ export default {
         this.list.forEach(item=>{
             this.srcList.push(item.imgUrl)
         })
-        console.log(this.listQuery)
         this.listLoading = false
 
       })
@@ -264,7 +263,6 @@ export default {
     handleCreate(){
       this.resetTemp()
       this.dialogFormVisible = true
-      console.log(this.temp)
       this.dialogStatus = 'create'
       this.$nextTick(()=>{
         this.$refs['dataForm'].clearValidate()
@@ -272,13 +270,10 @@ export default {
 
     },
     createData(){
-      console.log(this.temp)
-      
       this.$refs['dataForm'].validate((valid) => {
       if(valid){
         postAdvertsAdd(this.temp).then(response=>{
           this.dialogFormVisible = false
-          console.log(response)
           this.$notify({
             title: '成功',
             message: '创建成功',
@@ -292,7 +287,6 @@ export default {
     },
     handleUpdate(row){
       this.dialogStatus = 'update'
-      console.log(row)
       this.temp = Object.assign({}, row)
       this.modeList = []
       this.modeList.push({
@@ -305,7 +299,6 @@ export default {
       })
     },
     updateData(){
-      console.log(this.temp)
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           getAdvertsUp(this.temp).then(response => {
@@ -330,7 +323,6 @@ export default {
         const param = []
         param.push(row.uuid)
         const requestData = { uuids: param}
-        console.log(requestData)
         getAdvertsDel(requestData).then(response => {
           this.$notify({
             title: '成功',
@@ -351,8 +343,8 @@ export default {
         sort:undefined,
         status:1,
         title:undefined,
-
       }
+      this.modeList = []
     },
     cancel(){
       this.dialogFormVisible = false
@@ -362,7 +354,6 @@ export default {
       // const formData = new FormData()
       // formData.append('uuids', row.uuid)
       // formData.append('status', status)
-      console.log(this.temp)
       this.temp = row
       getAdvertsUp(this.temp).then(response => {
         this.$notify({
@@ -398,14 +389,11 @@ export default {
         this.$refs.upload.submit();
     },
     modeUpload(item) {
-      console.log(item.file);
       this.mode = item.file
       let fd = new FormData()// FormData 对象
       fd.append('file', this.mode)// 文件对象
-      console.log(fd.get('file'))
       postImgUpload(fd).then(response=>{
         this.temp.imgUrl = response.respObj.relUrl
-        console.log(response.respObj)
       })
     },
     fileChange(file, fileList) {

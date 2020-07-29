@@ -110,7 +110,7 @@ import PButton from '@/components/PermissionBtn'
 import { postMenu, getMenu, postSynchMenu } from '@/api/wechat'
 
 export default {
-  name: 'Menu',
+  name: 'wehcat-menu',
   components: {
     menuContent,
     PButton
@@ -188,7 +188,7 @@ export default {
             item['sub_button'] = []
           }
         })
-
+        console.log(this.list)
         // Just to simulate the time of the request
         // setTimeout(() => {
         this.listLoading = false

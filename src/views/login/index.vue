@@ -182,6 +182,13 @@ export default {
         }
       },
       immediate: true
+    },
+    width:{
+      handler(val){
+        console.log(val)
+      },
+      immediate: true
+
     }
   },
   created() {

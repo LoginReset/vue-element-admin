@@ -6,6 +6,7 @@
         placeholder="管理员账号"
         style="width: 200px;"
         class="filter-item"
+        clearable
         @keyup.enter.native="handleFilter"
       />
       <el-input
@@ -13,6 +14,7 @@
         placeholder="管理员手机号"
         style="width: 200px;"
         class="filter-item"
+        clearable
         @keyup.enter.native="handleFilter"
       />
       <el-input
@@ -20,6 +22,7 @@
         placeholder="管理员姓名"
         style="width: 200px;"
         class="filter-item"
+        clearable
         @keyup.enter.native="handleFilter"
       />
       <el-select
@@ -80,6 +83,11 @@
       <el-table-column label="姓名" align="center" width="120">
         <template slot-scope="{row}">
           <el-tag type="success">{{ row.name }}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="所属公司" align="center" width="200">
+        <template slot-scope="{row}">
+          <el-tag>{{ row.companyName }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="手机号" align="center" width="200">
@@ -177,8 +185,8 @@
               placeholder="请输入描述"
             />
           </el-form-item>
-          <el-form-item label="选择公司" v-if="roleName.includes('admin')" prop="companyUuid">
-            <el-select v-model="temp.companyUuid" filterable placeholder="请选择公司"  style="width:100%">
+          <el-form-item label="选择公司" v-if="admin" prop="companyUuid">
+            <el-select v-model="temp.companyUuid" filterable placeholder="请选择公司" :disabled="disable" style="width:100%">
                 <el-option v-for="item in companyList" 
                   :key="item.uuid" :label="item.name" :value="item.uuid">
                 </el-option>
@@ -295,6 +303,7 @@ export default {
         sort: 0,
         sysRole: undefined
       },
+      disable:true,//禁用
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -326,7 +335,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'roles', 'roleName'
+      'admin'
     ])
   },
   created() {
@@ -421,6 +430,7 @@ export default {
       })
     },
     handleCreate() {
+      this.disable = false
       this.showRoleAll()
       this.resetTemp()
       this.dialogStatus = 'create'
@@ -454,6 +464,9 @@ export default {
       })
     },
     handleUpdate(row) {
+      this.disable = true
+      console.log(this.disable)
+      console.log(row)
       this.temp = Object.assign({}, row) // copy obj
       this.showRoleAll()
       // this.temp.timestamp = new Date(this.temp.timestamp)
@@ -575,5 +588,8 @@ export default {
 <style scoped>
   .role-tree {
     margin-bottom: 30px;
+  }
+  .el-tag{
+    font-size: 14px;
   }
 </style>
