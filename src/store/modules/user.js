@@ -1,6 +1,7 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken,getOS, setOS, removeOS } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
+import {getHome} from '@/api/ele'
 
 const state = {
   token: getToken(),
@@ -10,7 +11,8 @@ const state = {
   roles: [], // 权限列表
   roleName: '',// 角色名
   osName:'',
-  browserName:''
+  browserName:'',
+  eleData:''
 }
 
 const mutations = {
@@ -40,6 +42,9 @@ const mutations = {
   },
   SET_ADMIN:(state, admin) => {
     state.admin = admin
+  },
+  SET_ELEDATA:(state, eleData)=>{
+    state.eleData = eleData
   }
 
 }
@@ -61,7 +66,8 @@ const actions = {
         // commit('SET_TOKEN', "LOGIN_SUCCESS")
         const data = {
           browser,
-          OS
+          OS,
+          username
         }
         setOS(data)
         setToken('LOGIN_SUCCESS')// 本项目中没有实际意义，只是一个标志位表示登录成功了，也可以用作token值
@@ -98,6 +104,16 @@ const actions = {
       }).catch(error => {
         reject(error)
       })
+    })
+  },
+  getElement({ commit }) {
+    return new Promise((resolve, reject) => {
+      // console.log('getElement',eleData)
+      getHome().then(response=>{  
+      const {respObj} = response
+        commit('SET_ELEDATA', respObj)// 权限列表
+      })
+      resolve()
     })
   },
 

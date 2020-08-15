@@ -8,6 +8,7 @@
 import { mapGetters } from 'vuex'
 import adminDashboard from './admin'
 import editorDashboard from './editor'
+import {getHome} from '@/api/ele'
 
 export default {
   name: 'Dashboard',
@@ -19,7 +20,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'roles', 'roleName'
+      'roles', 'roleName','ele'
     ])
   },
   created() {
@@ -30,6 +31,14 @@ export default {
       this.currentRole = 'editorDashboard'
 
     }
+    this.getList()
+
+  },
+  methods:{
+    getList(){
+      this.$store.dispatch('user/getElement')
+
+    },
   }
 }
 </script>

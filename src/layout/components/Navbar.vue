@@ -44,6 +44,11 @@
 <!--          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">-->
 <!--            <el-dropdown-item>Docs</el-dropdown-item>-->
 <!--          </a>-->
+          <router-link to="/change/password">
+            <el-dropdown-item divided @click.native="changePwd">
+              <span style="display:block;">{{ $t('navbar.changePwd') }}</span>
+            </el-dropdown-item>
+          </router-link>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">{{ $t('navbar.logOut') }}</span>
           </el-dropdown-item>
@@ -83,6 +88,9 @@ export default {
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
+    },
+    changePwd(){
+      this.$router.push('changePwd')
     },
     async logout() {
       await this.$store.dispatch('user/logout')

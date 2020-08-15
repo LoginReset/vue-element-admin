@@ -70,9 +70,6 @@ export function getEnterpriseView(query){
    * @returns {AxiosPromise}
    */
   export function postImgUpload(data) {
-    console.log(data)
-    console.log(111)
-  
     return request({
       url: '/b/upload/up_img',
       method: 'post',

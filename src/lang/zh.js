@@ -70,10 +70,11 @@ export default {
     logOut: '退出登录',
     profile: '个人中心',
     theme: '换肤',
-    size: '布局大小'
+    size: '布局大小',
+    changePwd:'修改密码'
   },
   login: {
-    title: '系统登录',
+    title: 'Bom清单管理系统登录',
     logIn: '登录',
     username: '账号',
     password: '密码',
@@ -123,6 +124,8 @@ export default {
     assign:'指派',
     selectAll:'全选',
     add: '添加',
+    up_bom:'上传bom清单',
+    upStock:'库存',
     override:'重构权限',
     addMenu:'添加菜单',
     saveMenu:'保存菜单',

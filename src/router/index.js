@@ -83,6 +83,19 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/change',
+    component: Layout,
+    children: [
+      {
+        path: 'password',
+        component: () => import('@/views/dashboard/password'),
+        name: 'changePwd',
+        meta: { title: '修改密码', icon: 'documentation'},
+        hidden:true
+      }
+    ]
+  },
   // {
   //   path: '/documentation',
   //   component: Layout,
@@ -130,26 +143,114 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
-    path: '/ctl',
+    path: '/element',
     component: Layout,
-    redirect: '/ctl/device-list',
+    redirect: '/element/manage',
     alwaysShow: true, // will always show the root menu
-    name: 'ctl',
+    name: 'element',
     meta: {
-      title: '控制面板',
-      icon: 'ctl',
-      roles: ['ctl']
-      // roles: ['admin', 'editor'] // you can set roles in root nav
+      title: '元器件管理',
+      icon: 'element',
+      roles: ['element']
     }, children: [
       {
-        path: 'device-list',
-        component: () => import('@/views/wechat/components/device-list'),
-        name: 'DeviceList',
+        path: 'manage',
+        component: () => import('@/views/element/manage'),
+        name: 'element-manage',
         meta: {
-          title: '控制面板',
-          roles: ['ctl-manage']
-          // roles: ['admin'] // or you can only set roles in sub nav
+          title: '元器件规格',
+          roles: ['element-manage','element-manage-list']
         }
+      },
+      {
+        path: 'edit',
+        component: () => import('@/views/element/redirect'),
+        name: 'element-edit',
+        meta: {
+          title: '元件规格编辑',
+          roles: ['element-manage'],
+          activeMenu: '/element/manage',
+        },
+        hidden:true
+
+      },{
+        path: 'create',
+        component: () => import('@/views/element/redirect'),
+        name: 'element-create',
+        meta: {
+          title: '创建元件规格',
+          roles: ['element-create']
+        }
+      },
+      {
+        path: 'name',
+        component: () => import('@/views/element/name'),
+        name: 'element-name',
+        meta: {
+          title: '元件名称',
+          roles: ['element-name']
+        }
+      },
+      {
+        path: 'rank',
+        component: () => import('@/views/element/rank'),
+        name: 'element-rank',
+        meta: {
+          title: '元件级别',
+          roles: ['element-rank']
+        }
+      },
+      {
+        path: 'type',
+        component: () => import('@/views/element/type'),
+        name: 'element-type',
+        meta: {
+          title: '元件类型',
+          roles: ['element-type']
+        }
+      }
+    ]
+  },  {
+    path: '/bom',
+    component: Layout,
+    redirect: '/bom/manage',
+    alwaysShow: true, // will always show the root menu
+    name: 'bom',
+    meta: {
+      title: 'bom清单管理',
+      icon: 'bom',
+      roles: ['bom']
+    }, children: [
+      {
+        path: 'manage',
+        component: () => import('@/views/bom/manage'),
+        name: 'bom-manage',
+        meta: {
+          title: 'bom清单造价',
+          roles: ['bom-manage']
+        }
+      }
+    ]
+  },
+  // {
+  //   path: '/ctl',
+  //   component: Layout,
+  //   redirect: '/ctl/device-list',
+  //   alwaysShow: true, 
+  //   name: 'ctl',
+  //   meta: {
+  //     title: '控制面板',
+  //     icon: 'ctl',
+  //     roles: ['ctl']
+  //   }, children: [
+  //     {
+  //       path: 'device-list',
+  //       component: () => import('@/views/wechat/components/device-list'),
+  //       name: 'DeviceList',
+  //       meta: {
+  //         title: '控制面板',
+  //         roles: ['ctl-manage']
+  //       }
         // children: [
         //   {
         //     path: 'panel',
@@ -188,101 +289,94 @@ export const asyncRoutes = [
         //   }
         // ]
 
-      }
-    ]
-  }, {
-    path:'/device',
-    component:Layout,
-    redirect: '/device/manage',
-    alwaysShow: true, // will always show the root menu
-    name: 'device',
-    meta:{
-      title:'设备管理',
-      icon: 'shebei2',
-      roles:['device']
-    },children:[
-      {
-        path: 'manage',
-        component: () => import('@/views/device/manage'),
-        name: 'device-manage',
-        meta: {
-          // noCache:true,
-          title: '设备管理',
-          roles: ['device-manage']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },{
-        path: 'user',
-        component: () => import('@/views/device/user'),
-        name: 'device-user',
-        meta: {
-          // noCache:true,
-          title: '用户设备',
-          roles: ['device-user']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      }
-    ]
+    //   }
+    // ]
+  // },
+//    {
+//     path:'/device',
+//     component:Layout,
+//     redirect: '/device/manage',
+//     alwaysShow: true, // will always show the root menu
+//     name: 'device',
+//     meta:{
+//       title:'设备管理',
+//       icon: 'shebei2',
+//       roles:['device']
+//     },children:[
+//       {
+//         path: 'manage',
+//         component: () => import('@/views/device/manage'),
+//         name: 'device-manage',
+//         meta: {
+//           title: '设备管理',
+//           roles: ['device-manage']
+//         }
+//       },{
+//         path: 'user',
+//         component: () => import('@/views/device/user'),
+//         name: 'device-user',
+//         meta: {
+//           title: '用户设备',
+//           roles: ['device-user']
+//         }
+//       }
+//     ]
 
 
-},{
-    path: '/enterprise',
-    component: Layout,
-    redirect: '/enterprise/manage',
-    alwaysShow: true, // will always show the root menu
-    name: 'enterprise',
-    meta: {
-      title: '企业管理',
-      icon: '111',
-      roles: ['enterprise']
-      // roles: ['admin', 'editor'] // you can set roles in root nav
-    }, children: [
-      {
-        path: 'manage',
-        component: () => import('@/views/enterprise/manage'),
-        name: 'enterprise-manage',
-        meta: {
-          title: '企业管理',
-          roles: ['enterprise-manage']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'logo',
-        component: () => import('@/views/enterprise/logo'),
-        name: 'enterprise-logo',
-        meta: {
-          title: 'logo管理',
-          roles: ['enterprise-logo']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      }
-    ]
-  },{
-      path:'/advertise',
-      component:Layout,
-      redirect: '/advertise/manage',
-      alwaysShow: true, // will always show the root menu
-      name: 'advertise',
-      meta:{
-        title:'广告管理',
-        icon: 'guanggao',
-        roles:['advertise']
-      },children:[
-        {
-          path: 'manage',
-          component: () => import('@/views/advertise/manage'),
-          name: 'advertise-manage',
-          meta: {
-            title: '广告管理',
-            roles: ['advertise-manage']
-            // roles: ['admin'] // or you can only set roles in sub nav
-          }
-        }
-      ]
+// },{
+//     path: '/enterprise',
+//     component: Layout,
+//     redirect: '/enterprise/manage',
+//     alwaysShow: true, // will always show the root menu
+//     name: 'enterprise',
+//     meta: {
+//       title: '企业管理',
+//       icon: '111',
+//       roles: ['enterprise']
+//     }, children: [
+//       {
+//         path: 'manage',
+//         component: () => import('@/views/enterprise/manage'),
+//         name: 'enterprise-manage',
+//         meta: {
+//           title: '企业管理',
+//           roles: ['enterprise-manage']
+//         }
+//       },
+//       {
+//         path: 'logo',
+//         component: () => import('@/views/enterprise/logo'),
+//         name: 'enterprise-logo',
+//         meta: {
+//           title: 'logo管理',
+//           roles: ['enterprise-logo']
+//         }
+//       }
+//     ]
+//   },{
+//       path:'/advertise',
+//       component:Layout,
+//       redirect: '/advertise/manage',
+//       alwaysShow: true, // will always show the root menu
+//       name: 'advertise',
+//       meta:{
+//         title:'广告管理',
+//         icon: 'guanggao',
+//         roles:['advertise']
+//       },children:[
+//         {
+//           path: 'manage',
+//           component: () => import('@/views/advertise/manage'),
+//           name: 'advertise-manage',
+//           meta: {
+//             title: '广告管理',
+//             roles: ['advertise-manage']
+//           }
+//         }
+//       ]
 
 
-  },
+//   },
   // {
   //   path: '/file',
   //   component: Layout,
@@ -330,28 +424,27 @@ export const asyncRoutes = [
   //     }
   //   ]
   // },
-  {
-    path: '/wechat',
-    component: Layout,
-    redirect: '/wechat/menu',
-    alwaysShow: true, // will always show the root menu
-    name: 'wechat',
-    meta: {
-      title: '微信管理',
-      icon: 'wechat',
-      roles: ['wechat']
-      // roles: ['admin', 'editor'] // you can set roles in root nav
-    }, children: [
-      {
-        path: 'menu',
-        component: () => import('@/views/wechat/menu'),
-        name: 'wehcat-menu',
-        meta: {
-          title: '自定义菜单',
-          roles: ['wechat-menu']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
+  // {
+  //   path: '/wechat',
+  //   component: Layout,
+  //   redirect: '/wechat/menu',
+  //   alwaysShow: true, // will always show the root menu
+  //   name: 'wechat',
+  //   meta: {
+  //     title: '微信管理',
+  //     icon: 'wechat1',
+  //     roles: ['wechat']
+  //     // roles: ['admin', 'editor'] // you can set roles in root nav
+  //   }, children: [
+  //     {
+  //       path: 'menu',
+  //       component: () => import('@/views/wechat/menu'),
+  //       name: 'wehcat-menu',
+  //       meta: {
+  //         title: '自定义菜单',
+  //         roles: ['wechat-menu']
+  //       }
+  //     },
       //  {
       //   path: 'msgTemp',
       //   component: () => import('@/views/wechat/msgTemp'),
@@ -383,8 +476,8 @@ export const asyncRoutes = [
       //   },
       //   hidden: true
       // }
-    ]
-  },
+  //   ]
+  // },
   // {
   //   path: '/sms',
   //   component: Layout,
@@ -484,7 +577,7 @@ export const asyncRoutes = [
   //         noCache: false,
   //         activeMenu: '/msgPush/wechatTemp',
   //         roles: ['msgPush-edit'] },
-  //       hidden: true
+  //         hidden: true
   //     }
   //   ]
   // },

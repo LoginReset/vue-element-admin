@@ -85,11 +85,6 @@
           <el-tag type="success">{{ row.name }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="所属公司" align="center" width="200">
-        <template slot-scope="{row}">
-          <el-tag>{{ row.companyName }}</el-tag>
-        </template>
-      </el-table-column>
       <el-table-column label="手机号" align="center" width="200">
         <template slot-scope="{row}">
           <el-tag type="info">{{ row.phoneNum }}</el-tag>
@@ -185,13 +180,6 @@
               placeholder="请输入描述"
             />
           </el-form-item>
-          <el-form-item label="选择公司" v-if="admin" prop="companyUuid">
-            <el-select v-model="temp.companyUuid" filterable placeholder="请选择公司" :disabled="disable" style="width:100%">
-                <el-option v-for="item in companyList" 
-                  :key="item.uuid" :label="item.name" :value="item.uuid">
-                </el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label="角色" prop="puuid">
             <el-tree
               ref="tree"
@@ -230,7 +218,6 @@
 
 <script>
 import { getRoles, getUsers, postUserAdd, postUserUp, postUserStatus,postUserDel } from '@/api/sys'
-import { getEnterpriseView } from '@/api/enterprise'
 import waves from '@/directive/waves' // waves directive
 import { mapGetters } from 'vuex'
 import { parseTime } from '@/utils'
@@ -275,7 +262,6 @@ export default {
       tableKey: 0,
       list: [],
       deviceData:[],
-      companyList:[],
       roleList: null,
       total: 0,
       cTotal: 0,
@@ -298,7 +284,6 @@ export default {
         confirmPwd: '',
         phoneNum: '',
         name: '',
-        companyUuid:'',
         description:'',
         sort: 0,
         sysRole: undefined
@@ -355,15 +340,7 @@ export default {
           page:1,
           limit:20
         }
-        getEnterpriseView(query).then(response=>{
-          this.cTotal = response.respObj.total
-          if(this.cTotal>0){
-            query.limit = this.cTotal
-          }
-          getEnterpriseView(query).then(response=>{
-            this.companyList = response.respObj.item
-          })
-        })
+     
       })
     },
     handleFilter() {
@@ -402,7 +379,6 @@ export default {
         phoneNum: '',
         name: '',
         description:'',
-        companyUuid:'',
         sort: 0,
         sysRole: undefined
       }

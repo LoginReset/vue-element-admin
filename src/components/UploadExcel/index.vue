@@ -42,6 +42,7 @@ export default {
         this.$message.error('Only support uploading one file!')
         return
       }
+      console.log(files)
       const rawFile = files[0] // only use files[0]
 
       if (!this.isExcel(rawFile)) {
@@ -84,10 +85,16 @@ export default {
         const reader = new FileReader()
         reader.onload = e => {
           const data = e.target.result
+          console.log('data')
           const workbook = XLSX.read(data, { type: 'array' })
+
           const firstSheetName = workbook.SheetNames[0]
+
           const worksheet = workbook.Sheets[firstSheetName]
+
           const header = this.getHeaderRow(worksheet)
+          console.log(header)
+
           const results = XLSX.utils.sheet_to_json(worksheet)
           this.generateData({ header, results })
           this.loading = false
@@ -97,13 +104,18 @@ export default {
       })
     },
     getHeaderRow(sheet) {
+      console.log(sheet)
       const headers = []
       const range = XLSX.utils.decode_range(sheet['!ref'])
+      console.log(range)
       let C
       const R = range.s.r
+      console.log(range.s.c)
       /* start in the first row */
+      
       for (C = range.s.c; C <= range.e.c; ++C) { /* walk every column in the range */
         const cell = sheet[XLSX.utils.encode_cell({ c: C, r: R })]
+        console.log(cell)
         /* find the cell in the first row */
         let hdr = 'UNKNOWN ' + C // <-- replace with your desired default
         if (cell && cell.t) hdr = XLSX.utils.format_cell(cell)

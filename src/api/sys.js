@@ -19,7 +19,7 @@ export function getUsers(query) {
 export function postUserAdd(data) {
   console.log(data)
   return request({
-    url: '/b/su/add',
+    url: '/b/su',
     method: 'post',
     data
   })
@@ -80,7 +80,7 @@ export function getRoles(query) {
  */
 export function postRoleAdd(data) {
   return request({
-    url: '/b/sr/add',
+    url: '/b/sr',
     method: 'post',
     data
   })
@@ -142,7 +142,7 @@ export function getPermissionAll() {
  */
 export function postPermissionAdd(data) {
   return request({
-    url: '/b/sp/add',
+    url: '/b/sp',
     method: 'post',
     data
   })
@@ -368,4 +368,28 @@ export function postCitieAdd(data) {
     data
   })
 }
-
+/**
+ * 操作日志
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function getLog(query) {
+  
+  return request({
+    url: '/b/sl/log',
+    method: 'get',
+    params:query
+  })
+}
+/**
+ * 修改密码
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function postPwdUp(data) {
+  return request({
+    url: '/b/su/modify/pwd/t1',
+    method: 'post',
+    data
+  })
+}

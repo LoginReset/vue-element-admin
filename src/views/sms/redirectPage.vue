@@ -44,7 +44,6 @@
           >
             <el-col :span="7">
               <el-form-item
-                prop="smsField"
                 :rules="[{required: true, message: '短信模板字段必填', trigger: 'change'}]"
                 :prop="'other0.templateParam.'+index+'.smsField'"
                 style="margin-right:5px"
@@ -262,6 +261,7 @@ export default {
             }
           }
           var templateParam = JSON.parse(data.txSmsParam.templateParam)
+          //进来改变将${}变成描述显示
           templateParam = this.changeDescription(templateParam)
           this.temp.other.templateParam = templateParam
         } else if (data.aliSmsParam) {
@@ -286,6 +286,8 @@ export default {
                   item1.children.forEach(item2 => {
                     if (item2.name === templateParam[i].name) {
                       templateParam[i].name = item2.description
+                      //描述字段必须则显示描述字段否则不显示 
+                      // 将每个变量的是否必须描述标志放入数组
                       item2.descField === 1?this.showDescField[i]=true:this.showDescField[i]=false
                       this.descriptions[i] = item2.description
                       this.titleNames[i] = item2.name
