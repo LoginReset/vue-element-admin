@@ -130,11 +130,10 @@
             class="permission-tree"
             :data="permissionAll"
             show-checkbox
-            check-strictly
             node-key="uuid"
             :props="treeProp"
+            :check-strictly="strictly"
             @check="treeCheck"
-
           />
         </el-form-item>
       </el-form>
@@ -167,7 +166,7 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import PButton from '@/components/PermissionBtn'
 export default {
-  name: 'role',
+  name: 'Role',
   components: { Pagination, PButton },
   directives: { waves },
   data() {
@@ -186,10 +185,11 @@ export default {
     return {
       tableKey: 0,
       list: [],
-      keys:[],
+      keys: [],
       permissionAll: null,
       total: 0,
       listLoading: true,
+      strictly: true,
       listQuery: {
         page: 1,
         limit: 20,
@@ -272,13 +272,16 @@ export default {
         description: '',
         sort: 0
       }
-    }, 
+    },
     treeCheck(data, status) {
-      this.keys = []
+      console.log(111)
+      // this.keys = []
+      console.log(data)
+      console.log(status)
       this.keys = status.checkedKeys.concat(status.halfCheckedKeys)
     },
     checkedPermission() {
-      // console.log(this.$refs.tree.getCheckedKeys())
+      console.log(this.$refs.tree.getCheckedKeys())
       // const checkedUuid = this.$refs.tree.getCheckedKeys()
       const checkedUuid = this.keys
       if (checkedUuid.length === 0) {
@@ -296,11 +299,14 @@ export default {
       getPermissionAll().then(response => {
         this.permissionAll = response.respObj.item
         if (this.dialogStatus === 'update') {
+          console.log(this.temp.permissions)
           this.$refs.tree.setCheckedKeys(this.temp.permissions) // this.temp.permissions===permission的uuid
         }
       })
     },
     handleCreate() {
+      this.$refs.tree && this.$refs.tree.setCheckedKeys([])
+      this.strictly = false
       this.showPermissionAll()
       this.resetTemp()
       this.dialogStatus = 'create'
@@ -309,7 +315,6 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
       this.temp.description = this.temp.description.trim()
-
     },
     createData() {
       const permiUuids = this.checkedPermission()
@@ -333,6 +338,8 @@ export default {
     },
     handleUpdate(row) {
       this.showPermissionAll()
+      this.strictly = true
+      // this.$refs.tree&&this.$refs.tree.setCheckedKeys([])
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
@@ -340,8 +347,8 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
-      this.temp.description = this.temp.description.trim()
 
+      this.temp.description = this.temp.description.trim()
     },
     updateData() {
       const permiUuids = this.checkedPermission()
@@ -387,8 +394,6 @@ export default {
           // this.getList();
           this.list.splice(index, 1)
         })
-      }).catch(err => {
-
       })
     },
     handleDownload() {
@@ -421,5 +426,8 @@ export default {
 <style scoped>
   .permission-tree {
     margin-bottom: 30px;
+  }
+  .el-tag{
+    font-size: 14px;
   }
 </style>

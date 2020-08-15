@@ -334,11 +334,11 @@ export function getFieldKeyDel(data) {
  * 查看省市县
  * @returns {AxiosPromise}
  */
-export function getProvinceView(query){
+export function getProvinceView(query) {
   return request({
-    url:'/b/province/cities/view',
+    url: '/b/province/cities/view',
     method: 'get',
-    params:query
+    params: query
   })
 }
 /**
@@ -369,3 +369,15 @@ export function postCitieAdd(data) {
   })
 }
 
+/**
+ * 修改密码
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function postPwdUp(data) {
+  return request({
+    url: '/b/su/modify/pwd/t1',
+    method: 'post',
+    data
+  })
+}

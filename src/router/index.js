@@ -83,6 +83,19 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/change',
+    component: Layout,
+    children: [
+      {
+        path: 'password',
+        component: () => import('@/views/dashboard/password'),
+        name: 'changePwd',
+        meta: { title: '修改密码', icon: 'documentation' },
+        hidden: true
+      }
+    ]
+  },
   // {
   //   path: '/documentation',
   //   component: Layout,
@@ -191,16 +204,16 @@ export const asyncRoutes = [
       }
     ]
   }, {
-    path:'/device',
-    component:Layout,
+    path: '/device',
+    component: Layout,
     redirect: '/device/manage',
     alwaysShow: true, // will always show the root menu
     name: 'device',
-    meta:{
-      title:'设备管理',
+    meta: {
+      title: '设备管理',
       icon: 'shebei2',
-      roles:['device']
-    },children:[
+      roles: ['device']
+    }, children: [
       {
         path: 'manage',
         component: () => import('@/views/device/manage'),
@@ -211,7 +224,7 @@ export const asyncRoutes = [
           roles: ['device-manage']
           // roles: ['admin'] // or you can only set roles in sub nav
         }
-      },{
+      }, {
         path: 'user',
         component: () => import('@/views/device/user'),
         name: 'device-user',
@@ -224,8 +237,7 @@ export const asyncRoutes = [
       }
     ]
 
-
-},{
+  }, {
     path: '/enterprise',
     component: Layout,
     redirect: '/enterprise/manage',
@@ -258,29 +270,28 @@ export const asyncRoutes = [
         }
       }
     ]
-  },{
-      path:'/advertise',
-      component:Layout,
-      redirect: '/advertise/manage',
-      alwaysShow: true, // will always show the root menu
-      name: 'advertise',
-      meta:{
-        title:'广告管理',
-        icon: 'guanggao',
-        roles:['advertise']
-      },children:[
-        {
-          path: 'manage',
-          component: () => import('@/views/advertise/manage'),
-          name: 'advertise-manage',
-          meta: {
-            title: '广告管理',
-            roles: ['advertise-manage']
-            // roles: ['admin'] // or you can only set roles in sub nav
-          }
+  }, {
+    path: '/advertise',
+    component: Layout,
+    redirect: '/advertise/manage',
+    alwaysShow: true, // will always show the root menu
+    name: 'advertise',
+    meta: {
+      title: '广告管理',
+      icon: 'guanggao',
+      roles: ['advertise']
+    }, children: [
+      {
+        path: 'manage',
+        component: () => import('@/views/advertise/manage'),
+        name: 'advertise-manage',
+        meta: {
+          title: '广告管理',
+          roles: ['advertise-manage']
+          // roles: ['admin'] // or you can only set roles in sub nav
         }
-      ]
-
+      }
+    ]
 
   },
   // {
@@ -351,7 +362,7 @@ export const asyncRoutes = [
           roles: ['wechat-menu']
           // roles: ['admin'] // or you can only set roles in sub nav
         }
-      },
+      }
       //  {
       //   path: 'msgTemp',
       //   component: () => import('@/views/wechat/msgTemp'),
@@ -525,13 +536,13 @@ export const asyncRoutes = [
         path: 'permission',
         component: () => import('@/views/sys/permission'),
         name: 'permission',
-        
+
         meta: {
           title: '系统权限',
           roles: ['sys-permission']
           // roles: ['admin'] // or you can only set roles in sub nav
         }
-       },
+      },
       // {
       //   path: 'fieldName',
       //   component: () => import('@/views/sys/fieldName'),
