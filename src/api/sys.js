@@ -347,3 +347,15 @@ export function postCitieAdd(data) {
   })
 }
 
+/**
+ * 修改密码
+ * @param data
+ * @returns {AxiosPromise}
+ */
+export function postPwdUp(data) {
+  return request({
+    url: '/b/su/modify/pwd/t1',
+    method: 'post',
+    data
+  })
+}

@@ -84,6 +84,19 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/change',
+    component: Layout,
+    children: [
+      {
+        path: 'password',
+        component: () => import('@/views/dashboard/password'),
+        name: 'changePwd',
+        meta: { title: '修改密码', icon: 'documentation' },
+        hidden: true
+      }
+    ]
+  },
+  {
     path: '/documentation',
     component: Layout,
     children: [

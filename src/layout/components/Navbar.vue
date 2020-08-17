@@ -26,11 +26,11 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link to="/profile/index">
+          <!-- <router-link to="/profile/index">
             <el-dropdown-item>
               {{ $t('navbar.profile') }}
             </el-dropdown-item>
-          </router-link>
+          </router-link> -->
           <router-link to="/">
             <el-dropdown-item>
               {{ $t('navbar.dashboard') }}
@@ -44,6 +44,11 @@
 <!--          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">-->
 <!--            <el-dropdown-item>Docs</el-dropdown-item>-->
 <!--          </a>-->
+          <router-link to="/change/password">
+            <el-dropdown-item divided @click.native="changePwd">
+              <span style="display:block;">{{ $t('navbar.changePwd') }}</span>
+            </el-dropdown-item>
+          </router-link>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">{{ $t('navbar.logOut') }}</span>
           </el-dropdown-item>

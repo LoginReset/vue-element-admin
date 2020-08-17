@@ -127,12 +127,13 @@
         <el-form-item label="系统权限" prop="puuid">
           <el-tree
             ref="tree"
-            default-expand-all
             class="permission-tree"
             :data="permissionAll"
             show-checkbox
             node-key="uuid"
             :props="treeProp"
+            :check-strictly="strictly"
+            @check="treeCheck"
           />
         </el-form-item>
       </el-form>
@@ -184,9 +185,11 @@ export default {
     return {
       tableKey: 0,
       list: [],
+      keys: [],
       permissionAll: null,
       total: 0,
       listLoading: true,
+      strictly: true,
       listQuery: {
         page: 1,
         limit: 20,
@@ -269,8 +272,18 @@ export default {
         description: '',
         sort: 0
       }
-    }, checkedPermission() {
-      const checkedUuid = this.$refs.tree.getCheckedKeys()
+    },
+    treeCheck(data, status) {
+      console.log(111)
+      // this.keys = []
+      console.log(data)
+      console.log(status)
+      this.keys = status.checkedKeys.concat(status.halfCheckedKeys)
+    },
+    checkedPermission() {
+      console.log(this.$refs.tree.getCheckedKeys())
+      // const checkedUuid = this.$refs.tree.getCheckedKeys()
+      const checkedUuid = this.keys
       if (checkedUuid.length === 0) {
         this.$notify({
           title: '警告',
@@ -286,11 +299,14 @@ export default {
       getPermissionAll().then(response => {
         this.permissionAll = response.respObj.item
         if (this.dialogStatus === 'update') {
+          console.log(this.temp.permissions)
           this.$refs.tree.setCheckedKeys(this.temp.permissions) // this.temp.permissions===permission的uuid
         }
       })
     },
     handleCreate() {
+      this.$refs.tree && this.$refs.tree.setCheckedKeys([])
+      this.strictly = false
       this.showPermissionAll()
       this.resetTemp()
       this.dialogStatus = 'create'
@@ -299,7 +315,6 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
       this.temp.description = this.temp.description.trim()
-
     },
     createData() {
       const permiUuids = this.checkedPermission()
@@ -323,6 +338,8 @@ export default {
     },
     handleUpdate(row) {
       this.showPermissionAll()
+      this.strictly = true
+      // this.$refs.tree&&this.$refs.tree.setCheckedKeys([])
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
@@ -330,11 +347,10 @@ export default {
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
-      this.temp.description = this.temp.description.trim()
 
+      this.temp.description = this.temp.description.trim()
     },
     updateData() {
-
       const permiUuids = this.checkedPermission()
       if (permiUuids.length === 0) {
         return
@@ -378,8 +394,6 @@ export default {
           // this.getList();
           this.list.splice(index, 1)
         })
-      }).catch(err => {
-
       })
     },
     handleDownload() {
@@ -412,5 +426,8 @@ export default {
 <style scoped>
   .permission-tree {
     margin-bottom: 30px;
+  }
+  .el-tag{
+    font-size: 14px;
   }
 </style>

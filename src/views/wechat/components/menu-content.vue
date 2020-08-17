@@ -21,13 +21,11 @@
           class="board-column-content"
           @start="datadragStart"
           @end="datadragEnd"
-          @add="datadragAdd"
-        >
-
+          @add="datadragAdd">
           <div v-for="(cItem,cIndex) in pItem.sub_button" :key="cItem.cIndex" class="board-item item" @click="editMenu(pIndex,cIndex)">
             {{ cItem.name }}
           </div>
-          <div slot="footer" class="board-item" @click="addChildMenu(pIndex )">添加子菜单</div>
+          <div slot="footer" class="board-item" @click="addChildMenu(pIndex)">添加子菜单</div>
         </draggable>
       </div>
     </draggable>
@@ -102,18 +100,32 @@ export default {
     },
     datadragEnd(evt) {
       evt.preventDefault()
+      //保持背景颜色随拖拽不换
       if (this.isChange) {
-        // this.classIndex[evt.oldIndex] = evt.newIndex
-        // this.classIndex[evt.newIndex] = evt.oldIndex
-        const newIndex = this.classIndex[evt.oldIndex]
-        this.classIndex[evt.oldIndex] = this.classIndex[evt.newIndex]
-        this.classIndex[evt.newIndex] = newIndex
-        console.log(this.classIndex)
+        //面板左右移动一个时 classIndex交换
+        if(evt.oldIndex+1 === evt.newIndex || evt.oldIndex-1 === evt.newIndex){
+          let newIndex = this.classIndex[evt.oldIndex]
+          this.classIndex[evt.oldIndex] = this.classIndex[evt.newIndex]
+          this.classIndex[evt.newIndex] = newIndex
+        }else{
+          //面板从第一个移动到最后一个或从最后一个移动到第一个  classIndex依次交换
+          let first = this.classIndex[0]
+          let last = this.classIndex[2]
+          if(evt.oldIndex === 0){
+            this.classIndex[0] = this.classIndex[1]
+            this.classIndex[1] = this.classIndex[2]
+            this.classIndex[2] = first
+          }else{
+            this.classIndex[2] = this.classIndex[1]
+            this.classIndex[1] = this.classIndex[0]
+            this.classIndex[0] = last
+          }
+        }
         this.isChange = false
       }
       console.log('拖动前的索引 :' + evt.oldIndex)
       console.log('拖动后的索引 :' + evt.newIndex)
-      console.log(this.listMenu.splice(0, 1, this.listMenu[0]))
+      this.listMenu.splice(0, 1, this.listMenu[0])
       for (const pMenu of this.list) {
         const cList = pMenu.sub_button
         if (cList && cList.length > 5) {
@@ -151,7 +163,6 @@ export default {
 <style lang="scss" scoped>
 
   .board-column {
-
     .menu-content {
       display: flex;
       align-items: flex-start;
