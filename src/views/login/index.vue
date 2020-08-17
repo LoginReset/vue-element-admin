@@ -1,108 +1,113 @@
 <template>
   <div class="login-container">
-    <el-form
-      ref="loginForm"
-      :model="loginForm"
-      :rules="loginRules"
-      class="login-form"
-      autocomplete="on"
-      label-position="left"
-    >
-
-      <div class="title-container">
-        <h3 class="title">
-          {{ $t('login.title') }}
-        </h3>
-        <lang-select class="set-language" />
-      </div>
-      <el-form-item ref="dragVerifySize" prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          :placeholder="$t('login.username')"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
-
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password">
+    <div class="main">
+      <el-form
+        ref="loginForm"
+        :model="loginForm"
+        :rules="loginRules"
+        class="login-form"
+        autocomplete="on"
+        label-position="left"
+      >
+        <div class="title-container">
+          <h3 class="title">
+            {{ $t('login.title') }}
+          </h3>
+          <lang-select class="set-language" />
+        </div>
+        <el-form-item ref="dragVerifySize" prop="username">
           <span class="svg-container">
-            <svg-icon icon-class="password" />
+            <svg-icon icon-class="user" />
           </span>
           <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            :placeholder="$t('login.password')"
-            name="password"
-            tabindex="2"
+            ref="username"
+            v-model="loginForm.username"
+            :placeholder="$t('login.username')"
+            name="username"
+            type="text"
+            tabindex="1"
             autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleLogin"
           />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-          </span>
         </el-form-item>
-      </el-tooltip>
 
-      <!--滑动验证-->
-      <el-form-item class="drag-verify-box">
-        <drag-verify
-          ref="Verify"
-          :text="text"
-          :success-text="successText"
-          :background="background"
-          :progress-bar-bg="progressBarBg"
-          :completed-bg="completedBg"
-          :handler-bg="handlerBg"
-          :handler-icon="handlerIcon"
-          :text-size="textSize"
-          :success-icon="successIcon"
-          :circle="getShape"
-          :width="width"
-          :height="height"
-          :color="color"
-          :border-radius="borderRadius"
-        />
-      </el-form-item>
+        <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+          <el-form-item prop="password">
+            <span class="svg-container">
+              <svg-icon icon-class="password" />
+            </span>
+            <el-input
+              :key="passwordType"
+              ref="password"
+              v-model="loginForm.password"
+              :type="passwordType"
+              :placeholder="$t('login.password')"
+              name="password"
+              tabindex="2"
+              autocomplete="on"
+              @keyup.native="checkCapslock"
+              @blur="capsTooltip = false"
+              @keyup.enter.native="handleLogin"
+            />
+            <span class="show-pwd" @click="showPwd">
+              <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+            </span>
+          </el-form-item>
+        </el-tooltip>
 
-      <el-button
-        :loading="loading"
-        type="primary"
-        style="width:100%;margin-bottom:30px;"
-        :style="{height:height+'px'}"
-        @click.native.prevent="handleLogin"
-      >
-        {{ $t('login.logIn') }}
-      </el-button>
+        <!--滑动验证-->
+        <el-form-item class="drag-verify-box">
+          <drag-verify
+            ref="Verify"
+            :text="text"
+            :success-text="successText"
+            :background="background"
+            :progress-bar-bg="progressBarBg"
+            :completed-bg="completedBg"
+            :handler-bg="handlerBg"
+            :handler-icon="handlerIcon"
+            :text-size="textSize"
+            :success-icon="successIcon"
+            :circle="getShape"
+            :width="width"
+            :height="height"
+            :color="color"
+            :border-radius="borderRadius"
+          />
+        </el-form-item>
 
-      <!--<div style="position:relative">-->
-      <!--<div class="tips">-->
-      <!--<span>{{ $t('login.username') }} : admin</span>-->
-      <!--<span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>-->
-      <!--</div>-->
-      <!--<div class="tips">-->
-      <!--<span style="margin-right:18px;">-->
-      <!--{{ $t('login.username') }} : editor-->
-      <!--</span>-->
-      <!--<span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>-->
-      <!--</div>-->
+        <el-button
+          :loading="loading"
+          type="primary"
+          style="width:100%;margin-bottom:30px;"
+          :style="{height:height+'px'}"
+          @click.native.prevent="handleLogin"
+        >
+          {{ $t('login.logIn') }}
+        </el-button>
 
-      <!--<el-button class="thirdparty-button" type="primary" @click="showDialog=true">-->
-      <!--{{ $t('login.thirdparty') }}-->
-      <!--</el-button>-->
-      <!--</div>-->
-    </el-form>
+        <!--<div style="position:relative">-->
+        <!--<div class="tips">-->
+        <!--<span>{{ $t('login.username') }} : admin</span>-->
+        <!--<span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>-->
+        <!--</div>-->
+        <!--<div class="tips">-->
+        <!--<span style="margin-right:18px;">-->
+        <!--{{ $t('login.username') }} : editor-->
+        <!--</span>-->
+        <!--<span>{{ $t('login.password') }} : {{ $t('login.any') }}</span>-->
+        <!--</div>-->
 
+        <!--<el-button class="thirdparty-button" type="primary" @click="showDialog=true">-->
+        <!--{{ $t('login.thirdparty') }}-->
+        <!--</el-button>-->
+        <!--</div>-->
+      </el-form>
+    </div>
+    <div class="footer-1">
+      <div class="footer-top"><a href="http://www.cdzic.net">成都子程电子设备有限公司</a>提供技术支持</div>
+      <div class="footer">copyright <a href="http://www.cdzic.net">© 2009 cdzic</a> all rights reserved.</div>
+    </div>
+    
     <el-dialog :title="$t('login.thirdparty')" :visible.sync="showDialog">
       {{ $t('login.thirdpartyTips') }}
       <br>
@@ -124,6 +129,7 @@ export default {
   components: { LangSelect, SocialSign, DragVerify },
   data() {
     const validateUsername = (rule, value, callback) => {
+      console.log(value)
       if (!validUsername(value)) {
         callback(new Error('Please enter the correct user name'))
       } else {
@@ -181,6 +187,13 @@ export default {
         }
       },
       immediate: true
+    },
+    width:{
+      handler(val){
+        console.log(val)
+      },
+      immediate: true
+
     }
   },
   created() {
@@ -192,19 +205,21 @@ export default {
     } else if (this.loginForm.password === '') {
       this.$refs.password.focus()
     }
-    console.log(this.$refs.username)
     this.width = this.$refs.dragVerifySize.$el.clientWidth
     this.height = this.$refs.username.$el.clientHeight
-
     /* 当窗口改变触发*/
     window.onresize = () => {
-      return (() => {
-        this.width = this.$refs.dragVerifySize.$el.clientWidth
-        this.height = this.$refs.username.$el.clientHeight
-      })()
+        return (() => {
+          this.width = this.$refs.dragVerifySize.$el.clientWidth
+          this.height = this.$refs.username.$el.clientHeight
+        })()
+        
     }
+    
+    
   },
   destroyed() {
+    window.onresize = null
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
@@ -241,6 +256,7 @@ export default {
           const loginInfo = this.loginForm
           loginInfo.browser = this.browser + ' ' + this.version
           loginInfo.OS = this.OS
+          console.log(loginInfo)
           this.$store.dispatch('user/login', loginInfo)
             .then(() => {
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
@@ -543,14 +559,21 @@ export default {
   $light_gray: #eee;
 
   .login-container {
-    min-height: 100%;
+    // position: relative;
+    // min-height: 100%;
+    padding-bottom: 0;
+
     width: 100%;
+    height: 100vh;
+
     background-color: $bg;
     overflow: hidden;
 
     .login-form {
       position: relative;
       width: 520px;
+      height: calc(100vh-70px);
+
       max-width: 100%;
       padding: 160px 35px 0;
       margin: 0 auto;
@@ -612,6 +635,33 @@ export default {
       position: absolute;
       right: 0;
       bottom: 6px;
+    }
+    .main{
+      // height: calc(100vh-70px);
+      height: 90%;
+    }
+    .footer-1{
+      // position: absolute;
+      // bottom: 0;
+      // left:0;
+      // margin-bottom: 0px;
+      height: 10%;
+    }
+    .footer-top{
+      // margin-top:300px ;
+      text-align: center;
+      color: #fff;
+      a{
+        // color: skyblue;
+      }
+    }
+    .footer{
+      margin-top:20px ;
+      text-align: center;
+      color: #fff;
+      a{
+        // color: skyblue;
+      }
     }
 
     @media only screen and (max-width: 470px) {
