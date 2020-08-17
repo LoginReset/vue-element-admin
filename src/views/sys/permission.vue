@@ -66,8 +66,7 @@
       />
       <el-table-column label="权限名" align="left" min-width="250px">
         <template slot-scope="{row}">
-          <el-tag v-if="row.filterUrl.split('/').length%2===0" type="success">{{ row.permission }}</el-tag>
-          <el-tag v-if="row.filterUrl.split('/').length%2===1">{{ row.permission }}</el-tag>
+          <el-tag type="success">{{ row.permission }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="菜单名" align="center" min-width="150px">
@@ -256,8 +255,8 @@ export default {
           { max: 50, message: '长度不能超过50字符', trigger: 'change' }],
         menuName: [{ required: true, message: '菜单名必填', trigger: 'change' },
           { max: 30, message: '长度不能超过30字符', trigger: 'change' }],
-        filterUrl: [{ required: true, message: '路径必填', trigger: 'change' },
-          { max: 50, message: '长度不能超过50字符', trigger: 'change' }],
+        // filterUrl: [{ required: true, message: '路径必填', trigger: 'change' },
+        //   { max: 50, message: '长度不能超过50字符', trigger: 'change' }],
         description: [{ max: 200, message: '长度不能超过200字符', trigger: 'change' }],
         sort: [{ validator: checkSort, trigger: 'change' }]
       },
@@ -463,5 +462,8 @@ export default {
 <style scoped>
   .permission-tree {
     margin-bottom: 30px;
+  }
+  .el-tag{
+    font-size:14px;
   }
 </style>
