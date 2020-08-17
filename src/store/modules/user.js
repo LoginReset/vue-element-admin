@@ -56,7 +56,8 @@ const actions = {
         // const { data } = response
         const data = {
           browser,
-          OS
+          OS,
+          username
         }
         console.log(data)
         setOS(data)

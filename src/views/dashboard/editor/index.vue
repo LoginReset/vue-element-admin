@@ -11,7 +11,7 @@
         <span style="font-size:20px;display:inline-block;">欢迎管理员{{name}}使用后台管理系统</span>
       </div>
     </div>
-    <panel-group  @handleSetLineChartData="handleSetLineChartData" />
+    <!-- <panel-group  @handleSetLineChartData="handleSetLineChartData" /> -->
     <div>
       <img :src="emptyGif" class="emptyGif">
     </div>
@@ -76,20 +76,20 @@ export default {
   },
   
   methods:{
-    handleSetLineChartData(type) {
+    // handleSetLineChartData(type) {
       
-      console.log(type)
-      if(type==='elRank'){
-        this.$router.push({name:'element-rank'})
-      }else if(type==='elType'){
-        this.$router.push({name:'element-type'})
-      }else if(type==='elSum'){
-        this.$router.push({name:'element-manage'})
-      }else if(type==='elName'){
-        this.$router.push({name:'element-name'})
-      }
-      // this.lineChartData = lineChartData[type]
-    }
+    //   console.log(type)
+    //   if(type==='elRank'){
+    //     this.$router.push({name:'element-rank'})
+    //   }else if(type==='elType'){
+    //     this.$router.push({name:'element-type'})
+    //   }else if(type==='elSum'){
+    //     this.$router.push({name:'element-manage'})
+    //   }else if(type==='elName'){
+    //     this.$router.push({name:'element-name'})
+    //   }
+    //   // this.lineChartData = lineChartData[type]
+    // }
   }
 }
 </script>
