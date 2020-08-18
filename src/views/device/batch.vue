@@ -7,7 +7,7 @@
                 :model="temp"
                 label-position="right"
                 label-width="100px"
-                style="width: 800px; margin-left:20px;">
+                style="width: 1000px;">
                 <el-form-item>
                     <el-row>
                         <el-col :span="8">
@@ -26,12 +26,12 @@
                         </el-col>
                         <el-col :span="4">
                             <el-form-item style="margin-left:20px">
-                                <el-button type="success" @click="batch">注册</el-button>
+                                <el-button type="success" icon="el-icon-upload2" @click="batch">注册</el-button>
                             </el-form-item>
                         </el-col>
                         <el-col :span="4">
                             <el-form-item>
-                                <el-button  type="primary" @click="batch">导出</el-button>
+                                <el-button  type="primary" icon="el-icon-download" @click="batch">导出</el-button>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -56,7 +56,7 @@
                     type="index"
                     width="50"
                 />
-                <el-table-column label="设备昵称" align="center" width="250">
+                <el-table-column label="设备昵称" align="center" width="250" show-overflow-tooltip>
                     <template slot-scope="{row}">
                     <el-tag>{{row.deviceNick}}</el-tag>
                     </template>
@@ -66,7 +66,7 @@
                     <span>{{row.deviceName}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="appKey" align="center" width="220">
+                <el-table-column label="appKey" align="center" width="220" show-overflow-tooltip>
                     <template slot-scope="{row}">
                     <el-tag type="success">{{row.appKey}}</el-tag>
                     </template>
@@ -88,12 +88,12 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <pagination
+            <!-- <pagination
                 v-show="list.length>0"
-                :total="total"
+                :total="list.length"
                 :page.sync="listQuery.page"
                 :limit.sync="listQuery.limit"
-                @pagination="getList"/>
+                @pagination="getList"/> -->
         </div>
     </div>
 </template>

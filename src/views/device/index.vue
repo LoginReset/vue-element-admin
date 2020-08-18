@@ -61,7 +61,7 @@
       </el-button>
       <PButton
         class="filter-item"
-        icon="el-icon-edit"
+        icon="el-icon-download"
         perms="product-manage:export"
         type="primary"
         label="table.export"
@@ -94,7 +94,7 @@
         type="index"
         width="50"
       />
-      <el-table-column label="设备昵称" align="center" width="300">
+      <el-table-column label="设备昵称" align="center" width="300" show-overflow-tooltip>
         <template slot-scope="{row}">
           <el-tag>{{row.nickName}}</el-tag>
         </template>
@@ -109,7 +109,7 @@
           <el-tag type="success">{{row.appKey}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="设备秘钥" align="center">
+      <el-table-column label="设备秘钥" align="center" >
         <template slot-scope="{row}">
           <span>{{row.deviceSecret}}</span>
         </template>
