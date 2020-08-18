@@ -1,6 +1,7 @@
 const state = {
   visitedViews: [],
-  cachedViews: []
+  cachedViews: [],
+  directFlag: false//页面跳转标志
 }
 
 const mutations = {
@@ -63,7 +64,10 @@ const mutations = {
         break
       }
     }
-  }
+  },
+  SET_FLAG:(state, directFlag) => {
+    state.directFlag = directFlag
+  },
 }
 
 const actions = {
@@ -82,6 +86,10 @@ const actions = {
     return new Promise(resolve => {
       dispatch('delVisitedView', view)
       dispatch('delCachedView', view)
+      commit('ADD_CACHED_VIEW', view)
+      let directFlag = true
+      commit('SET_FLAG', directFlag)// 页面跳转时更新标志
+      
       resolve({
         visitedViews: [...state.visitedViews],
         cachedViews: [...state.cachedViews]

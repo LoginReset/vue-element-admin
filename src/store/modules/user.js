@@ -9,7 +9,8 @@ const state = {
   avatar: '', // 头像
   introduction: '', // 简介
   roles: [], // 权限列表
-  roleName: ''// 角色名
+  roleName: '',// 角色名
+  directFlag: false//页面跳转标志
 }
 
 const mutations = {
@@ -37,13 +38,12 @@ const mutations = {
   SET_BROWSERNAME: (state, browserName) => {
     state.browserName = browserName
   },
+  
 }
 
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    console.log(889999)
-    console.log(userInfo)
     const { username, password, browser, OS } = userInfo
     return new Promise((resolve, reject) => {
       const formData = new FormData()
@@ -87,6 +87,8 @@ const actions = {
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
+        // let directFlag = false
+        
         commit('SET_ROLES', roles)// 权限列表
         commit('SET_NAME', name)// 姓名
         commit('SET_AVATAR', avatar)// 头像
