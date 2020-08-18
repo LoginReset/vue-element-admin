@@ -159,7 +159,7 @@ export const asyncRoutes = [
         name: 'element-manage',
         meta: {
           title: '元器件规格',
-          roles: ['element-manage','element-manage-list']
+          roles: ['element-manage']
         }
       },
       {
@@ -168,7 +168,7 @@ export const asyncRoutes = [
         name: 'element-edit',
         meta: {
           title: '元件规格编辑',
-          roles: ['element-manage'],
+          roles: ['element-manage:edit'],
           activeMenu: '/element/manage',
         },
         hidden:true
@@ -179,7 +179,7 @@ export const asyncRoutes = [
         name: 'element-create',
         meta: {
           title: '创建元件规格',
-          roles: ['element-create']
+          roles: ['element-manage:add']
         }
       },
       {

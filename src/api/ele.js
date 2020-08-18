@@ -247,3 +247,15 @@ export function getHome() {
       method: 'get'
   })
 }    
+/**
+* 修改价格
+* @param data
+* @returns {AxiosPromise}
+ */
+export function postPriceUp(data) {
+  return request({
+      url: '/b/com/update_price',
+      method: 'post',
+      data
+  })
+} 

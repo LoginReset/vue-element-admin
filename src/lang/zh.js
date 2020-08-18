@@ -126,6 +126,7 @@ export default {
     add: '添加',
     up_bom:'上传bom清单',
     upStock:'库存',
+    priceUp:'价格',
     override:'重构权限',
     addMenu:'添加菜单',
     saveMenu:'保存菜单',

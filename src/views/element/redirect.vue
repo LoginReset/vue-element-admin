@@ -46,8 +46,8 @@
                         <el-option
                             v-for="(item,index) in options"
                             :key="index"
-                            :label="item.label"
-                            :value="item.value">
+                            :label="item"
+                            :value="item">
                         </el-option>
                     </el-select>
             <!-- <el-input v-model.trim="temp.elPrecision" clearable placeholder="请输入元件精度" /> -->
@@ -64,6 +64,7 @@
               accept="image/png,image/gif,image/jpg,image/jpeg,xlsx"
               list-type="picture"
               :auto-upload="false">
+              <div class="el-upload__tip" slot="tip" v-if="modeList.length===0">图片不存在</div>
               <el-button slot="trigger" size="small" type="primary">上传图片</el-button>
             </el-upload>
 
@@ -105,7 +106,7 @@
             <el-input v-model="temp.stock" clearable placeholder="请输入库存" />
           </el-form-item>
           <el-form-item label="价格" prop="price">
-            <el-input v-model.trim="temp.price" clearable placeholder="请输入价格(单位/元)" />
+            <el-input v-model.trim="temp.price" clearable placeholder="请输入价格(单位/元)" :disabled="disable"/>
           </el-form-item>
           <!-- <el-form-item label="价格上浮比例" prop="comeUp">
             <el-input v-model.trim="temp.comeUp" clearable placeholder="请输入价格上浮比例" />
@@ -132,10 +133,13 @@ export default {
   name: 'element-edit',
   data() {
     var checkPrecision = (rule,value,callback)=>{
-      
-      if(value!==''&&typeof value ==='string'){
+      if(value!==''){
+          if(value.split('%').length>2){
+              callback(new Error('格式不正确'))
+          }
+          value = value.split('%')[0]
           value = Number(value)
-          console.log(value)
+
           if(!/^\+?[1-9][0-9]*$/.test(value)||value>100||value<=0){
               this.flag = false
               callback(new Error('请输入[1,100]的正整数'))
@@ -163,6 +167,7 @@ export default {
     return {
       url:'',
       index: 0,
+      disable:false,
       flag : true,
       titleData: [],
       listLoading: true,
@@ -173,31 +178,32 @@ export default {
       fileList:[],
       mode:{},
       action: 'https://jsonplaceholder.typicode.com/posts/',
-      options:[{
-          value:5,
-          label:'5%'
-        },{
-          value:10,
-          label:'10%'
-        },{
-          value:15,
-          label:'15%'
-        },{
-          value:20,
-          label:'20%'
-        },{
-          value:25,
-          label:'25%'
-        },{
-          value:50,
-          label:'50%'
-        },{
-          value:75,
-          label:'75%'
-        },{
-          value:100,
-          label:'100%'
-        }],
+      options:['5%','10%','15%','20%','50%','75%','100%'],
+      // [{
+      //     value:5,
+      //     label:'5%'
+      //   },{
+      //     value:10,
+      //     label:'10%'
+      //   },{
+      //     value:15,
+      //     label:'15%'
+      //   },{
+      //     value:20,
+      //     label:'20%'
+      //   },{
+      //     value:25,
+      //     label:'25%'
+      //   },{
+      //     value:50,
+      //     label:'50%'
+      //   },{
+      //     value:75,
+      //     label:'75%'
+      //   },{
+      //     value:100,
+      //     label:'100%'
+      //   }],
       temp:{
         uuid:undefined,
         description :'',
@@ -246,6 +252,7 @@ export default {
       this.listLoading = true
 
       if (arrPath[arrPath.length - 1] === 'edit') {
+        this.disable = true
         const t = sessionStorage.getItem('elData')
         console.log(t)
         const data = JSON.parse(t)
@@ -263,7 +270,7 @@ export default {
         
         // this.temp.elPrecision = this.temp.elPrecision/100
         // this.temp.comeUp = this.temp.comeUp/100
-        this.temp.price = this.temp.price/1000
+        // this.temp.price = this.temp.price/1000
         this.temp.imgPath&&this.modeList.push({
           url:this.temp.imgPath
         })
@@ -338,6 +345,7 @@ export default {
         let data = JSON.parse(JSON.stringify(this.temp))
         // data.elPrecision = data.elPrecision*100
         // data.comeUp = data.comeUp*100
+        
         data.price = data.price*1000
         
         console.log(typeof data.elPrecision)
@@ -358,7 +366,6 @@ export default {
               console.log(data[k])
               data[k] = data[k].trim()
             }
-            console.log('----')
           }
           return data
     },
@@ -409,6 +416,7 @@ export default {
     },
     handleRemove(file,fileList){
       this.temp.imgPath = ''
+      this.modeList = []
     },
     modeUpload(item) {
       this.mode = item.file
@@ -438,10 +446,6 @@ export default {
     changePercision(){
       if(!this.flag){
         this.temp.elPrecision = ''
-      }else{
-        if(this.temp.elPrecision){
-           this.temp.elPrecision = Number(this.temp.elPrecision)
-        }
       }
       console.log(this.temp.elPrecision)
     }
@@ -453,5 +457,8 @@ export default {
 
  .el-select{
       width:100%;
+  }
+  .el-upload__tip{
+    color:#e64242
   }
 </style>

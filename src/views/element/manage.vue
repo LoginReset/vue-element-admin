@@ -68,9 +68,9 @@
       border
       fit
       highlight-current-row
-      style="width: 100%;"
       row-key="uuid"
       @sort-change="sortChange"
+      
     >
       <el-table-column
         label="序号"
@@ -81,7 +81,9 @@
       />
       <el-table-column label="元件图标" align="center">
         <template slot-scope="{row}">
+          <el-tag v-if="!row.imgPath" type="info">不存在</el-tag>
           <el-image 
+            v-else
             :src="row.imgPath" 
             :preview-src-list="srcList">
           </el-image>
@@ -89,17 +91,17 @@
       </el-table-column>
       <el-table-column label="元件名称" align="center">
         <template slot-scope="{row}">
-          <el-tag>{{row.elementName}}</el-tag>
+          <el-tag type="warning" v-if="row.elementName">{{row.elementName}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="元件类型" align="center">
         <template slot-scope="{row}">
-          <span>{{row.typeName}}</span>
+          <el-tag type="warning" v-if="row.typeName">{{row.typeName}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="元件级别" align="center">
         <template slot-scope="{row}">
-          <span>{{row.rankName}}</span>
+          <el-tag type="warning" v-if="row.rankName">{{row.rankName}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="品牌" align="center">
@@ -109,12 +111,17 @@
       </el-table-column>
       <el-table-column label="元件精度" align="center">
         <template slot-scope="{row}">
-          <span>{{row.elPrecision?row.elPrecision+'%':''}}</span>
+          <span>{{row.elPrecision}}</span>
         </template>
       </el-table-column>
       <el-table-column label="元件参数" align="center">
         <template slot-scope="{row}">
-          <span>{{row.parameter}}</span>
+          <el-tag>{{row.parameter}}</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="封装参数" align="center" show-overflow-tooltip> 
+        <template slot-scope="{row}">
+          <el-tag>{{row.packaging}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="功率" align="center">
@@ -124,11 +131,11 @@
       </el-table-column>
       <el-table-column label="价格/元" align="center">
         <template slot-scope="{row}">
-          <span>{{row.price>0?row.price/1000:0}}</span>
+          <el-tag type="success">{{row.price>0?row.price:0}}</el-tag>
         </template>
       </el-table-column>
       
-      <el-table-column label="描述" align="center">
+      <el-table-column label="描述" align="center" width="150" show-overflow-tooltip>
         <template slot-scope="{row}">
           <span>{{ row.description }}</span>
         </template>
@@ -143,26 +150,33 @@
           <span>{{ row.createDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="300">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="350">
         <template slot-scope="{row,$index}">
           <PButton
-            perms="element-name:edit"
+            perms="element-manage:edit"
             size="mini"
             type="primary"
             label="table.edit"
             @click="handleUpdate(row)"
           />
           <PButton
-            perms="element-name:edit"
+            perms="element-manage:price"
             size="mini"
             type="success"
+            label="table.priceUp"
+            @click="handleUpPrice(row)"
+          />
+          <PButton
+            perms="element-manage:stock"
+            size="mini"
+            type=""
             label="table.upStock"
             @click="handleUp(row)"
           />
           <PButton
             v-if="row.status!='deleted'"
             class="filter-item"
-            perms="element-name:delete"
+            perms="element-manage:delete"
             size="mini"
             type="danger"
             label="table.delete"
@@ -178,7 +192,7 @@
       :limit.sync="listQuery.limit"
       @pagination="getList"/>
       <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-          <template v-if="dialogStatus==='upStock'">
+          <template>
             <el-form
             ref="dataForm"
               :rules="rules"
@@ -186,42 +200,30 @@
               label-position="left"
               label-width="100px"
               style="width: 400px; margin-left:50px;">
-                <el-form-item label="库存操作" >
+                <template v-if="dialogStatus==='upStock'">
+                  <el-form-item label="库存操作" >
                   <el-radio-group v-model="temp.aboolean">
                     <el-radio :label="true">增加</el-radio>
                     <el-radio :label="false">减少</el-radio>
                   </el-radio-group>
                     
-                </el-form-item>
-                <el-form-item label="库存数量" prop="stock">
-                    <el-input v-model.trim="temp.stock" clearable placeholder="请输入操作库存数量" />
-                </el-form-item>
+                  </el-form-item>
+                  <el-form-item label="库存数量" prop="stock">
+                      <el-input v-model.trim="temp.stock" clearable placeholder="请输入操作库存数量" />
+                  </el-form-item>
+                </template>
+                <template v-else>
+                  <el-form-item label="价格" prop="price">
+                    <el-input v-model.trim="temp.price" clearable placeholder="请输入价格"/>
+                  </el-form-item>
+                </template>
             </el-form>
         </template>
-        <!-- <template v-else>
-            <el-upload
-              class="upload-demo"
-              style=" margin-left:250px;"
-              ref="upload"
-              drag
-              action="#"
-              :file-list="modeList"
-              :http-request="modeUpload"
-              :on-change="fileChange"
-              :on-preview="handlePreview"
-              accept=".xls,.xlsx"
-              :auto-upload="false">
-              <i class="el-icon-upload"></i>
-              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-              <div class="el-upload__tip" slot="tip">上传成功后会自动下载</div>
-            </el-upload> 
-            <el-button @click="submitUpload">点击上传文件</el-button>
-          </template> -->
-        <div slot="footer" class="dialog-footer" v-show="dialogStatus==='upStock'">
+        <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">
             {{ $t('table.cancel') }}
           </el-button>
-          <el-button type="primary " @click="upStock">
+          <el-button type="primary " @click="dialogStatus==='upStock'?upStock():upPrice()">
             {{ $t('table.confirm') }}
           </el-button>
         </div>
@@ -230,7 +232,7 @@
   </div>
 </template>
 <script>
-import {getComView,postComAdd,postComeUp,getComDel,getComUpStock,postUpBom} from '@/api/ele'
+import {getComView,postComAdd,postComeUp,getComDel,getComUpStock,postUpBom,postPriceUp} from '@/api/ele'
 import {getHome} from '@/api/ele'
 
 import PButton from '@/components/PermissionBtn'
@@ -240,7 +242,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 
 
 export default {
-  name:'element-name',
+  name:'element-manage',
   directives: { waves },
   components:{
     PButton,
@@ -256,6 +258,16 @@ export default {
           }
           callback()
     }
+    var checkPrice = (rule,value,callback) =>{
+      console.log(typeof Number(value))
+      value = Number(value)
+      
+      if(!new RegExp("((^[1-9][0-9]{0,10})+(.?[0-9]{1,3})?$)|(^[0]+(.[0-9]{1,3})?$)").test(value)){
+        callback(new Error('价格可精确到厘'))
+      }
+      console.log(value)
+      callback()
+    }
     return{
       url:'',
       tableKey:0,
@@ -267,6 +279,7 @@ export default {
         uuid:undefined,
         aboolean:true,
         stock:undefined,
+        price:undefined,
       },
       listQuery:{
         page:1,
@@ -283,11 +296,13 @@ export default {
       dialogStatus: '',
       textMap:{
         upStock: '库存管理',
-        upBom: '上传Bom清单'
+        upPrice: '修改价格'
       },
       rules:{
         stock:[{ required: true, message: '库存数量必填', trigger: 'change' },
-               { validator: checkStock, trigger: 'change' }]
+               { validator: checkStock, trigger: 'change' }],
+        price:[{ required: true,validator:checkPrice,trigger: 'change'}],
+
       }
     }
   },
@@ -305,7 +320,7 @@ export default {
         this.srcList = []
         console.log(this.list)
         this.list.forEach(item=>{
-          console.log(item)
+          item.price = item.price/1000
             this.srcList.push(item.imgPath)
         })
         console.log(this.srcList)
@@ -318,7 +333,6 @@ export default {
     },
     handleCreate(){
         this.$router.push({name:'element-create'})
-    
 
     },
     createData(){
@@ -387,6 +401,31 @@ export default {
 
       this.handleFilter()
     },
+    handleUpPrice(row){
+      this.temp.uuid = row.uuid
+      this.temp.price = row.price
+      this.dialogStatus = 'upPrice'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+          this.$refs['dataForm'].clearValidate()
+      })
+    },
+    upPrice(){
+      const data ={
+        uuid:this.temp.uuid,
+        price:this.temp.price*1000
+      }
+      postPriceUp(data).then(response=>{
+        this.dialogFormVisible = false
+              this.$notify({
+              title: '成功',
+              message: '修改价格成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.getList()
+      })
+    },
     handleUp(row){
         this.temp.uuid = row.uuid
         this.dialogStatus = 'upStock'
@@ -395,6 +434,7 @@ export default {
             this.$refs['dataForm'].clearValidate()
         })
     },
+    
     upStock(){
         this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -404,11 +444,12 @@ export default {
               this.dialogFormVisible = false
               this.$notify({
               title: '成功',
-              message: '更新成功',
+              message: '更新库存成功',
               type: 'success',
               duration: 2000
             })
             this.getList()
+            this.resetTemp()
           })
         }
       })
@@ -476,22 +517,13 @@ export default {
 
       })
     },
-    // resetTemp(){
-    //   this.temp = {
-    //     uuid:undefined,
-    //     description :undefined,
-    //     brand:undefined,
-    //     elPrecision :undefined,
-    //     elementName :undefined,
-    //     packaging :undefined,
-    //     power :undefined,
-    //     price :undefined,
-    //     rankName :undefined,
-    //     stock :undefined,
-    //     parameter :undefined,
-    //     typeName :undefined,
-    //   }
-    // },
+    resetTemp(){
+      this.temp = {
+        uuid:undefined,
+        aboolean :true,
+        stock:undefined
+      }
+    },
     cancel(){
       this.dialogFormVisible = false
       console.log(this.temp)
