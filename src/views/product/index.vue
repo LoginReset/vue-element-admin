@@ -63,6 +63,7 @@
       highlight-current-row
       style="width: 100%;"
       row-key="uuid"
+      @sort-change="sortChange"
     >
       <el-table-column
         label="序号"
@@ -78,17 +79,17 @@
       </el-table-column>
       <el-table-column label="appKey" align="center" width="220">
         <template slot-scope="{row}">
-          <el-tag>{{row.appKey}}</el-tag>
+          <el-tag type="success">{{row.appKey}}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="注册秘钥" align="center">
         <template slot-scope="{row}">
-          <el-tag>{{row.registerKey}}</el-tag>
+          <span>{{row.registerKey}}</span>
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" >
         <template slot-scope="{row}">
-          <el-tag>{{row.remark}}</el-tag>
+          <span>{{row.remark}}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" sortable="custom" prop="create_date" width="230">
@@ -108,11 +109,11 @@
           <PButton
             v-if="row.status!='deleted'"
             class="filter-item"
-            perms="enterprise-manage:delete"
+            perms="product-manage:rk"
             size="mini"
-            type="danger"
-            label="table.delete"
-            @click="handleDelete(row,$index)"
+            type="success"
+            label="table.registerKey"
+            @click="handleRk(row,$index)"
           />
         </template>
       </el-table-column>
@@ -128,7 +129,7 @@
           ref="dataForm"
           :rules="rules"
           :model="temp"
-          label-position="left"
+          label-position="right"
           label-width="100px"
           style="width: 400px; margin-left:50px;">
           <el-form-item label="项目名称" prop="name">
@@ -232,6 +233,20 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
+    sortChange(data) { // 排序
+      const { prop, order } = data
+      if (prop === 'create_date') {
+        if (order === 'ascending') {
+          this.listQuery.orderType = 'asc'
+        } else if (order === 'descending') {
+          this.listQuery.orderType = 'desc'
+        } else {
+          this.listQuery.orderType = undefined
+        }
+        this.listQuery.orderField = prop
+      }
+      this.handleFilter()
+    },
     handleCreate(){
       this.resetTemp()
       this.dialogFormVisible = true
@@ -286,24 +301,25 @@ export default {
         }
       })
     },
-    handleDelete(row,index){
-      this.$confirm('确定删除当前公司?', '警告', {
+    handleRk(row,index){
+      this.$confirm('确定重置registerKey?', '警告', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async() => {
-        const param = []
-        param.push(row.uuid)
-        const requestData = { uuids: param }
+        // const param = []
+        // param.push(row.uuid)
+        const requestData = { uuid: row.uuid }
         console.log(requestData)
         postProKey(requestData).then(response => {
           this.$notify({
             title: '成功',
-            message: '删除成功',
+            message: '重置成功',
             type: 'success',
             duration: 2000
           })
-          this.list.splice(index, 1)
+          this.getList()
+        //   this.list.splice(index, 1)
         })
       }).catch(err => {
 
@@ -324,3 +340,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+    .el-tag{
+        font-size: 14px;
+    }
+</style>

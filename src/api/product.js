@@ -1,10 +1,10 @@
 import request from '@/utils/request'
 //产品查询
-export function getProView() {
+export function getProView(query) {
     return request({
       url: '/b/product/view', 
       method: 'get',
-    //   params:query
+      params:query
     })
   }
 //产品添加

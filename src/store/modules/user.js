@@ -59,6 +59,7 @@ const actions = {
           OS,
           username
         }
+        console.log('setOS------')
         console.log(data)
         setOS(data)
         // commit('SET_TOKEN', "LOGIN_SUCCESS")

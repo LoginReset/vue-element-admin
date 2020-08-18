@@ -63,6 +63,7 @@ export default {
   computed: {
     username:{
       get(){
+        console.log(JSON.parse(getOS()))
         let account = JSON.parse(getOS()).username
         return account
       }
