@@ -442,9 +442,6 @@ export default {
       })
     },
     spChange(status, row) {
-      // const formData = new FormData()
-      // formData.append('nickName', row.nickName)
-      // formData.append('status', status)
       const data = {
         nickName:row.nickName,
         status
