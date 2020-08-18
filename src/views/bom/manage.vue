@@ -19,32 +19,35 @@
                         <div class="el-upload__tip" slot="tip" style="text-align:center;">上传成功后会自动下载</div>
                         </el-upload>
                 </el-form-item>
-                <el-row>
-                    <el-col :span="20">
-                        <el-form-item label-position="left" label="价格上浮比例" prop="comeUp">
-                            <el-select v-model="temp.comeUp" 
-                            filterable 
-                            default-first-option 
-                            allow-create 
-                            placeholder="价格上浮比例"
-                            @change="change"
-                            @blur="blur"
-                            >
-                                <el-option
-                                    v-for="(item,index) in options"
-                                    :key="index"
-                                    :label="item"
-                                    :value="item">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="4">
-                        <el-form-item>
-                            <el-tag type="info">%</el-tag>
-                        </el-form-item>
-                    </el-col>
+                <el-form-item>
+                    <el-row>
+                        <el-col :span="20">
+                            <el-form-item label-position="left" label="价格上浮比例" prop="comeUp">
+                                <el-select v-model="temp.comeUp" 
+                                filterable 
+                                default-first-option 
+                                allow-create 
+                                placeholder="价格上浮比例"
+                                @change="change"
+                                @blur="blur"
+                                >
+                                    <el-option
+                                        v-for="(item,index) in options"
+                                        :key="index"
+                                        :label="item"
+                                        :value="item">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-form-item>
+                                <el-tag type="info">%</el-tag>
+                            </el-form-item>
+                        </el-col>
                 </el-row>
+                </el-form-item>
+                
                 
             </el-form>
         </div>
