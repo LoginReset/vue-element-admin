@@ -234,9 +234,9 @@
 <script>
 import {getComView,postComAdd,postComeUp,getComDel,getComUpStock,postUpBom,postPriceUp} from '@/api/ele'
 import {getHome} from '@/api/ele'
-
 import PButton from '@/components/PermissionBtn'
 import waves from '@/directive/waves' // waves directive
+import { mapGetters } from 'vuex'
 
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
@@ -309,10 +309,26 @@ export default {
   created(){
     this.getList();
   },
+  computed:{
+    ...mapGetters(['directFlag'])
+  },
+  watch:{
+    directFlag: {
+      handler: function(directFlag) {
+        console.log(directFlag)
+        if(directFlag){
+          this.getList()
+          directFlag = false
+          this.$store.dispatch('tagsView/refreshView', directFlag)
+        }
+      },
+      immediate: true
+    },
+  },
   methods:{
-    
     getList(){
       this.listLoading = true
+      console.log(this.listQuery)
       getComView(this.listQuery).then(response=>{
         this.list = response.respObj.item
         this.total = response.respObj.total
@@ -328,11 +344,15 @@ export default {
       
     },
     handleFilter(){
+      console.log('handleFilter')
       this.listQuery.page = 1
+      console.log(this.listQuery)
       this.getList()
     },
     handleCreate(){
-        this.$router.push({name:'element-create'})
+      let directFlag = false
+      this.$store.dispatch('tagsView/refreshView', directFlag)
+      this.$router.push({name:'element-create'})
 
     },
     createData(){
@@ -354,6 +374,8 @@ export default {
       })
     },
     handleUpdate(row){
+      let directFlag = false
+      this.$store.dispatch('tagsView/refreshView', directFlag)
       const data = JSON.stringify(row)
       sessionStorage.setItem('elData', data)
       this.$router.push({ name: 'element-edit' })

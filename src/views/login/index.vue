@@ -560,8 +560,12 @@ export default {
 
   .login-container {
     // position: relative;
-    min-height: 100%;
+    // min-height: 100%;
+    // padding-bottom: 0;
+
     width: 100%;
+    height: 100vh;
+
     background-color: $bg;
     overflow: hidden;
 
@@ -633,16 +637,18 @@ export default {
       bottom: 6px;
     }
     .main{
-      height: calc(100vh-70px);
+      // height: calc(100vh-70px);
+      height: 90%;
     }
     .footer-1{
       // position: absolute;
       // bottom: 0;
       // left:0;
-      height: 70px;
+      // margin-bottom: 0px;
+      height: 10%;
     }
     .footer-top{
-      margin-top:300px ;
+      // margin-top:300px ;
       text-align: center;
       color: #fff;
       a{

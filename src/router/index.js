@@ -91,6 +91,19 @@ export const constantRoutes = [
         path: 'password',
         component: () => import('@/views/dashboard/password'),
         name: 'changePwd',
+        meta: { title: '修改密码', icon: 'documentation' },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/documentation',
+    component: Layout,
+    children: [
+      {
+        path: 'password',
+        component: () => import('@/views/dashboard/password'),
+        name: 'changePwd',
         meta: { title: '修改密码', icon: 'documentation'},
         hidden:true
       }
@@ -514,7 +527,6 @@ export const asyncRoutes = [
   //     meta: {
   //       title: '创建短信模板',
   //       roles: ['sms-create']
-
   //     }
   //   }, {
   //     path: 'edit',
@@ -814,21 +826,21 @@ export const asyncRoutes = [
   //   ]
   // },
 
-  {
-    path: '/error-log',
-    component: Layout,
-    meta: {
-      roles: ['error-log']
-    },
-    children: [
-      {
-        path: 'log',
-        component: () => import('@/views/error-log/index'),
-        name: 'ErrorLog',
-        meta: { title: 'errorLog', icon: 'bug', roles: ['error-log'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/error-log',
+  //   component: Layout,
+  //   meta: {
+  //     roles: ['error-log']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'log',
+  //       component: () => import('@/views/error-log/index'),
+  //       name: 'ErrorLog',
+  //       meta: { title: 'errorLog', icon: 'bug', roles: ['error-log'] }
+  //     }
+  //   ]
+  // },
 
   // {
   //   path: '/excel',
@@ -868,77 +880,77 @@ export const asyncRoutes = [
   //   ]
   // },
 
-  {
-    path: '/zip',
-    component: Layout,
-    redirect: '/zip/download',
-    alwaysShow: true,
-    name: 'Zip',
-    meta: { title: 'zip', icon: 'zip', roles: ['zip'] },
-    children: [
-      {
-        path: 'download',
-        component: () => import('@/views/zip/index'),
-        name: 'ExportZip',
-        meta: { title: 'exportZip', roles: ['zip-download'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/zip',
+  //   component: Layout,
+  //   redirect: '/zip/download',
+  //   alwaysShow: true,
+  //   name: 'Zip',
+  //   meta: { title: 'zip', icon: 'zip', roles: ['zip'] },
+  //   children: [
+  //     {
+  //       path: 'download',
+  //       component: () => import('@/views/zip/index'),
+  //       name: 'ExportZip',
+  //       meta: { title: 'exportZip', roles: ['zip-download'] }
+  //     }
+  //   ]
+  // },
 
-  {
-    path: '/pdf',
-    component: Layout,
-    redirect: '/pdf/index',
-    meta: {
-      roles: ['pdf']
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/pdf/index'),
-        name: 'PDF',
-        meta: { title: 'pdf', icon: 'pdf', roles: ['pdf'] }
-      }
-    ]
-  },
-  {
-    path: '/pdf/download',
-    component: () => import('@/views/pdf/download'),
-    meta: {
-      roles: ['pdf-download']
-    },
-    hidden: true
-  },
+  // {
+  //   path: '/pdf',
+  //   component: Layout,
+  //   redirect: '/pdf/index',
+  //   meta: {
+  //     roles: ['pdf']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/pdf/index'),
+  //       name: 'PDF',
+  //       meta: { title: 'pdf', icon: 'pdf', roles: ['pdf'] }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/pdf/download',
+  //   component: () => import('@/views/pdf/download'),
+  //   meta: {
+  //     roles: ['pdf-download']
+  //   },
+  //   hidden: true
+  // },
 
-  {
-    path: '/theme',
-    component: Layout,
-    meta: {
-      roles: ['theme']
-    },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/theme/index'),
-        name: 'Theme',
-        meta: { title: 'theme', icon: 'theme', roles: ['theme'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/theme',
+  //   component: Layout,
+  //   meta: {
+  //     roles: ['theme']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/theme/index'),
+  //       name: 'Theme',
+  //       meta: { title: 'theme', icon: 'theme', roles: ['theme'] }
+  //     }
+  //   ]
+  // },
 
-  {
-    path: '/clipboard',
-    component: Layout,
-    meta: { roles: ['theme'] },
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/clipboard/index'),
-        name: 'ClipboardDemo',
-        meta: { title: 'clipboardDemo', icon: 'clipboard', roles: ['theme'] }
-      }
-    ]
-  },
+  // {
+  //   path: '/clipboard',
+  //   component: Layout,
+  //   meta: { roles: ['theme'] },
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/clipboard/index'),
+  //       name: 'ClipboardDemo',
+  //       meta: { title: 'clipboardDemo', icon: 'clipboard', roles: ['theme'] }
+  //     }
+  //   ]
+  // },
 
   {
     path: '/i18n',
@@ -956,19 +968,19 @@ export const asyncRoutes = [
     ]
   },
 
-  {
-    path: 'external-link',
-    component: Layout,
-    meta: {
-      roles: ['external-link']
-    },
-    children: [
-      {
-        path: 'https://github.com/PanJiaChen/vue-element-admin',
-        meta: { title: 'externalLink', icon: 'link', roles: ['external-link'] }
-      }
-    ]
-  },
+  // {
+  //   path: 'external-link',
+  //   component: Layout,
+  //   meta: {
+  //     roles: ['external-link']
+  //   },
+  //   children: [
+  //     {
+  //       path: 'https://github.com/PanJiaChen/vue-element-admin',
+  //       meta: { title: 'externalLink', icon: 'link', roles: ['external-link'] }
+  //     }
+  //   ]
+  // },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

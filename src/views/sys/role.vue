@@ -321,7 +321,6 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
       this.temp.description = this.temp.description.trim()
-
     },
     createData() {
       const permiUuids = this.checkedPermission()
@@ -402,8 +401,6 @@ export default {
           // this.getList();
           this.list.splice(index, 1)
         })
-      }).catch(err => {
-
       })
     },
     handleDownload() {

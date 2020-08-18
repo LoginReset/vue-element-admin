@@ -13,6 +13,7 @@ const state = {
   osName:'',
   browserName:'',
   eleData:''
+  // directFlag: false//页面跳转标志
 }
 
 const mutations = {
@@ -63,13 +64,14 @@ const actions = {
       formData.append('osName', OS)
       login(formData).then(response => {
         // const { data } = response
-        // commit('SET_TOKEN', "LOGIN_SUCCESS")
         const data = {
           browser,
           OS,
           username
         }
+        console.log(data)
         setOS(data)
+        // commit('SET_TOKEN', "LOGIN_SUCCESS")
         setToken('LOGIN_SUCCESS')// 本项目中没有实际意义，只是一个标志位表示登录成功了，也可以用作token值
         resolve()
       }).catch(error => {
@@ -82,6 +84,7 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
+        console.log(response)
         const { respObj } = response
         console.log(respObj)
         if (!respObj) {
@@ -94,6 +97,8 @@ const actions = {
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
+        // let directFlag = false
+        
         commit('SET_ROLES', roles)// 权限列表
         commit('SET_NAME', name)// 姓名
         commit('SET_AVATAR', avatar)// 头像
@@ -117,14 +122,15 @@ const actions = {
     })
   },
 
-  // user logout
-  logout({ commit, state, dispatch }) {
+   // user logout
+   logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
       console.log(JSON.parse(getOS()))
       const data = new FormData()
       data.append('osName',JSON.parse(getOS()).OS)
       data.append('browserName',JSON.parse(getOS()).browser)
-      console.log(data)
+      console.log('logout')
+      console.log(data.get('osName'))
       logout(data).then(() => {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
@@ -141,7 +147,6 @@ const actions = {
       })
     })
   },
-
   // remove token
   resetToken({ commit }) {
     return new Promise(resolve => {

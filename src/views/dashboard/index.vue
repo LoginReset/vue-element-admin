@@ -37,7 +37,6 @@ export default {
   methods:{
     getList(){
       this.$store.dispatch('user/getElement')
-
     },
   }
 }
