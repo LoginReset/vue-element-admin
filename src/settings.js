@@ -1,5 +1,5 @@
 module.exports = {
-  title: '成都子程电子',
+  title: '子程电子Bom清单管理系统',
 
   /**
    * @type {boolean} true | false
