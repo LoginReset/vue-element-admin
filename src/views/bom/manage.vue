@@ -8,11 +8,11 @@
                         ref="upload"
                         drag
                         action="#"
+                        :multiple="false"
                         :file-list="modeList"
                         :http-request="modeUpload"
                         :on-change="fileChange"
                         :on-preview="handlePreview"
-                        accept=".xls,.xlsx"
                         :auto-upload="false">
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -39,12 +39,14 @@
                 
             </el-form>
         </div>
+        <el-button type="primary" icon="el-icon-download" class="download_btn" @click="downloadXls">模板下载</el-button>
         
     </div>
 </template>
 
 <script>
 import {postUpBom} from '@/api/ele'
+import { env } from 'echarts/lib/export'
 
 export default {
     name:'bom-manage',
@@ -73,6 +75,20 @@ export default {
         }
     },
     methods:{
+        beforeUpload(file){
+            console.log(file)
+            let testmsg = file.name.substring(file.name.lastIndexOf('.')+1)
+            let extension = testmsg === 'xls'
+            let extension2 = testmsg === 'xlsx'
+            if(!extension && !extension2) {
+                this.$message({
+                    message: '上传文件只能是 xls、xlsx格式!',
+                    type: 'error'
+                });
+            }
+            return extension||extension2
+
+        },
         modeUpload(item) {
             this.mode = item.file
             let fd = new FormData()// FormData 对象
@@ -86,14 +102,22 @@ export default {
             })
         },
         fileChange(file, fileList) {
-            console.log(file)
             // console.log(file.raw)
             this.modeList = []
+            let extension =  this.beforeUpload(file)
+            if(!extension){
+                return
+            }
             this.modeList.push(file)
             this.submitUpload()
         },
         submitUpload() {
             this.$refs.upload.submit();
+        },
+        downloadXls(){
+            let url = process.env.VUE_APP_BASE_API+'/bom清单模板.xlsx'
+            console.log(url)
+            window.location.href = url
         },
         handlePreview(file) {
             var a = document.createElement('a');
@@ -134,5 +158,9 @@ export default {
     .el-upload-dragger{
         width: 560px;
     }
-
+    .download_btn{
+        position: absolute;
+        top:5%;
+        right:5%;
+    }
 </style>

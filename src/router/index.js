@@ -193,7 +193,8 @@ export const asyncRoutes = [
         meta: {
           title: '创建元件规格',
           roles: ['element-manage:add']
-        }
+        },
+        hidden:true
       },
       {
         path: 'name',

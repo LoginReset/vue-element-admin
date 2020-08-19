@@ -1,35 +1,73 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input
-        v-model.trim="listQuery.elementName"
-        clearable
-        placeholder="元件名称"
-        style="width: 150px;"
+      <el-select v-model="listQuery.elementName" 
+        clearable filterable 
+        placeholder="元件名称"  
+        style="width: 120px;" 
         class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-      <el-input
-        v-model.trim="listQuery.typeName"
-        clearable
-        placeholder="元件类型"
-        style="width: 150px;"
+        @change="handleFilter">
+            <el-option v-for="(item,index) in ele.elementNames"
+              :key="index" :label="item" :value="item">
+            </el-option>
+      </el-select>
+
+      <el-select v-model="listQuery.typeName" 
+        clearable filterable 
+        placeholder="元件类型"  
+        style="width: 120px;" 
         class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-      <el-input
-        v-model.trim="listQuery.rankName"
-        clearable
-        placeholder="元件应用级别"
-        style="width: 150px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
+        @change="handleFilter">
+            <el-option v-for="(item,index) in ele.typeNames"
+              :key="index" :label="item" :value="item">
+            </el-option>
+      </el-select>
+
+      <el-select v-model="listQuery.rankName" clearable filterable 
+        placeholder="元件级别"  style="width: 120px;" class="filter-item"
+        @change="handleFilter">
+            <el-option v-for="(item,index) in ele.rankNames"
+              :key="index" :label="item" :value="item">
+            </el-option>
+      </el-select>
+      
       <el-input
         v-model.trim="listQuery.brand"
         clearable
         placeholder="品牌"
-        style="width: 150px;"
+        style="width: 120px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
+      <el-input
+        v-model.trim="listQuery.elPrecision"
+        clearable
+        placeholder="元件精度"
+        style="width: 120px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
+      <el-input
+        v-model.trim="listQuery.parameter"
+        clearable
+        placeholder="元件参数"
+        style="width: 120px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
+      <el-input
+        v-model.trim="listQuery.packaging"
+        clearable
+        placeholder="封装参数"
+        style="width: 120px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
+      <el-input
+        v-model.trim="listQuery.power"
+        clearable
+        placeholder="功率"
+        style="width: 120px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
@@ -227,13 +265,12 @@
             {{ $t('table.confirm') }}
           </el-button>
         </div>
-
       </el-dialog>
   </div>
 </template>
 <script>
 import {getComView,postComAdd,postComeUp,getComDel,getComUpStock,postUpBom,postPriceUp} from '@/api/ele'
-import {getHome} from '@/api/ele'
+import {getElView,getRankView,getTypeView,getHome,postParameter} from '@/api/ele'
 import PButton from '@/components/PermissionBtn'
 import waves from '@/directive/waves' // waves directive
 import { mapGetters } from 'vuex'
@@ -271,6 +308,8 @@ export default {
     return{
       url:'',
       tableKey:0,
+      flag:false,//组合参数只查询一次
+      ele:{},
       list:[],
       srcList:[],
       modeList:[],
@@ -288,6 +327,10 @@ export default {
         typeName:undefined,
         rankName:undefined,
         brand:undefined,
+        elPrecision:undefined,
+        parameter:undefined,
+        packaging:undefined,
+        power:undefined,
         orderField:undefined,
         orderType:undefined
       },
@@ -328,23 +371,24 @@ export default {
   methods:{
     getList(){
       this.listLoading = true
-      console.log(this.listQuery)
       getComView(this.listQuery).then(response=>{
         this.list = response.respObj.item
         this.total = response.respObj.total
-        this.listLoading = false
         this.srcList = []
-        console.log(this.list)
         this.list.forEach(item=>{
           item.price = item.price/1000
             this.srcList.push(item.imgPath)
         })
-        console.log(this.srcList)
+        if(!this.flag){
+          postParameter().then(response=>{
+            this.ele = response.respObj
+            this.flag = true
+          })
+        }
+        this.listLoading = false
       })
-      
     },
     handleFilter(){
-      console.log('handleFilter')
       this.listQuery.page = 1
       console.log(this.listQuery)
       this.getList()
@@ -353,25 +397,6 @@ export default {
       let directFlag = false
       this.$store.dispatch('tagsView/refreshView', directFlag)
       this.$router.push({name:'element-create'})
-
-    },
-    createData(){
-      console.log(this.temp)
-      this.$refs['dataForm'].validate((valid) => {
-      if(valid){
-        postElAdd(this.temp).then(response=>{
-          this.dialogFormVisible = false
-          console.log(response)
-          this.$notify({
-            title: '成功',
-            message: '创建成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.getList()
-        })
-      }
-      })
     },
     handleUpdate(row){
       let directFlag = false
@@ -381,36 +406,10 @@ export default {
       this.$router.push({ name: 'element-edit' })
       
 
-    //   this.temp = Object.assign({}, row)
-    //   console.log(this.temp)
-    //   this.dialogFormVisible = true
-    //   this.$nextTick(() => {
-    //     this.$refs['dataForm'].clearValidate()
-    //   })
-    },
-    updateData(){
-      console.log(this.temp)
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          getComUpStock(this.temp).then(response => {
-              this.dialogFormVisible = false
-              this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.getList()
-          })
-        }
-      })
     },
     sortChange(data) { // 排序
-        console.log(151551515)
-
       const { prop, order } = data
       if (prop === 'createDate') {
-        console.log(151551515)
         if (order === 'ascending') {
           this.listQuery.orderType = 'asc'
         } else if (order === 'descending') {
@@ -483,41 +482,8 @@ export default {
       //     this.$refs['dataForm'].clearValidate()
       // })
     },
-    modeUpload(item) {
-      this.mode = item.file
-      let fd = new FormData()// FormData 对象
-      fd.append('file', this.mode)// 文件对象
-      console.log(fd.get('file'))
-      postUpBom(fd).then(response=>{
-        this.url = response.respObj
-        this.handlePreview(item.file)
-      })
-    },
-    fileChange(file, fileList) {
-      console.log(file)
-      // console.log(file.raw)
-      this.modeList = []
-      this.modeList.push(file)
-      this.submitUpload()
-    },
-    submitUpload() {
-        this.$refs.upload.submit();
-      },
-    handlePreview(file) {
-        var a = document.createElement('a');
-        var event = new MouseEvent('click');
-        a.download = file.name;
-        a.href = this.url;
-        a.dispatchEvent(event);
-        console.log('handlePreview')
-        console.log(file)
-        console.log(this.url)
-    },
-    upload(){
-
-    },
     handleDelete(row,index){
-      this.$confirm('确定删除元件参数?', '警告', {
+      this.$confirm('确定删除该元件参数?', '警告', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
@@ -548,7 +514,6 @@ export default {
     },
     cancel(){
       this.dialogFormVisible = false
-      console.log(this.temp)
     }
   }
 }

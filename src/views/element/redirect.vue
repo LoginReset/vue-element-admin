@@ -139,10 +139,10 @@ export default {
           }
           value = value.split('%')[0]
           value = Number(value)
-
           if(!/^\+?[1-9][0-9]*$/.test(value)||value>100||value<=0){
-              this.flag = false
               callback(new Error('请输入[1,100]的正整数'))
+              this.temp.elPrecision = ''
+
           }else{
             this.flag = true
           }
@@ -443,10 +443,9 @@ export default {
       // this.$forceUpdate()
     },
     changePercision(){
-      if(!this.flag){
-        this.temp.elPrecision = ''
-      }
-      console.log(this.temp.elPrecision)
+      // if(!this.flag){
+      //   this.temp.elPrecision = ''
+      // }
     }
   }
 

@@ -36,7 +36,9 @@ export default {
   },
   methods:{
     getList(){
-      this.$store.dispatch('user/getElement')
+      this.$store.dispatch('user/getElement') //获取首页element各个数量
+      this.$store.dispatch('user/getEleRole')//获取首页element权限
+
     },
   }
 }

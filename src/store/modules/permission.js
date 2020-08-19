@@ -15,7 +15,6 @@ function hasPermission(roles, route) {
     //   }
     //   return route.meta.roles.includes(role)
     // })
-    // console.log('-----------')
     // console.log(a)
     return roles.some(role => route.meta.roles.includes(role))
     // return true
@@ -69,8 +68,9 @@ const actions = {
       let accessedRoutes
       accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       console.log(accessedRoutes)
+      console.log('accessedRoutes')
       // }
-      if (typeof roles[0] === 'string') {
+      if (typeof roles[0] === 'string'&&roles[0]!=='dashborad') {
         commit('SET_ROUTES', accessedRoutes)
       }
       resolve(accessedRoutes)

@@ -331,6 +331,7 @@ export default {
       })
     },
     handleCreate() {
+      this.$refs.tree&&this.$refs.tree.setCheckedKeys([])
       this.showPermissionAllSelect = true
       this.showPermissionAll()
       this.resetTemp()

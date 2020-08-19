@@ -1,6 +1,6 @@
 <template>
-  <el-row :gutter="100" type="flex" justify="center" class="panel-group">
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.componet>0">
+  <el-row :gutter="100" type="flex" justify="center" class="panel-group" v-if="eleR.roles">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.componet>0&&eleR.manage">
       <div class="card-panel" @click="handleSetLineChartData('elSum')" >
         <div class="card-panel-icon-wrapper icon-people">
           <svg-icon icon-class="sum" class-name="card-panel-icon" />
@@ -13,7 +13,7 @@
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.elementName>0">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.elementName>0&&eleR.name">
       <div class="card-panel" @click="handleSetLineChartData('elName')">
         <div class="card-panel-icon-wrapper icon-message">
           <svg-icon icon-class="name" class-name="card-panel-icon" />
@@ -26,7 +26,7 @@
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.elementRank>0">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.elementRank>0&&eleR.rank">
       <div class="card-panel" @click="handleSetLineChartData('elRank')">
         <div class="card-panel-icon-wrapper icon-money">
           <svg-icon icon-class="rank" class-name="card-panel-icon" />
@@ -39,7 +39,7 @@
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.elementType>0">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.elementType>0&&eleR.type">
       <div class="card-panel" @click="handleSetLineChartData('elType')">
         <div class="card-panel-icon-wrapper icon-shopping">
           <svg-icon icon-class="type" class-name="card-panel-icon" />
@@ -59,6 +59,7 @@
 import CountTo from 'vue-count-to'
 import { mapGetters } from 'vuex'
 import {getHome} from '@/api/ele'
+import store from '@/store'
 // let ele = window.ses
 export default {
   components: {
@@ -85,6 +86,7 @@ export default {
   // },
   data(){
     return{
+      
       // componet:0,
       // elementName:0,
       // elementType:0,
@@ -94,7 +96,7 @@ export default {
   computed:{
     // this.getList()
     ...mapGetters([
-      'ele'
+      'ele','eleR'
     ])
   },
   methods: {
