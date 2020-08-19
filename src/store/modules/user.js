@@ -1,5 +1,4 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getPermissionAll } from '@/api/sys'
 import { getToken, setToken, removeToken,getOS, setOS, removeOS } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 import {getHome} from '@/api/ele'
@@ -13,9 +12,8 @@ const state = {
   roleName: '',// 角色名
   osName:'',
   browserName:'',
-  eleData:'',
-  eleR:''
-  // directFlag: false//页面跳转标志
+  eleData:'', //element总数
+  eleR:''  //element权限
 }
 
 const mutations = {
@@ -95,14 +93,30 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction, roleName,admin } = respObj
-
+        const { roles, name, avatar, introduction, roleName,admin  } = respObj
+        
+        
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
-        // let directFlag = false
+        console.log('permission',roles)
+        let eleR = {
+          roles:false,
+          manage:false,
+          name:false,
+          rank:false,
+          type:false,
+        }
         
+        if(roles.includes('element')){
+          eleR.roles = true
+          roles.includes('element-manage')?eleR.manage = true:''
+          roles.includes('element-name')?eleR.name = true:''
+          roles.includes('element-type')?eleR.type = true:''
+          roles.includes('element-rank')?eleR.rank = true:''
+        }
+        commit('SET_ELER',eleR) //首页权限
         commit('SET_ROLES', roles)// 权限列表
         commit('SET_NAME', name)// 姓名
         commit('SET_AVATAR', avatar)// 头像
@@ -113,47 +127,6 @@ const actions = {
       }).catch(error => {
         reject(error)
       })
-    })
-  },
-  //获取首页element权限 没有则不显示
-  getEleRole({commit,dispatch}){
-    return new Promise((resolve, reject) => {
-      let roles = ['element-manage','element-name','element-type','element-rank']
-      let eleR = {
-        roles:false,
-        manage:false,
-        name:false,
-        rank:false,
-        type:false,
-      }
-      getPermissionAll({permission:'element'}).then(response=>{
-        let access = response.respObj.item
-        if(access.length>0){
-          // 判断元件管理权限是否存在
-            eleR.roles = true
-            let arr = access[0].children
-            if(arr.length>0){
-              //判断三级是否存在
-              let eleRoles = []
-              arr.forEach(item=>{
-                eleRoles.push(item.permission)
-              })
-              roles = roles.slice(0,4)
-              let intersection = roles.filter(v => eleRoles.includes(v)) 
-              console.log(intersection)
-              intersection.forEach(r=>{
-                r === 'element-manage'?eleR.manage = true:''
-                r === 'element-name'?eleR.name = true:''
-                r === 'element-type'?eleR.type = true:''
-                r === 'element-rank'?eleR.rank = true:''
-              })
-          }
-          console.log(eleR)
-          commit('SET_ELER',eleR)
-        }
-      })
-      
-      resolve()
     })
   },
   getElement({ commit }) {

@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="100" type="flex" justify="center" class="panel-group" v-if="eleR.roles">
+  <el-row :gutter="100"  class="panel-group" v-if="eleR.roles">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.componet>0&&eleR.manage">
       <div class="card-panel" @click="handleSetLineChartData('elSum')" >
         <div class="card-panel-icon-wrapper icon-people">

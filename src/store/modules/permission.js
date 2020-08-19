@@ -70,7 +70,7 @@ const actions = {
       console.log(accessedRoutes)
       console.log('accessedRoutes')
       // }
-      if (typeof roles[0] === 'string'&&roles[0]!=='dashborad') {
+      if (typeof roles[0] === 'string') {
         commit('SET_ROUTES', accessedRoutes)
       }
       resolve(accessedRoutes)
