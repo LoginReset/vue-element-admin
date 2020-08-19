@@ -23,6 +23,16 @@ export function postMqBatch(data) {
         data
     })
 } 
+//设备导出
+export function getMqExport(query) {
+    console.log(query)
+    return request({
+        url: '/b/mqUser/export', 
+        method: 'get',
+        params:query
+    })
+} 
+
 //设置是否成为超级用户
 export function postMqSp(data) {
     return request({

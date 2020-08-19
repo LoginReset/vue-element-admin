@@ -31,7 +31,7 @@
                         </el-col>
                         <el-col :span="4">
                             <el-form-item>
-                                <el-button  type="primary" icon="el-icon-download" @click="batch">导出</el-button>
+                                <el-button  type="primary" icon="el-icon-download" @click="exportB">导出</el-button>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -101,7 +101,7 @@
 import {getProView} from '@/api/product'
 
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import {getMqView,postMqBatch,postMqSp,postMqEnable} from '@/api/device'
+import {getMqView,postMqBatch,postMqSp,postMqEnable,getMqExport} from '@/api/device'
 
 export default {
     name:'device-batch',
@@ -112,6 +112,8 @@ export default {
         return{
             tableKey:0,
             listLoading:false,
+            api: process.env.VUE_APP_BASE_API,
+            registerNum:'',
             list:[],
             proList:[],
             total:0,
@@ -148,7 +150,18 @@ export default {
             console.log(this.temp)
             postMqBatch(this.temp).then(response=>{
                 this.list = response.respObj
+                this.registerNum =  this.list[0].registerNum
+                this.exportB()
+                // window.location.href = `${this.api}/b/mqUser/export?registerNum=${this.registerNum}`
+                // getMqExport(query).then(response=>{
+                //     console.log(response)
+                // })
+                
             })
+            
+        },
+        exportB(){
+            window.location.href = `${this.api}/b/mqUser/export?registerNum=${this.registerNum}`
         },
         sortChange(data) { // 排序
             const { prop, order } = data

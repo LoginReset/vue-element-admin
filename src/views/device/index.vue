@@ -65,7 +65,7 @@
         perms="product-manage:export"
         type="primary"
         label="table.export"
-        @click="handleCreate"
+        @click="handleExport"
       />
       <el-button
         class="filter-item"
@@ -357,6 +357,16 @@ export default {
         })
       }
       })
+    },
+    handleExport(){
+      cnosole.log(this.listQuery)
+      let arr = []
+      for(let k in this.listQuery){
+        arr.push(k+'='+this.listQuery[k])
+      }
+      let a = '?'
+      a = a+arr.join('&')
+      console.log(a)
     },
     handleUpdate(row){
       this.dialogStatus = 'update'
