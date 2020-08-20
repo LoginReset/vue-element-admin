@@ -249,6 +249,7 @@ export default {
             return
           }
           this.loading = true
+          console.log(this.browser)
           this.browser = this.getBrowser().browser || '未知浏览器' // 获取浏览器名
           this.version = this.getBrowser().version || '未知浏览器版本号' // 获取浏览器版本
           this.OS = this.getOS() + ' ' + this.getDigits() || '未知操作系统' // 系统版本号
@@ -327,16 +328,18 @@ export default {
 					  var rFirefox = /(firefox)\/([\w.]+)/ // 火狐
 					  var rOpera = /(opera).+version\/([\w.]+)/ // 旧Opera
 					  var rNewOpera = /(opr)\/(.+)/ // 新Opera 基于谷歌
-					  var rChrome = /(chrome)\/([\w.]+)/ // 谷歌
+            var rChrome = /(chrome)\/([\w.]+)/ // 谷歌
 					  var rUC = /(chrome)\/([\w.]+)/// UC
 					  var rMaxthon = /(chrome)\/([\w.]+)/// 遨游
 					  var r2345 = /(chrome)\/([\w.]+)/// 2345
 					  var rQQ = /(chrome)\/([\w.]+)/// QQ
 					  // var rMetasr =  /(metasr)\/([\w.]+)/;//搜狗
 					  var rSafari = /version\/([\w.]+).*(safari)/
+            // var rSafari = /safari\/[\d.]+/ //safari
 
-					  var ua = navigator.userAgent.toLowerCase()
-
+            var ua = navigator.userAgent.toLowerCase()
+            
+            console.log('navigator',navigator,'ua',ua)
 					  var matchBS, matchBS2
 
 					  // IE 低版
@@ -444,7 +447,9 @@ export default {
 						  }
 					  }
 					  // Safari（苹果）浏览器
-					  matchBS = rSafari.exec(ua)
+            matchBS = rSafari.exec(ua)
+            console.log('谷歌浏览器',rChrome)
+             console.log(matchBS)
 					  if ((matchBS != null) && (!(window.attachEvent)) && (!(window.chrome)) && (!(window.opera))) {
 						  return {
 							  browser: 'Safari',
@@ -452,8 +457,11 @@ export default {
 						  }
 					  }
 					  // 谷歌浏览器
-					   matchBS = rChrome.exec(ua)
+             matchBS = rChrome.exec(ua)
+             
+
 					  if ((matchBS != null) && (!(window.attachEvent))) {
+              
 						  matchBS2 = rNewOpera.exec(ua)
 						  if (matchBS2 == null) {
 							  return {

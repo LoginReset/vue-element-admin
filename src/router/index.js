@@ -196,7 +196,16 @@ export const asyncRoutes = [
           title: '批量注册',
           roles: ['device-batch']
           // roles: ['admin'] // or you can only set roles in sub nav
-        }
+        },
+      },{
+        path: 'version',
+        component: () => import('@/views/device/version'),
+        name: 'device-version',
+        meta: {
+          title: '指定版本',
+          roles: ['device-version']
+          // roles: ['admin'] // or you can only set roles in sub nav
+        },
       }
     ]
   },

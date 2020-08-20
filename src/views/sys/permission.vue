@@ -201,7 +201,7 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 import PButton from '@/components/PermissionBtn'
 
 export default {
-  name: 'Permission',
+  name: 'permission',
   components: { Pagination, PButton },
   directives: { waves },
   data() {

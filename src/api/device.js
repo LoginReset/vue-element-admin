@@ -49,5 +49,12 @@ export function postMqEnable(data) {
         data
     })
 } 
-
+//指定版本
+export function postVersion(data) {
+    return request({
+        url: '/b/mqUser/specify/version', 
+        method: 'post',
+        data
+    })
+} 
 

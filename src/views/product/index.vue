@@ -74,10 +74,10 @@
       />
       <el-table-column label="项目名称" align="center" width="220">
         <template slot-scope="{row}">
-          <el-tag>{{row.name}}</el-tag>
+          <el-tag v-if="row.name">{{row.name}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="appKey" align="center" width="220">
+      <el-table-column label="appKey" align="center" show-overflow-tooltip width="220">
         <template slot-scope="{row}">
           <el-tag type="success">{{row.appKey}}</el-tag>
         </template>

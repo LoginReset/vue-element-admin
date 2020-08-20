@@ -10,9 +10,9 @@
         @keyup.enter.native="handleFilter"
       />
       <el-input
-        v-model.trim="listQuery.deviceName"
+        v-model.trim="listQuery.registerNum"
         clearable
-        placeholder="设备名称"
+        placeholder="注册编号"
         style="width: 150px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
@@ -25,16 +25,23 @@
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
-      
       <el-input
-        v-model.trim="listQuery.registerNum"
+        v-model.trim="listQuery.currentVersion"
         clearable
-        placeholder="注册编号"
+        placeholder="当前版本"
         style="width: 150px;"
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
-      <el-select
+      <el-input
+        v-model.trim="listQuery.targetVersion"
+        clearable
+        placeholder="最新目标版本"
+        style="width: 150px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
+      <!-- <el-select
         v-model="listQuery.isEnable"
         clearable
         style="width: 140px"
@@ -55,17 +62,17 @@
       >
         <el-option key="1" label="启用" :value="1" />
         <el-option key="0" label="禁用" :value="0" />
-      </el-select>
+      </el-select> -->
        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
       <PButton
         class="filter-item"
         icon="el-icon-download"
-        perms="product-manage:export"
+        perms="product-manage:version"
         type="primary"
-        label="table.export"
-        @click="handleExport"
+        label="table.multipleVersion"
+        @click="handleMultiple"
       />
       <el-button
         class="filter-item"
@@ -99,9 +106,9 @@
           <el-tag>{{row.nickName}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="设备名称" align="center">
+      <el-table-column label="批量注册编号" align="center">
         <template slot-scope="{row}">
-          <span>{{row.deviceName}}</span>
+          <span>{{row.registerNum }}</span>
         </template>
       </el-table-column>
       <el-table-column label="appKey" align="center" width="220">
@@ -109,42 +116,15 @@
           <el-tag type="success">{{row.appKey}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="设备秘钥" align="center" >
+      <el-table-column label="当前版本" align="center" >
         <template slot-scope="{row}">
-          <span>{{row.deviceSecret}}</span>
+          <span>{{row.currentVersion}}</span>
         </template>
       </el-table-column>
       
-      <el-table-column label="注册编号" align="center">
+      <el-table-column label="最新版本" align="center">
         <template slot-scope="{row}">
-          <span>{{row.registerNum}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" align="center" width="150">
-        <template slot-scope="{row}">
-          <el-switch
-            v-model="row.isEnable"
-            :active-value="Number(1)"
-            :inactive-value="Number(0)"
-            active-text="启用"
-            inactive-text="禁用"
-            :disabled="!hasPerms('device-manage:switch')"
-            @change="enableChange($event,row)"
-          />
-        </template>
-      </el-table-column>
-      
-      <el-table-column label="超级用户" align="center" width="150">
-        <template slot-scope="{row}">
-          <el-switch
-            v-model="row.isSuperuser"
-            :active-value="Number(1)"
-            :inactive-value="Number(0)"
-            active-text="启用"
-            inactive-text="禁用"
-            :disabled="!hasPerms('device-manage:switch')"
-            @change="spChange($event,row)"
-          />
+          <span>{{row.targetVersion}}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column label="备注" align="center" >
@@ -157,6 +137,17 @@
           <span>{{ row.createDate }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+          <PButton
+            perms="product-manage:edit"
+            size="mini"
+            type="primary"
+            label="table.edit"
+            @click="handleSingle(row)"
+          />
+        </template>
+      </el-table-column>
     </el-table>
     <pagination
       v-show="total>0"
@@ -164,40 +155,46 @@
       :page.sync="listQuery.page"
       :limit.sync="listQuery.limit"
       @pagination="getList"/>
-      <!-- <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible"> -->
+      <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
    
-      <!-- <el-form
+      <el-form
           ref="dataForm"
           :rules="rules"
           :model="temp"
           label-position="right"
           label-width="100px"
           style="width: 400px; margin-left:50px;">
-          <el-form-item label="选择项目" prop="appKey">
-            <el-select v-model="temp.appKey" filterable placeholder="请选择"  style="width:100%">
-                <el-option v-for="item in proList" 
-                    :key="item.uuid" :label="item.name" :value="item.appKey">
-                </el-option>
-            </el-select>
+          <template v-if="dialogStatus==='multiple'">
+              <el-form-item label="项目" prop="appKey">
+                <el-select v-model="temp.appKey" filterable placeholder="请选择"  style="width:100%">
+                    <el-option v-for="item in proList" 
+                        :key="item.uuid" :label="item.name" :value="item.appKey">
+                    </el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="批量注册编号" prop="registerNum">
+                <el-input v-model.trim="temp.registerNum" clearable placeholder="请输入批量注册编号" />
+            </el-form-item>
+          </template>
+          <el-form-item label="最新版本号" prop="targetVersion ">
+            <el-input v-model.trim="temp.targetVersion " clearable placeholder="请输入最新版本号" />
           </el-form-item>
-          <el-form-item label="注册数量" prop="count">
-            <el-input v-model.trim="temp.remark" clearable placeholder="请输入备注" />
-          </el-form-item>
-        </el-form> -->
-        <!-- <div slot="footer" class="dialog-footer">
+        </el-form> 
+       <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">
             {{ $t('table.cancel') }}
           </el-button>
-          <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+          <el-button type="primary" @click="dialogStatus==='single'?handleSingle():handleMultiple()">
             {{ $t('table.confirm') }}
           </el-button>
-        </div> -->
+        </div>
 
-      <!-- </el-dialog> -->
+      </el-dialog>
   </div>
 </template>
 <script>
-import {getMqView,postMqAdd,postMqBatch,postMqSp,postMqEnable,getMqExport} from '@/api/device'
+import {getProView} from '@/api/product'
+import {getMqView,postMqAdd,postMqBatch,postMqSp,postMqEnable,getMqExport,postVersion} from '@/api/device'
 import PButton from '@/components/PermissionBtn'
 import waves from '@/directive/waves' // waves directive
 import { hasBtnPermission } from '@/utils/permission'
@@ -231,11 +228,11 @@ export default {
       proList:[],
       total:0,
       temp:{
-        uuid:undefined,
-        name:undefined,
-        // appKey:undefined,
-        // registerKey:undefined,
-        remark:undefined,
+        nickName:undefined,
+        currentVersion:undefined,
+        appKey:undefined,
+        registerNum:undefined,
+        currentVersion:undefined,
       },
       query:{
         page:1,
@@ -246,17 +243,17 @@ export default {
         limit:20,
         nickName:undefined,
         appKey:undefined,
-        deviceName:undefined,
+        currentVersion:undefined,
         isEnable:undefined,
-        isSuperuser:undefined,
+        targetVersion:undefined,
         registerNum:undefined,
       },
       listLoading:false,
       dialogFormVisible: false,
       dialogStatus: '',
       textMap:{
-        update: 'Edit',
-        export: 'Export'
+        single: '指定版本',
+        multiple: '批量指定'
       },
       rules:{
         // name:[{ required: true, message: '公司名称必填', trigger: 'change' }],
@@ -278,7 +275,19 @@ export default {
         this.list = response.respObj.item
         this.total = response.respObj.total
         console.log(this.listQuery)
-        this.listLoading = false
+      })
+      getProView(this.query).then(response=>{
+          if(this.query.limit<response.respObj.total){
+              this.query.limit = response.respObj.total
+              getProView(this.query).then(response=>{
+                  this.proList = response.respObj.item
+                  this.listLoading = false
+              })
+          }else{
+            this.proList = response.respObj.item
+          }
+          this.listLoading = false
+
       })
     },
     handleFilter(){
@@ -299,18 +308,22 @@ export default {
       }
       this.handleFilter()
     },
-    handleExport(){
-      console.log(this.listQuery)
-      let arr = []
-      for(let k in this.listQuery){
-        if(this.listQuery[k]){
-          arr.push(k+'='+this.listQuery[k])
-        }
-      }
-      let param = '?'
-      param = param+arr.join('&')
-      let url = process.env.VUE_APP_BASE_API+'/b/mqUser/export'+param
-      window.location.href = url
+    handleSingle(row){
+      this.dialogStatus = 'single'
+      console.log(row)
+      this.temp = Object.assign({}, row)
+      console.log(this.temp)
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleMultiple(){
+      this.dialogStatus = 'multiple'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     },
     resetTemp(){
       this.temp = {

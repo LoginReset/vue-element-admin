@@ -131,6 +131,7 @@ export default {
     reviewer: '审核人',
     registerKey:'重置',
     batch:'批量注册',
+    multipleVersion:'批量指定版本',
     id: '序号',
     date: '时间',
     author: '作者',

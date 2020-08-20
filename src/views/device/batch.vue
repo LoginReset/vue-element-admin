@@ -109,6 +109,17 @@ export default {
         Pagination
     },
     data(){
+        var countValid = (rule,value,callback)=>{
+            if(!/(^[1-9]\d*$)/.test(value)){
+                callback(new Error('请输入正整数'))
+            }else{
+                value = Number(value)
+                if(value>100||value<10){
+                    callback(new Error('注册数量范围为[10,100]'))
+                }
+            }
+            callback()
+        }
         return{
             tableKey:0,
             listLoading:false,
@@ -123,10 +134,13 @@ export default {
             },
             temp:{
                 appKey:undefined,
-                count:undefined
+                count:10
             },
             rules:{
-
+                count:[{required:true,message:'注册数量不能为空',trigger:'change'},
+                // {min:10,max:100,message:'注册数量为[10,100]',trigger:'change'},
+                {validator:countValid,trigger:'change'}],
+                appKey:[{required:true,message:'项目不能为空',trigger:'change'}]
             }
         }
     },
@@ -148,16 +162,16 @@ export default {
         },
         batch(){
             console.log(this.temp)
-            postMqBatch(this.temp).then(response=>{
-                this.list = response.respObj
-                this.registerNum =  this.list[0].registerNum
-                this.exportB()
-                // window.location.href = `${this.api}/b/mqUser/export?registerNum=${this.registerNum}`
-                // getMqExport(query).then(response=>{
-                //     console.log(response)
-                // })
-                
+            this.$refs['dataForm'].validate((valid) => {
+                if(valid){
+                    postMqBatch(this.temp).then(response=>{
+                        this.list = response.respObj
+                        this.registerNum =  this.list[0].registerNum
+                        this.exportB()
+                    })
+                }
             })
+            
             
         },
         exportB(){
