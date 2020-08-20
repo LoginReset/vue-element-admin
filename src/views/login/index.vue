@@ -129,7 +129,6 @@ export default {
   components: { LangSelect, SocialSign, DragVerify },
   data() {
     const validateUsername = (rule, value, callback) => {
-      console.log(value)
       if (!validUsername(value)) {
         callback(new Error('Please enter the correct user name'))
       } else {
@@ -187,13 +186,6 @@ export default {
         }
       },
       immediate: true
-    },
-    width:{
-      handler(val){
-        console.log(val)
-      },
-      immediate: true
-
     }
   },
   created() {
@@ -249,9 +241,8 @@ export default {
             return
           }
           this.loading = true
-          console.log(this.browser)
-          this.browser = this.getBrowser().browser || '未知浏览器' // 获取浏览器名
-          this.version = this.getBrowser().version || '未知浏览器版本号' // 获取浏览器版本
+          this.browser = (this.getBrowser()&&this.getBrowser().browser) || '未知浏览器' // 获取浏览器名
+          this.version = (this.getBrowser()&&this.getBrowser().version) || '未知浏览器版本号' // 获取浏览器版本
           this.OS = this.getOS() + ' ' + this.getDigits() || '未知操作系统' // 系统版本号
 
           const loginInfo = this.loginForm
@@ -339,7 +330,6 @@ export default {
 
             var ua = navigator.userAgent.toLowerCase()
             
-            console.log('navigator',navigator,'ua',ua)
 					  var matchBS, matchBS2
 
 					  // IE 低版
@@ -447,9 +437,6 @@ export default {
 						  }
 					  }
 					  // Safari（苹果）浏览器
-            matchBS = rSafari.exec(ua)
-            console.log('谷歌浏览器',rChrome)
-             console.log(matchBS)
 					  if ((matchBS != null) && (!(window.attachEvent)) && (!(window.chrome)) && (!(window.opera))) {
 						  return {
 							  browser: 'Safari',
@@ -458,7 +445,6 @@ export default {
 					  }
 					  // 谷歌浏览器
              matchBS = rChrome.exec(ua)
-             
 
 					  if ((matchBS != null) && (!(window.attachEvent))) {
               
