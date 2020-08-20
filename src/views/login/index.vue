@@ -244,8 +244,10 @@ export default {
             return
           }
           this.loading = true
-          this.browser = this.getBrowser().browser || '未知浏览器' // 获取浏览器名
-          this.version = this.getBrowser().version || '未知浏览器版本号' // 获取浏览器版本
+		  this.browser = (this.getBrowser()&&this.getBrowser().browser) || '未知浏览器' // 获取浏览器名
+          this.version = (this.getBrowser()&&this.getBrowser().version) || '未知浏览器版本号' // 获取浏览器版本
+          //this.browser = this.getBrowser().browser || '未知浏览器' // 获取浏览器名
+          //this.version = this.getBrowser().version || '未知浏览器版本号' // 获取浏览器版本
           this.OS = this.getOS() + ' ' + this.getDigits() || '未知操作系统' // 系统版本号
 
           const loginInfo = this.loginForm
