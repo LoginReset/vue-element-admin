@@ -161,12 +161,21 @@ export const asyncRoutes = [
         meta: {
           title: '项目管理',
           roles: ['product-manage']
-          
           // roles: ['admin'] // or you can only set roles in sub nav
         }
-      }
+      },{
+        path: 'config',
+        component: () => import('@/views/product/config'),
+        name: 'product-config',
+        meta: {
+          title: '基础配置',
+          roles: ['product-config']
+          // roles: ['admin'] // or you can only set roles in sub nav
+        }
+      },
     ]
   },
+  
   {
     path: '/device',
     component: Layout,
@@ -175,7 +184,7 @@ export const asyncRoutes = [
     name: 'device',
     meta: {
       title: '设备管理',
-      icon: 'excel',
+      icon: 'devices',
       roles: ['device']
       // roles: ['admin', 'editor'] // you can set roles in root nav
     }, children: [
@@ -197,13 +206,47 @@ export const asyncRoutes = [
           roles: ['device-batch']
           // roles: ['admin'] // or you can only set roles in sub nav
         },
+        
       },{
-        path: 'version',
-        component: () => import('@/views/device/version'),
-        name: 'device-version',
+        path: 'history',
+        component: () => import('@/views/device/history'),
+        name: 'device-history',
+        meta: {
+          title: '批量注册记录',
+          roles: ['device-history']
+          // roles: ['admin'] // or you can only set roles in sub nav
+        },
+      }
+    ]
+  },
+  {
+    path: '/version',
+    component: Layout,
+    redirect: '/version/manage',
+    alwaysShow: true, // will always show the root menu
+    name: 'version',
+    meta: {
+      title: '版本管理',
+      icon: 'version',
+      roles: ['version']
+      // roles: ['admin', 'editor'] // you can set roles in root nav
+    }, children: [
+      ,{
+        path: 'manage',
+        component: () => import('@/views/version/manage'),
+        name: 'version-manage',
+        meta: {
+          title: '版本管理',
+          roles: ['version-manage']
+          // roles: ['admin'] // or you can only set roles in sub nav
+        },
+      },{
+        path: 'batch',
+        component: () => import('@/views/version/batch'),
+        name: 'version-batch',
         meta: {
           title: '指定版本',
-          roles: ['device-version']
+          roles: ['version-batch']
           // roles: ['admin'] // or you can only set roles in sub nav
         },
       }

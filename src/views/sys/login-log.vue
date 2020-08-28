@@ -2,6 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
+        clearable
         v-model.trim="listQuery.account"
         placeholder="管理员账号"
         style="width: 150px;"
@@ -9,6 +10,7 @@
         @keyup.enter.native="handleFilter"
       />
       <el-input
+        clearable
         v-model.trim="listQuery.name"
         placeholder="管理员姓名"
         style="width: 150px;"
@@ -17,6 +19,7 @@
       />
       <el-input
         v-model.trim="listQuery.osName"
+        clearable
         placeholder="操作系统名"
         style="width: 150px;"
         class="filter-item"
@@ -24,6 +27,7 @@
       />
       <el-input
         v-model.trim="listQuery.browserName"
+        clearable
         placeholder="浏览器名"
         style="width: 150px;"
         class="filter-item"

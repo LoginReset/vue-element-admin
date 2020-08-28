@@ -3,6 +3,7 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.permission"
+        clearable
         placeholder="权限名"
         style="width: 200px;"
         class="filter-item"
@@ -10,6 +11,7 @@
       />
       <el-input
         v-model="listQuery.menuName"
+        clearable
         placeholder="菜单名"
         style="width: 200px;"
         class="filter-item"
@@ -17,6 +19,7 @@
       />
       <el-input
         v-model="listQuery.filterUrl"
+        clearable
         placeholder="路径"
         style="width: 200px;"
         class="filter-item"

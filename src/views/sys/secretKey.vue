@@ -3,6 +3,7 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.searchText"
+        clearable
         placeholder="角色描述或密钥"
         style="width: 300px;"
         class="filter-item"

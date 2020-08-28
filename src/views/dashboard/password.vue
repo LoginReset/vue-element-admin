@@ -56,18 +56,22 @@ export default {
   },
   methods: {
     modify() {
-      const data = {
-        newPwd: this.temp.newPwd,
-        oldPwd: this.temp.oldPwd
-      }
-      postPwdUp(data).then(response => {
-        this.$notify({
-          title: '成功',
-          message: '修改成功',
-          type: 'success',
-          duration: 2000
-        })
-        this.resetTemp()
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          const data = {
+            newPwd: this.temp.newPwd,
+            oldPwd: this.temp.oldPwd
+          }
+          postPwdUp(data).then(response => {
+            this.$notify({
+              title: '成功',
+              message: '修改成功',
+              type: 'success',
+              duration: 2000
+            })
+            this.resetTemp()
+          })
+        }
       })
     },
     resetTemp() {

@@ -167,7 +167,7 @@ export default {
                     postMqBatch(this.temp).then(response=>{
                         this.list = response.respObj
                         this.registerNum =  this.list[0].registerNum
-                        this.exportB()
+                        // this.exportB()
                     })
                 }
             })

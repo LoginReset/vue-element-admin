@@ -2,31 +2,6 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-        v-model.trim="listQuery.name"
-        clearable
-        placeholder="项目名称"
-        style="width: 150px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-      <el-input
-        v-model.trim="listQuery.appKey"
-        clearable
-        placeholder="appKey"
-        style="width: 150px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-      <el-input
-        v-model.trim="listQuery.registerKey"
-        clearable
-        placeholder="注册秘钥"
-        style="width: 150px;"
-        class="filter-item"
-        @keyup.enter.native="handleFilter"
-      />
-      
-      <el-input
         v-model.trim="listQuery.remark"
         clearable
         placeholder="备注"
@@ -34,17 +9,17 @@
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
+      <el-input
+        v-model.trim="listQuery.value"
+        clearable
+        placeholder="值"
+        style="width: 150px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         {{ $t('table.search') }}
       </el-button>
-      <PButton
-        class="filter-item"
-        icon="el-icon-edit"
-        perms="product-manage:add"
-        type="primary"
-        label="table.add"
-        @click="handleCreate"
-      />
       <el-button
         class="filter-item"
         style="margin-left: 10px;"
@@ -72,27 +47,22 @@
         type="index"
         width="50"
       />
-      <el-table-column label="项目名称" align="center" width="220">
+      <el-table-column label="类型" align="center" show-overflow-tooltip width="220">
         <template slot-scope="{row}">
-          <el-tag v-if="row.name">{{row.name}}</el-tag>
+          <el-tag type="success">{{row.type}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="appKey" align="center" show-overflow-tooltip width="220">
+      <el-table-column label="值" align="center">
         <template slot-scope="{row}">
-          <el-tag type="success">{{row.appKey}}</el-tag>
+          <span>{{row.value}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="注册秘钥" align="center">
-        <template slot-scope="{row}">
-          <span>{{row.registerKey}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="备注" align="center" >
+      <el-table-column label="备注" align="center" show-overflow-tooltip width="220">
         <template slot-scope="{row}">
           <span>{{row.remark}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" sortable="custom" prop="create_date" width="180">
+      <el-table-column label="创建时间" prop="create_date" sortable="custom" align="center"  width="180">
         <template slot-scope="{row}">
           <span>{{ row.createDate }}</span>
         </template>
@@ -103,22 +73,13 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row,$index}">
+        <template slot-scope="{row}">
           <PButton
-            perms="product-manage:edit"
+            perms="product-config:edit"
             size="mini"
             type="primary"
             label="table.edit"
             @click="handleUpdate(row)"
-          />
-          <PButton
-            v-if="row.status!='deleted'"
-            class="filter-item"
-            perms="product-manage:rk"
-            size="mini"
-            type="success"
-            label="table.registerKey"
-            @click="handleRk(row,$index)"
           />
         </template>
       </el-table-column>
@@ -137,8 +98,33 @@
           label-position="right"
           label-width="100px"
           style="width: 400px; margin-left:50px;">
-          <el-form-item label="项目名称" prop="name">
-            <el-input v-model.trim="temp.name" clearable placeholder="请输入项目名称" />
+          <el-form-item label="类型" prop="type">
+            <el-input v-model.trim="temp.type" clearable placeholder="请输入类型" />
+          </el-form-item>
+          <!-- <el-form-item label="值" prop="value">
+            <el-input v-model.trim="temp.value" clearable placeholder="请输入值" />
+          </el-form-item> -->
+           <el-form-item
+            v-for="(param,index) in temp.value"
+            :key="index"
+            :label="'值'+(index+1)"
+            prop="value">
+            <el-col :span="19">
+              <el-form-item
+                :rules="[{required: true, message: '值必填', trigger: ['change','blur']},{max:100,message:'长度不能超过100',trigger:'change'}]"
+                :prop="'value.'+index+'.val'"
+                style="margin-right:10px">
+                <el-input v-model.trim="param.val" placeholder="值" clearable />
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item style="margin-left:20px" v-show="index>0">
+                <el-button type="danger" @click.prevent="removeParam(param)">删除</el-button>
+              </el-form-item>
+            </el-col>
+          </el-form-item>
+          <el-form-item>
+            <el-button style="" @click="addParam">添加参数</el-button>
           </el-form-item>
           <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model.trim="temp.remark" clearable placeholder="请输入备注" />
@@ -148,7 +134,7 @@
           <el-button @click="dialogFormVisible = false">
             {{ $t('table.cancel') }}
           </el-button>
-          <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+          <el-button type="primary" @click="updateData()">
             {{ $t('table.confirm') }}
           </el-button>
         </div>
@@ -157,7 +143,7 @@
   </div>
 </template>
 <script>
-import {getProView,postProAdd,postProUp,postProKey} from '@/api/product'
+import {getConfigView,postConfigUp} from '@/api/product'
 import PButton from '@/components/PermissionBtn'
 import waves from '@/directive/waves' // waves directive
 
@@ -165,23 +151,23 @@ import Pagination from '@/components/Pagination' // secondary package based on e
 
 
 export default {
-  name:'product-manage',
+  name:'product-config',
   directives: { waves },
   components:{
     PButton,
     Pagination
   },
   data(){
-    var checkSort = (rule, value, callback) => {
+    var checkType = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('二维码类型必填'))
+        return callback(new Error('类型必填'))
       }
       if (!/^[0-9]+$/.test(value)) {
         return callback(new Error('类型必须是数字'))
       }
-      if (parseInt(value) > 99 || parseInt(value) < 0) {
-        return callback(new Error('二维码类型范围[0,99]'))
-      }
+    //   if (parseInt(value) > 99 || parseInt(value) < 0) {
+    //     return callback(new Error('类型范围[0,99]'))
+    //   }
       callback()
     }
     return{
@@ -189,18 +175,19 @@ export default {
       list:[],
       total:0,
       temp:{
-        uuid:undefined,
-        name:undefined,
-        // appKey:undefined,
-        // registerKey:undefined,
+        type:undefined,
+        value:{
+            key:'',
+            val:''
+        },
         remark:undefined,
       },
       listQuery:{
         page:1,
         limit:20,
-        name:undefined,
-        appKey:undefined,
-        registerKey:undefined,
+        value:undefined,
+        orderField:undefined,
+        orderType:undefined,
         remark:undefined,
       },
       listLoading:false,
@@ -211,7 +198,7 @@ export default {
         create: 'Create'
       },
       rules:{
-        name:[{ required: true, message: '项目名称必填', trigger: 'change' }],
+        type:[{ required: true, validator: checkType, trigger: 'change' }],
         // address:[{required:true, message:'公司地址必填', trigger:'change'}],
         // // companyTel:[{required:true, message:'公司电话必填', trigger:'change'}],
         // linkman:[{required:true, message:'公司联系人必填', trigger:'change'}],
@@ -226,7 +213,7 @@ export default {
   methods:{
     getList(){
       this.listLoading = true
-      getProView(this.listQuery).then(response=>{
+      getConfigView(this.listQuery).then(response=>{
         this.list = response.respObj.item
         this.total = response.respObj.total
         console.log(this.listQuery)
@@ -252,48 +239,50 @@ export default {
       }
       this.handleFilter()
     },
-    handleCreate(){
-      this.resetTemp()
-      this.dialogFormVisible = true
-      this.dialogStatus = 'create'
-      this.$nextTick(()=>{
-        this.$refs['dataForm'].clearValidate()
-      })
-
+    jsonData(value){
+        let data = JSON.parse(value)
+        let newArr = []
+        let i = 0
+        for(let k in data){
+            let obj = {
+                key:k,
+                val:data[k]
+            }
+            newArr.push(obj)
+        }
+        console.log('newArr',newArr)
+        return newArr
     },
-    createData(){
-      console.log(this.temp)
-      this.$refs['dataForm'].validate((valid) => {
-      if(valid){
-        postProAdd(this.temp).then(response=>{
-          this.dialogFormVisible = false
-          console.log(response)
-          this.$notify({
-            title: '成功',
-            message: '创建成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.getList()
-        })
-      }
+    changeValue(value){
+      let obj = {}
+      value.forEach(item=>{
+          obj[item.key] = item.val
       })
+      let val = JSON.stringify(obj)
+      return val
     },
     handleUpdate(row){
       this.dialogStatus = 'update'
       console.log(row)
       this.temp = Object.assign({}, row)
+      this.temp.value = this.jsonData(row.value)
       console.log(this.temp)
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    
     updateData(){
-      console.log(this.temp)
+      let value = this.changeValue(this.temp.value)
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          postProUp(this.temp).then(response => {
+          let data = {
+              remark:this.temp.remark,
+              type:this.temp.type,
+              value
+          }
+          postConfigUp(data).then(response => {
               this.dialogFormVisible = false
               this.$notify({
               title: '成功',
@@ -306,34 +295,24 @@ export default {
         }
       })
     },
-    handleRk(row,index){
-      this.$confirm('确定重置registerKey?', '警告', {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async() => {
-        // const param = []
-        // param.push(row.uuid)
-        const requestData = { uuid: row.uuid }
-        console.log(requestData)
-        postProKey(requestData).then(response => {
-          this.$notify({
-            title: '成功',
-            message: '重置成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.getList()
-        //   this.list.splice(index, 1)
-        })
-      }).catch(err => {
-
-      })
+    removeParam(param){
+        let index = this.temp.value.indexOf(param)
+        if(index>0){
+            this.temp.value.splice(index,1)
+        }
+    },
+    addParam(){
+        console.log(this.temp.value)
+        let len = this.temp.value.length+1
+        this.temp.value.push({
+          key: `value${len}`,
+          val: ''
+        });
     },
     resetTemp(){
       this.temp = {
-        uuid:undefined,
-        name:undefined,
+        type:undefined,
+        value:undefined,
         remark:undefined,
 
       }

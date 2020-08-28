@@ -31,3 +31,19 @@ export function postProKey(data) {
       data
     })
 } 
+//配置查询
+export function getConfigView(query) {
+  return request({
+    url: '/b/baseConfig/view', 
+    method: 'get',
+    params:query
+  })
+}
+//配置修改
+export function postConfigUp(data) {
+  return request({
+    url: '/b/baseConfig/update', 
+    method: 'post',
+    data
+  })
+} 

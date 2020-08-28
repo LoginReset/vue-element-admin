@@ -3,6 +3,7 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.account"
+        clearable
         placeholder="管理员账号"
         style="width: 200px;"
         class="filter-item"
@@ -10,6 +11,7 @@
       />
       <el-input
         v-model="listQuery.phoneNum"
+        clearable
         placeholder="管理员手机号"
         style="width: 200px;"
         class="filter-item"
@@ -17,6 +19,7 @@
       />
       <el-input
         v-model="listQuery.name"
+        clearable
         placeholder="管理员姓名"
         style="width: 200px;"
         class="filter-item"

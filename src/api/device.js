@@ -49,12 +49,71 @@ export function postMqEnable(data) {
         data
     })
 } 
-//指定版本
+//批量指定版本
 export function postVersion(data) {
+    return request({
+        url: '/b/mqUser/specify/version_batch', 
+        method: 'post',
+        data
+    })
+} 
+//单个指定版本
+export function postSingleVersion(data) {
     return request({
         url: '/b/mqUser/specify/version', 
         method: 'post',
         data
     })
 } 
+//查询版本
+export function getVersionView(query) {
+    return request({
+        url: '/b/version/view', 
+        method: 'get',
+        params:query
+    })
+} 
 
+//添加版本
+export function postVersionAdd(data) {
+    return request({
+        url: '/b/version/add', 
+        method: 'post',
+        data
+    })
+} 
+//修改版本
+export function postVersionUp(data) {
+    return request({
+        url: '/b/version/update', 
+        method: 'post',
+        data
+    })
+} 
+//上传文件
+export function postUpFile(data) {
+    return request({
+        url: '/b/upload/up_file', 
+        method: 'post',
+        data,
+        headers:{
+            "Content-Type": "multipart/form-data"
+        }
+    })
+} 
+//设备批量导入
+export function postMqImport(data) {
+    return request({
+        url: '/b/mqUser/to_lead', 
+        method: 'post',
+        data
+    })
+} 
+//批量注册记录
+export function getRhView(query) {
+    return request({
+        url: '/b/rh/view', 
+        method: 'get',
+        params:query
+    })
+} 

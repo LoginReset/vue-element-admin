@@ -42,7 +42,6 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    console.log(889999)
     console.log(userInfo)
     const { username, password, browser, OS } = userInfo
     return new Promise((resolve, reject) => {
@@ -59,8 +58,6 @@ const actions = {
           OS,
           username
         }
-        console.log('setOS------')
-        console.log(data)
         setOS(data)
         // commit('SET_TOKEN', "LOGIN_SUCCESS")
         setToken('LOGIN_SUCCESS')// 本项目中没有实际意义，只是一个标志位表示登录成功了，也可以用作token值
@@ -75,9 +72,7 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
-        console.log(response)
         const { respObj } = response
-        console.log(respObj)
         if (!respObj) {
           reject('Verification failed, please Login again.')
         }
@@ -103,12 +98,10 @@ const actions = {
    // user logout
    logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {
-      console.log(JSON.parse(getOS()))
       const data = new FormData()
       data.append('osName',JSON.parse(getOS()).OS)
       data.append('browserName',JSON.parse(getOS()).browser)
       console.log('logout')
-      console.log(data.get('osName'))
       logout(data).then(() => {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])

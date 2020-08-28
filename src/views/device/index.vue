@@ -34,6 +34,21 @@
         class="filter-item"
         @keyup.enter.native="handleFilter"
       />
+      <el-select 
+        v-model="name" 
+        style="width: 150px;"
+        class="filter-item"
+        clearable
+        filterable 
+        placeholder="产品名称" 
+        @change="handleFilter">
+        <el-option 
+            v-for="item in proList" 
+            :key="item.uuid" 
+            :label="item.name" 
+            :value="item.name">
+          </el-option>
+      </el-select>
       <el-select
         v-model="listQuery.isEnable"
         clearable
@@ -99,23 +114,23 @@
           <el-tag>{{row.nickName}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="设备名称" align="center">
-        <template slot-scope="{row}">
-          <span>{{row.deviceName}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="appKey" align="center" width="220">
+      <el-table-column label="appKey" align="center" width="150">
         <template slot-scope="{row}">
           <el-tag type="success">{{row.appKey}}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="设备秘钥" align="center" >
+      <el-table-column label="设备名称" align="center" show-overflow-tooltip >
+        <template slot-scope="{row}">
+          <span>{{row.deviceName}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="设备秘钥" align="center" show-overflow-tooltip>
         <template slot-scope="{row}">
           <span>{{row.deviceSecret}}</span>
         </template>
       </el-table-column>
       
-      <el-table-column label="注册编号" align="center">
+      <el-table-column label="注册编号" align="center" show-overflow-tooltip>
         <template slot-scope="{row}">
           <span>{{row.registerNum}}</span>
         </template>
@@ -197,6 +212,7 @@
   </div>
 </template>
 <script>
+import {getProView} from '@/api/product'
 import {getMqView,postMqAdd,postMqBatch,postMqSp,postMqEnable,getMqExport} from '@/api/device'
 import PButton from '@/components/PermissionBtn'
 import waves from '@/directive/waves' // waves directive
@@ -237,13 +253,13 @@ export default {
         // registerKey:undefined,
         remark:undefined,
       },
-      query:{
-        page:1,
-        limit:20,
-      },
+      name:undefined,
       listQuery:{
         page:1,
         limit:20,
+        name:undefined,
+        orderField:undefined,
+        orderType:undefined,
         nickName:undefined,
         appKey:undefined,
         deviceName:undefined,
@@ -259,12 +275,7 @@ export default {
         export: 'Export'
       },
       rules:{
-        // name:[{ required: true, message: '公司名称必填', trigger: 'change' }],
-        // address:[{required:true, message:'公司地址必填', trigger:'change'}],
-        // // companyTel:[{required:true, message:'公司电话必填', trigger:'change'}],
-        // linkman:[{required:true, message:'公司联系人必填', trigger:'change'}],
-        // phone:[{required:true,pattern:/^[1]([3-9])[0-9]{9}$/,message:'请输入正确电话号码', trigger:'change'}],
-        // qrCodeType:[{required:true, validator: checkSort,trigger:'change'}],
+       
       }
     }
   },
@@ -277,11 +288,19 @@ export default {
       getMqView(this.listQuery).then(response=>{
         this.list = response.respObj.item
         this.total = response.respObj.total
-        console.log(this.listQuery)
-        this.listLoading = false
+        getProView().then(response=>{
+            this.proList = response.respObj.item
+            this.listLoading = false
+
+        })
       })
     },
     handleFilter(){
+      if(this.listQuery.appKey&&this.name){
+        this.listQuery.name = ''
+      }else{
+        this.listQuery.name = this.name
+      }
       this.listQuery.page = 1
       this.getList()
     },
@@ -369,7 +388,7 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
     .el-tag{
         font-size: 14px;
     }

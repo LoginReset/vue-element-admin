@@ -3,6 +3,7 @@
     <div class="filter-container">
       <el-input
         v-model="listQuery.roleName"
+        clearable
         placeholder="角色名"
         style="width: 200px;"
         class="filter-item"

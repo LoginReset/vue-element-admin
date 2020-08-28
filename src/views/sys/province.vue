@@ -4,6 +4,7 @@
    
       <el-input
         v-model.trim="listQuery.name"
+        clearable
         placeholder="行政区名称"
         style="width: 150px;"
         class="filter-item"
@@ -11,6 +12,7 @@
       />
       <el-input
         v-model.trim="listQuery.code"
+        clearable
         placeholder="行政区代码"
         style="width: 150px;"
         class="filter-item"

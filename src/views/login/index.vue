@@ -230,6 +230,8 @@ export default {
       })
     },
     handleLogin() {
+      console.log(window)
+      console.log(navigator)
       /* 验证*/
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -268,7 +270,7 @@ export default {
     // 判断所处操作系统
     getOS() {
 		    var sUserAgent = navigator.userAgent.toLowerCase()
-
+        console.log('navigator.platform',navigator.platform)
       var isWin = (navigator.platform == 'Win32') || (navigator.platform == 'Win64') || (navigator.platform == 'wow64')
 
       var isMac = (navigator.platform == 'Mac68K') || (navigator.platform == 'MacPPC') || (navigator.platform == 'Macintosh') || (navigator.platform == 'MacIntel')
@@ -282,6 +284,7 @@ export default {
         else return 'Linux'
       }
       if (isWin) {
+        console.log('sUserAgent',sUserAgent)
         var isWin2K = sUserAgent.indexOf('Windows nt 5.0') > -1 || sUserAgent.indexOf('Windows 2000') > -1
         if (isWin2K) return 'Win2000'
         var isWinXP = sUserAgent.indexOf('Windows nt 5.1') > -1 || sUserAgent.indexOf('Windows XP') > -1
@@ -314,19 +317,19 @@ export default {
     getBrowser() {
 					  var rMsie = /(msie\s|trident\/7)([\w\.]+)/
 					  var rTrident = /(trident)\/([\w.]+)/
-					  var rEdge = /(chrome)\/([\w.]+)/// IE
+					  var rEdge = /(chrome)\/([\w.]+)/ // IE
 
 					  var rFirefox = /(firefox)\/([\w.]+)/ // 火狐
 					  var rOpera = /(opera).+version\/([\w.]+)/ // 旧Opera
 					  var rNewOpera = /(opr)\/(.+)/ // 新Opera 基于谷歌
             var rChrome = /(chrome)\/([\w.]+)/ // 谷歌
-					  var rUC = /(chrome)\/([\w.]+)/// UC
-					  var rMaxthon = /(chrome)\/([\w.]+)/// 遨游
-					  var r2345 = /(chrome)\/([\w.]+)/// 2345
-					  var rQQ = /(chrome)\/([\w.]+)/// QQ
-					  // var rMetasr =  /(metasr)\/([\w.]+)/;//搜狗
-					  var rSafari = /version\/([\w.]+).*(safari)/
-            // var rSafari = /safari\/[\d.]+/ //safari
+					  var rUC = /(chrome)\/([\w.]+)/ // UC
+					  var rMaxthon = /(chrome)\/([\w.]+)/ // 遨游
+					  var r2345 = /(chrome)\/([\w.]+)/ // 2345
+					  var rQQ = /(chrome)\/([\w.]+)/ // QQ
+					  var rMetasr =  /(metasr)\/([\w.]+)/;//搜狗
+					  // var rSafari = /version\/([\w.]+).*(safari)/
+            var rSafari = /safari\/[\d.]+/gi //safari
 
             var ua = navigator.userAgent.toLowerCase()
             

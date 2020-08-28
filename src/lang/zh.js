@@ -117,6 +117,7 @@ export default {
     title: '标题',
     importance: '重要性',
     type: '类型',
+    versionImport:'导入设备',
     remark: '点评',
     search: '搜索',
     add: '添加',
