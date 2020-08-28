@@ -1,54 +1,54 @@
 <template>
-  <el-row :gutter="40" class="panel-group">
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+  <el-row :gutter="100"  class="panel-group" v-if="eleR.roles">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.componet>0&&eleR.manage">
+      <div class="card-panel" @click="handleSetLineChartData('elSum')" >
         <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+          <svg-icon icon-class="sum" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            New Visits
+            设备数量
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="ele.componet" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('messages')">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.elementName>0&&eleR.name">
+      <div class="card-panel" @click="handleSetLineChartData('elName')">
         <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="message" class-name="card-panel-icon" />
+          <svg-icon icon-class="name" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Messages
+            产品数量
           </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="ele.elementName" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('purchases')">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.elementRank>0&&eleR.rank">
+      <div class="card-panel" @click="handleSetLineChartData('elRank')">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="money" class-name="card-panel-icon" />
+          <svg-icon icon-class="rank" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Purchases
+            批量注册
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="ele.elementRank" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
+    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.elementType>0&&eleR.type">
+      <div class="card-panel" @click="handleSetLineChartData('elType')">
         <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="shopping" class-name="card-panel-icon" />
+          <svg-icon icon-class="type" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            Shoppings
+            版本数量
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="ele.elementType" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -57,10 +57,23 @@
 
 <script>
 import CountTo from 'vue-count-to'
-
+import { mapGetters } from 'vuex'
+import {getHome} from '@/api/ele'
+import store from '@/store'
+// let ele = window.ses
 export default {
   components: {
     CountTo
+  },
+ 
+  data(){
+    return{
+    }
+  },
+  computed:{
+    ...mapGetters([
+      'ele','eleR'
+    ])
   },
   methods: {
     handleSetLineChartData(type) {
