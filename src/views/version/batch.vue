@@ -50,7 +50,12 @@
         placeholder="产品名称"
         @change="handleFilter"
       >
-        <el-option v-for="item in proList" :key="item.uuid" :label="item.name" :value="item.name"></el-option>
+        <el-option
+          v-for="item in proList"
+          :key="item.uuid"
+          :label="item.name"
+          :value="item.name"
+        ></el-option>
       </el-select>
 
       <!-- <el-select
@@ -92,7 +97,8 @@
         type="primary"
         icon="el-icon-search"
         @click="handleFilter"
-      >{{ $t('table.search') }}</el-button>
+        >{{ $t("table.search") }}</el-button
+      >
       <PButton
         class="filter-item"
         icon="el-icon-download"
@@ -102,7 +108,7 @@
       />
       <PButton
         class="filter-item"
-        icon="el-icon-download"
+        icon="el-icon-upload2"
         perms="version-batch:import"
         type="success"
         label="table.versionImport"
@@ -122,7 +128,8 @@
         type="success"
         icon="el-icon-refresh"
         @click="getList"
-      >{{ $t('table.refresh') }}</el-button>
+        >{{ $t("table.refresh") }}</el-button
+      >
     </div>
     <el-table
       :key="tableKey"
@@ -135,15 +142,31 @@
       row-key="uuid"
       @sort-change="sortChange"
     >
-      <el-table-column label="序号" prop="id" align="center" type="index" width="50" />
-      <el-table-column label="设备名称" align="center" width="300" show-overflow-tooltip>
-        <template slot-scope="{row}">
-          <el-tag>{{row.deviceName}}</el-tag>
+      <el-table-column
+        label="序号"
+        prop="id"
+        align="center"
+        type="index"
+        width="50"
+      />
+      <el-table-column
+        label="设备名称"
+        align="center"
+        width="300"
+        show-overflow-tooltip
+      >
+        <template slot-scope="{ row }">
+          <el-tag>{{ row.deviceName }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="appKey" align="center" width="100" show-overflow-tooltip>
-        <template slot-scope="{row}">
-          <el-tag type="success">{{row.appKey}}</el-tag>
+      <el-table-column
+        label="appKey"
+        align="center"
+        width="100"
+        show-overflow-tooltip
+      >
+        <template slot-scope="{ row }">
+          <el-tag type="success">{{ row.appKey }}</el-tag>
         </template>
       </el-table-column>
       <!-- <el-table-column label="设备昵称" align="center" width="200" show-overflow-tooltip>
@@ -156,38 +179,47 @@
           <span>{{row.registerNum }}</span>
         </template>
       </el-table-column>-->
-      <el-table-column label="生产编号" align="center" width="150" show-overflow-tooltip>
-        <template slot-scope="{row}">
-          <span>{{row.productNum }}</span>
+      <el-table-column
+        label="生产编号"
+        align="center"
+        width="150"
+        show-overflow-tooltip
+      >
+        <template slot-scope="{ row }">
+          <span>{{ row.productNum }}</span>
         </template>
       </el-table-column>
       <el-table-column label="当前版本" align="center" show-overflow-tooltip>
-        <template slot-scope="{row}">
-          <span>{{row.currentVersion}}</span>
+        <template slot-scope="{ row }">
+          <span>{{ row.currentVersion }}</span>
         </template>
       </el-table-column>
 
       <el-table-column label="最新版本" align="center" show-overflow-tooltip>
-        <template slot-scope="{row}">
-          <span>{{row.targetVersion}}</span>
+        <template slot-scope="{ row }">
+          <span>{{ row.targetVersion }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新结果说明" align="center" show-overflow-tooltip>
-        <template slot-scope="{row}">
-          <span>{{row.upgradeRemark}}</span>
+      <el-table-column
+        label="更新结果说明"
+        align="center"
+        show-overflow-tooltip
+      >
+        <template slot-scope="{ row }">
+          <span>{{ row.upgradeRemark }}</span>
         </template>
       </el-table-column>
       <el-table-column label="设备状态" align="center" width="100">
-        <template slot-scope="{row}">
-          <el-tag v-if="row.deviceStatus===null" type="info">未激活</el-tag>
-          <el-tag v-if="row.deviceStatus===1" type="success">在线</el-tag>
-          <el-tag v-if="row.deviceStatus===0">离线</el-tag>
+        <template slot-scope="{ row }">
+          <el-tag v-if="row.deviceStatus === null" type="info">未激活</el-tag>
+          <el-tag v-if="row.deviceStatus === 1" type="success">在线</el-tag>
+          <el-tag v-if="row.deviceStatus === 0">离线</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="升级状态" align="center" width="80">
-        <template slot-scope="{row}">
-          <el-tag v-if="row.upgradeStatus===0" type="danger">失败</el-tag>
-          <el-tag v-if="row.upgradeStatus===1" type="success">成功</el-tag>
+        <template slot-scope="{ row }">
+          <el-tag v-if="row.upgradeStatus === 0" type="danger">失败</el-tag>
+          <el-tag v-if="row.upgradeStatus === 1" type="success">成功</el-tag>
         </template>
       </el-table-column>
       <!-- <el-table-column label="备注" align="center" >
@@ -197,17 +229,22 @@
       </el-table-column>-->
 
       <el-table-column label="状态更新时间" align="center" width="155">
-        <template slot-scope="{row}">
+        <template slot-scope="{ row }">
           <span>{{ row.lastStatusTs }}</span>
         </template>
       </el-table-column>
       <el-table-column label="升级时间" align="center" width="155">
-        <template slot-scope="{row}">
+        <template slot-scope="{ row }">
           <span>{{ row.upgradeDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
+      <el-table-column
+        label="操作"
+        align="center"
+        width="160"
+        class-name="small-padding fixed-width"
+      >
+        <template slot-scope="{ row }">
           <PButton
             perms="version-batch:detail"
             size="mini"
@@ -226,7 +263,7 @@
       </el-table-column>
     </el-table>
     <pagination
-      v-show="total>0"
+      v-show="total > 0"
       :total="total"
       :page.sync="listQuery.page"
       :limit.sync="listQuery.limit"
@@ -236,184 +273,237 @@
     <el-dialog
       :title="textMap[dialogStatus]"
       :visible.sync="dialogFormVisible"
-      :width="Object.keys(parameter).length===0?'50%':'70%'"
+      :width="Object.keys(parameter).length === 0 ? '50%' : '70%'"
     >
-      <template v-if="dialogStatus==='detail'">
+      <template v-if="dialogStatus === 'detail'">
         <el-card class="box-card">
-          <div class="left" :style="Object.keys(parameter).length>0?'width:400px':'width:auto'">
+          <div
+            class="left"
+            :style="
+              Object.keys(parameter).length > 0 ? 'width:400px' : 'width:auto'
+            "
+          >
             <div class="text item">
-              <span>产品名称：{{details.name}}</span>
+              <span>产品名称：{{ details.name }}</span>
             </div>
             <div class="text item">
-              <span>设备昵称：{{details.nickName}}</span>
+              <span>设备昵称：{{ details.nickName }}</span>
             </div>
             <div class="text item">
-              <span class="important">设备名称：{{details.deviceName}}</span>
+              <span class="important">设备名称：{{ details.deviceName }}</span>
             </div>
 
             <div class="text item">
-              <span>设备密钥：{{details.deviceSecret}}</span>
+              <span>设备密钥：{{ details.deviceSecret }}</span>
             </div>
             <div class="text item">
-              <span>appKey：{{details.appKey}}</span>
+              <span>appKey：{{ details.appKey }}</span>
             </div>
             <div class="text item">
-              <span>批量注册编号：{{details.registerNum}}</span>
+              <span>批量注册编号：{{ details.registerNum }}</span>
             </div>
             <div class="text item">
-              <span>生产编号：{{details.productNum}}</span>
+              <span>生产编号：{{ details.productNum }}</span>
             </div>
             <div class="text item">
-              <span>当前版本：{{details.currentVersion}}</span>
+              <span>当前版本：{{ details.currentVersion }}</span>
             </div>
             <div class="text item">
-              <span>最新版本：{{details.targetVersion}}</span>
+              <span>最新版本：{{ details.targetVersion }}</span>
             </div>
             <div class="text item">
-              <span>最新结果说明：{{details.upgradeRemark}}</span>
+              <span>最新结果说明：{{ details.upgradeRemark }}</span>
             </div>
             <div class="text item">
-              <span v-if="details.deviceStatus">设备状态：{{details.deviceStatus===0?'离线':'在线'}}</span>
+              <span v-if="details.deviceStatus"
+                >设备状态：{{
+                  details.deviceStatus === 0 ? "离线" : "在线"
+                }}</span
+              >
               <span v-else>设备状态：未激活</span>
             </div>
             <div class="text item">
-              <span class="important">使用状态：{{details.isEnable===0?'禁用':'启用'}}</span>
+              <span class="important"
+                >使用状态：{{ details.isEnable === 0 ? "禁用" : "启用" }}</span
+              >
             </div>
             <div class="text item">
-              <span>超级用户状态：{{details.isSuperuser===0?'禁用':'启用'}}</span>
+              <span
+                >超级用户状态：{{
+                  details.isSuperuser === 0 ? "禁用" : "启用"
+                }}</span
+              >
             </div>
             <div class="text item">
-              <span>升级状态：{{details.upgradeStatus}}</span>
+              <span>升级状态：{{ details.upgradeStatus }}</span>
             </div>
 
             <div class="text item">
-              <span>状态更新时间：{{details.lastStatusTs}}</span>
+              <span>状态更新时间：{{ details.lastStatusTs }}</span>
             </div>
             <div class="text item">
-              <span>创建时间：{{details.createDate}}</span>
+              <span>创建时间：{{ details.createDate }}</span>
             </div>
             <div class="text item">
-              <span>更新时间：{{details.updateDate}}</span>
-            </div>
-          </div>
-          <div
-            class="left item"
-            v-show="Object.keys(parameter).length>0"
-            :style="Object.keys(parameter).length>0?'width:400px':'width:0'"
-          >
-            <div class="text item">
-              <span>接收的 TCP 报文数量：{{parameter.recv_cn}}</span>
-            </div>
-            <div class="text item">
-              <span>此客户端允许建立的最大订阅数量：{{parameter.max_subscriptions}}</span>
-            </div>
-            <div class="text item">
-              <span>客户端使用的协议版本：{{parameter.proto_ver}}</span>
-            </div>
-            <div class="text item">
-              <span>接收的 MQTT 报文数量：{{parameter.recv_pkt}}</span>
-            </div>
-            <div class="text item">
-              <span>飞行队列当前长度：{{parameter.inflight}}</span>
-            </div>
-            <div class="text item">
-              <span>飞行队列最大长度：{{parameter.max_mqueue}}</span>
-            </div>
-            <div class="text item">
-              <span>生产编号：{{parameter.productNum}}</span>
-            </div>
-            <div class="text item">
-              <span>进程堆栈大小，单位：字节：{{parameter.heap_size}}</span>
-            </div>
-            <div class="text item">
-              <span>客户端连接时使用的用户名：{{parameter.username}}</span>
-            </div>
-            <div class="text item">
-              <span>端点提供的功能介绍：{{parameter.proto_name}}</span>
-            </div>
-            <div class="text item">
-              <span>此客户端已建立的订阅数量：{{parameter.subscriptions_cnt}}</span>
-            </div>
-            <div class="text item">
-              <span>发送的 MQTT 报文数量：{{parameter.send_pkt}}</span>
-            </div>
-            <div class="text item">
-              <span>会话创建时间：{{parameter.created_at}}</span>
-            </div>
-            <div class="text item">
-              <span>Erlang reduction：{{parameter.reductions}}</span>
-            </div>
-            <div class="text item">
-              <span>客户端的网络 IP 地址：{{parameter.ip_address}}</span>
-            </div>
-            <div class="text item">
-              <span>发送的 PUBLISH 报文数量：{{parameter.send_msg}}</span>
-            </div>
-            <div class="text item">
-              <span>发送的 TCP 报文数量：{{parameter.send_cnt}}</span>
+              <span>更新时间：{{ details.updateDate }}</span>
             </div>
           </div>
           <div
             class="left item"
-            v-show="Object.keys(parameter).length>0"
-            :style="Object.keys(parameter).length>0?'width:400px':'width:0'"
+            v-show="Object.keys(parameter).length > 0"
+            :style="
+              Object.keys(parameter).length > 0 ? 'width:400px' : 'width:0'
+            "
           >
             <div class="text item">
-              <span>会话过期间隔，单位：秒：{{parameter.expiry_interval}}</span>
+              <span>接收的 TCP 报文数量：{{ parameter.recv_cn }}</span>
             </div>
             <div class="text item">
-              <span>保持连接时间，单位：秒：{{parameter.keepalive}}</span>
+              <span
+                >此客户端允许建立的最大订阅数量：{{
+                  parameter.max_subscriptions
+                }}</span
+              >
             </div>
             <div class="text item">
-              <span>消息队列因超出长度而丢弃的消息数量：{{parameter.mqueue_dropped}}</span>
+              <span>客户端使用的协议版本：{{ parameter.proto_ver }}</span>
             </div>
             <div class="text item">
-              <span>指示客户端是否通过桥接方式连接：{{parameter.is_bridge}}</span>
+              <span>接收的 MQTT 报文数量：{{ parameter.recv_pkt }}</span>
             </div>
             <div class="text item">
-              <span>飞行队列最大长度：{{parameter.max_inflight}}</span>
+              <span>飞行队列当前长度：{{ parameter.inflight }}</span>
             </div>
             <div class="text item">
-              <span>接收的 PUBLISH 报文数量：{{parameter.recv_msg}}</span>
+              <span>飞行队列最大长度：{{ parameter.max_mqueue }}</span>
             </div>
             <div class="text item">
-              <span>允许存在未确认的 PUBREC 报文的最大数量：{{parameter.max_awaiting_rel}}</span>
+              <span>生产编号：{{ parameter.productNum }}</span>
             </div>
             <div class="text item">
-              <span>未确认的 PUBREC 报文数量：{{parameter.awaiting_rel}}</span>
+              <span>进程堆栈大小，单位：字节：{{ parameter.heap_size }}</span>
             </div>
             <div class="text item">
-              <span>进程邮箱大小：{{parameter.mailbox_len}}</span>
+              <span>客户端连接时使用的用户名：{{ parameter.username }}</span>
             </div>
             <div class="text item">
-              <span>消息队列当前长度：{{parameter.mqueue_len}}</span>
+              <span>端点提供的功能介绍：{{ parameter.proto_name }}</span>
             </div>
             <div class="text item">
-              <span>接收的字节数量：{{parameter.recv_oct}}</span>
+              <span
+                >此客户端已建立的订阅数量：{{
+                  parameter.subscriptions_cnt
+                }}</span
+              >
+            </div>
+            <div class="text item">
+              <span>发送的 MQTT 报文数量：{{ parameter.send_pkt }}</span>
+            </div>
+            <div class="text item">
+              <span>会话创建时间：{{ parameter.created_at }}</span>
+            </div>
+            <div class="text item">
+              <span>Erlang reduction：{{ parameter.reductions }}</span>
+            </div>
+            <div class="text item">
+              <span>客户端的网络 IP 地址：{{ parameter.ip_address }}</span>
+            </div>
+            <div class="text item">
+              <span>发送的 PUBLISH 报文数量：{{ parameter.send_msg }}</span>
+            </div>
+            <div class="text item">
+              <span>发送的 TCP 报文数量：{{ parameter.send_cnt }}</span>
+            </div>
+          </div>
+          <div
+            class="left item"
+            v-show="Object.keys(parameter).length > 0"
+            :style="
+              Object.keys(parameter).length > 0 ? 'width:400px' : 'width:0'
+            "
+          >
+            <div class="text item">
+              <span
+                >会话过期间隔，单位：秒：{{ parameter.expiry_interval }}</span
+              >
+            </div>
+            <div class="text item">
+              <span>保持连接时间，单位：秒：{{ parameter.keepalive }}</span>
+            </div>
+            <div class="text item">
+              <span
+                >消息队列因超出长度而丢弃的消息数量：{{
+                  parameter.mqueue_dropped
+                }}</span
+              >
+            </div>
+            <div class="text item">
+              <span
+                >指示客户端是否通过桥接方式连接：{{ parameter.is_bridge }}</span
+              >
+            </div>
+            <div class="text item">
+              <span>飞行队列最大长度：{{ parameter.max_inflight }}</span>
+            </div>
+            <div class="text item">
+              <span>接收的 PUBLISH 报文数量：{{ parameter.recv_msg }}</span>
+            </div>
+            <div class="text item">
+              <span
+                >允许存在未确认的 PUBREC 报文的最大数量：{{
+                  parameter.max_awaiting_rel
+                }}</span
+              >
+            </div>
+            <div class="text item">
+              <span
+                >未确认的 PUBREC 报文数量：{{ parameter.awaiting_rel }}</span
+              >
+            </div>
+            <div class="text item">
+              <span>进程邮箱大小：{{ parameter.mailbox_len }}</span>
+            </div>
+            <div class="text item">
+              <span>消息队列当前长度：{{ parameter.mqueue_len }}</span>
+            </div>
+            <div class="text item">
+              <span>接收的字节数量：{{ parameter.recv_oct }}</span>
             </div>
             <div class="text item" v-if="parameter.connected">
-              <span class="important">客户端连接时间：{{parameter.connected_at}}</span>
+              <span class="important"
+                >客户端连接时间：{{ parameter.connected_at }}</span
+              >
             </div>
             <div class="text item" v-if="!parameter.connected">
-              <span class="important">客户端断开时间：{{parameter.disconnected_at}}</span>
+              <span class="important"
+                >客户端断开时间：{{ parameter.disconnected_at }}</span
+              >
             </div>
             <div class="text item">
-              <span>指示客户端是否使用了全新的会话：{{parameter.clean_start}}</span>
+              <span
+                >指示客户端是否使用了全新的会话：{{
+                  parameter.clean_start
+                }}</span
+              >
             </div>
             <div class="text item">
-              <span>客户端标识符：{{parameter.clientid}}</span>
+              <span>客户端标识符：{{ parameter.clientid }}</span>
             </div>
             <div class="text item">
-              <span class="important">客户端是否处于连接状态：{{parameter.connected?'是':'否'}}</span>
+              <span class="important"
+                >客户端是否处于连接状态：{{
+                  parameter.connected ? "是" : "否"
+                }}</span
+              >
             </div>
             <div class="text item">
-              <span>客户端源端口：{{parameter.port}}</span>
+              <span>客户端源端口：{{ parameter.port }}</span>
             </div>
             <div class="text item">
-              <span>发送的字节数量：{{parameter.send_oct}}</span>
+              <span>发送的字节数量：{{ parameter.send_oct }}</span>
             </div>
             <div class="text item">
-              <span>指示客户端使用的配置组：{{parameter.zone}}</span>
+              <span>指示客户端使用的配置组：{{ parameter.zone }}</span>
             </div>
           </div>
         </el-card>
@@ -427,7 +517,7 @@
           label-position="left"
           style="width: 100%; margin-left:150px;"
         >
-          <template v-if="dialogStatus==='import'">
+          <template v-if="dialogStatus === 'import'">
             <el-form-item>
               <el-upload
                 style="margin-left:100px;width:100%;"
@@ -450,23 +540,35 @@
           </template>
           <template v-else>
             <el-form-item label="最新版本号" style="width:100%">
-              <el-select v-model="temp.targetVersion" filterable placeholder="请选择" clearable>
+              <el-select
+                v-model="temp.targetVersion"
+                filterable
+                placeholder="请选择"
+                clearable
+              >
                 <el-option
                   v-for="item in versionList"
                   :key="item.uuid"
-                  :label="item.apkVersion+'('+item.name+')'"
+                  :label="item.apkVersion + '(' + item.name + ')'"
                   :value="item.apkVersion"
                 ></el-option>
               </el-select>
             </el-form-item>
           </template>
         </el-form>
-        <div slot="footer" class="dialog-footer" v-if="dialogStatus!=='import'">
-          <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
+        <div
+          slot="footer"
+          class="dialog-footer"
+          v-if="dialogStatus !== 'import'"
+        >
+          <el-button @click="dialogFormVisible = false">{{
+            $t("table.cancel")
+          }}</el-button>
           <el-button
             type="primary"
-            @click="dialogStatus==='single'?single(): specify()"
-          >{{ $t('table.confirm') }}</el-button>
+            @click="dialogStatus === 'single' ? single() : specify()"
+            >{{ $t("table.confirm") }}</el-button
+          >
         </div>
       </template>
     </el-dialog>
@@ -481,7 +583,7 @@ import {
   postVersion,
   getVersionView,
   postSingleVersion,
-  getStatus,
+  getStatus
 } from "@/api/device";
 import PButton from "@/components/PermissionBtn";
 import waves from "@/directive/waves"; // waves directive
@@ -494,7 +596,7 @@ export default {
   directives: { waves },
   components: {
     PButton,
-    Pagination,
+    Pagination
   },
   data() {
     return {
@@ -513,11 +615,11 @@ export default {
         appKey: undefined,
         registerNum: undefined,
         currentVersion: undefined,
-        targetVersion: undefined,
+        targetVersion: undefined
       },
       query: {
         page: 1,
-        limit: 20,
+        limit: 20
       },
       listQuery: {
         page: 1,
@@ -533,7 +635,7 @@ export default {
         registerNum: undefined,
         apkVersion: undefined,
         upgradeStatus: undefined,
-        checkVersion: true,
+        checkVersion: true
       },
       listLoading: false,
       dialogFormVisible: false,
@@ -542,9 +644,9 @@ export default {
         single: "指定版本",
         multiple: "批量指定",
         import: "导入设备",
-        detail: "设备详情",
+        detail: "设备详情"
       },
-      rules: {},
+      rules: {}
     };
   },
   created() {
@@ -552,7 +654,7 @@ export default {
   },
   watch: {
     $route: {
-      handler: function (val, oldVal) {
+      handler: function(val, oldVal) {
         console.log(val.params);
         if (val.params.checkVersion !== undefined) {
           this.listQuery.checkVersion = false;
@@ -560,8 +662,8 @@ export default {
       },
       // 深度观察监听
       deep: true,
-      immediate: true,
-    },
+      immediate: true
+    }
   },
   methods: {
     getList() {
@@ -569,10 +671,10 @@ export default {
       if (this.listQuery.checkVersion === "") {
         this.listQuery.checkVersion = null;
       }
-      getMqView(this.listQuery).then((response) => {
+      getMqView(this.listQuery).then(response => {
         this.list = response.respObj.item;
         this.total = response.respObj.total;
-        getProView().then((response) => {
+        getProView().then(response => {
           this.proList = response.respObj.item;
           this.listLoading = false;
         });
@@ -603,7 +705,9 @@ export default {
       this.handleFilter();
     },
     handleDownload() {
-      window.location.href = `http://192.168.31.26:8080/b/mqUser/download`;
+      window.location.href = `${
+        process.env.VUE_APP_BASE_API
+      }/b/mqUser/download`;
     },
     handleImport() {
       this.modeList = [];
@@ -620,7 +724,7 @@ export default {
       if (!extension && !extension2) {
         this.$message({
           message: "上传文件只能是 xls 、xlsx格式!",
-          type: "error",
+          type: "error"
         });
       }
       return extension || extension2;
@@ -630,14 +734,14 @@ export default {
       this.mode = item.file;
       let fd = new FormData(); // FormData 对象
       fd.append("file", this.mode); // 文件对象
-      postMqImport(fd).then((response) => {
+      postMqImport(fd).then(response => {
         console.log(response);
         this.dialogFormVisible = false;
         this.$notify({
           title: "成功",
           message: response.errorMsg,
           type: "success",
-          duration: 2000,
+          duration: 2000
         });
         this.getList();
       });
@@ -655,9 +759,9 @@ export default {
     handleRemove() {},
     handleSingle(row) {
       let param = {
-        appKey: row.appKey,
+        appKey: row.appKey
       };
-      getVersionView(param).then((response) => {
+      getVersionView(param).then(response => {
         this.versionList = response.respObj.item;
       });
       this.dialogStatus = "single";
@@ -674,13 +778,13 @@ export default {
       if (!this.listQuery.appKey || !this.listQuery.currentVersion) {
         this.$message({
           message: "请先选择appKey、当前版本",
-          type: "error",
+          type: "error"
         });
       } else {
         let param = {
-          appKey: this.listQuery.appKey,
+          appKey: this.listQuery.appKey
         };
-        getVersionView(param).then((response) => {
+        getVersionView(param).then(response => {
           this.versionList = response.respObj.item;
         });
         this.dialogStatus = "multiple";
@@ -700,13 +804,13 @@ export default {
 
       console.log(data);
 
-      postSingleVersion(data).then((response) => {
+      postSingleVersion(data).then(response => {
         console.log(response);
         this.$notify({
           title: "成功",
           message: "已修改为指定版本",
           type: "success",
-          duration: 2000,
+          duration: 2000
         });
         this.getList();
 
@@ -749,11 +853,11 @@ export default {
         connected: true, // 客户端是否处于连接状态
         port: 54889, // 客户端源端口
         send_oct: 0, // 	发送的字节数量
-        zone: "external", //指示客户端使用的配置组
+        zone: "external" //指示客户端使用的配置组
       };
       // this.parameter = JSON.parse(JSON.stringify(test))
       this.parameter = {};
-      getStatus({ deviceName: row.deviceName }).then((response) => {
+      getStatus({ deviceName: row.deviceName }).then(response => {
         this.parameter = response.respObj;
       });
       this.dialogStatus = "detail";
@@ -771,13 +875,13 @@ export default {
         : "";
       data.targetVersion = this.temp.targetVersion;
       console.log("data", data);
-      postVersion(data).then((response) => {
+      postVersion(data).then(response => {
         console.log(response);
         this.$notify({
           title: "成功",
           message: "已修改为指定版本",
           type: "success",
-          duration: 2000,
+          duration: 2000
         });
         this.getList();
         this.dialogFormVisible = false;
@@ -793,8 +897,8 @@ export default {
     hasPerms(role, perms) {
       // 根据权限标识和外部指示状态进行权限判断
       return hasBtnPermission(role, perms); // & !this.disabled
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
