@@ -26,9 +26,13 @@
         @keyup.enter.native="handleFilter"
       />
 
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        {{ $t('table.search') }}
-      </el-button>
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >{{ $t('table.search') }}</el-button>
       <PButton
         class="filter-item"
         icon="el-icon-edit"
@@ -43,9 +47,7 @@
         type="success"
         icon="el-icon-refresh"
         @click="getList"
-      >{{ $t('table.refresh') }}
-      </el-button>
-
+      >{{ $t('table.refresh') }}</el-button>
     </div>
 
     <el-table
@@ -60,13 +62,7 @@
       :tree-props="{children: 'children'}"
       @sort-change="sortChange"
     >
-      <el-table-column
-        label="序号"
-        prop="id"
-        align="center"
-        type="index"
-        width="50"
-      />
+      <el-table-column label="序号" prop="id" align="center" type="index" width="50" />
       <el-table-column label="权限名" align="left" min-width="250px">
         <template slot-scope="{row}">
           <el-tag type="success">{{ row.permission }}</el-tag>
@@ -92,14 +88,13 @@
           <span>{{ row.sort }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" sortable="custom" prop="create_date">
+      <el-table-column label="创建时间" align="center" width="180" sortable="custom" prop="create_date">
         <template slot-scope="{row}">
           <span>{{ row.createDate }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
-
           <PButton
             class="filter-item"
             perms="sys-permission:edit"
@@ -173,12 +168,11 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
-          {{ $t('table.cancel') }}
-        </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          {{ $t('table.confirm') }}
-        </el-button>
+        <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
+        <el-button
+          type="primary"
+          @click="dialogStatus==='create'?createData():updateData()"
+        >{{ $t('table.confirm') }}</el-button>
       </div>
     </el-dialog>
 
@@ -195,31 +189,37 @@
 </template>
 
 <script>
-import store from '@/store'
-import { getPermissions, getPermissionAll, postPermissionAdd, postPermissionUp, getPermissionDel } from '@/api/sys'
-import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import store from "@/store";
+import {
+  getPermissions,
+  getPermissionAll,
+  postPermissionAdd,
+  postPermissionUp,
+  getPermissionDel,
+} from "@/api/sys";
+import waves from "@/directive/waves"; // waves directive
+import { parseTime } from "@/utils";
+import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
 // 按钮组件 全局使用
-import PButton from '@/components/PermissionBtn'
+import PButton from "@/components/PermissionBtn";
 
 export default {
-  name: 'permission',
+  name: "permission",
   components: { Pagination, PButton },
   directives: { waves },
   data() {
     var checkSort = (rule, value, callback) => {
       if (!value) {
-        callback()
+        callback();
       }
       if (!/^[0-9]+$/.test(value)) {
-        return callback(new Error('序号必须是数字'))
+        return callback(new Error("序号必须是数字"));
       }
       if (parseInt(value) > 9999 || parseInt(value) < -9999) {
-        return callback(new Error('序号范围[-9999,9999]'))
+        return callback(new Error("序号范围[-9999,9999]"));
       }
-      callback()
-    }
+      callback();
+    };
     return {
       tableKey: 0,
       list: [],
@@ -233,128 +233,139 @@ export default {
         orderType: undefined, // desc|asc
         permission: undefined,
         menuName: undefined,
-        filterUrl: undefined
+        filterUrl: undefined,
       },
-      statusOptions: ['published', 'draft', 'deleted'],
+      statusOptions: ["published", "draft", "deleted"],
       showReviewer: false,
       temp: {
         uuid: undefined,
-        permission: '',
-        description: '',
-        menuName: '',
-        filterUrl: '',
-        sort: 0
+        permission: "",
+        description: "",
+        menuName: "",
+        filterUrl: "",
+        sort: 0,
       },
       dialogFormVisible: false,
-      dialogStatus: '',
+      dialogStatus: "",
       textMap: {
-        update: 'Edit',
-        create: 'Create'
+        update: "Edit",
+        create: "Create",
       },
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        permission: [{ required: true, message: '权限名必填', trigger: 'change' },
-          { max: 50, message: '长度不能超过50字符', trigger: 'change' }],
-        menuName: [{ required: true, message: '菜单名必填', trigger: 'change' },
-          { max: 30, message: '长度不能超过30字符', trigger: 'change' }],
+        permission: [
+          { required: true, message: "权限名必填", trigger: "change" },
+          { max: 50, message: "长度不能超过50字符", trigger: "change" },
+        ],
+        menuName: [
+          { required: true, message: "菜单名必填", trigger: "change" },
+          { max: 30, message: "长度不能超过30字符", trigger: "change" },
+        ],
         // filterUrl: [{ required: true, message: '路径必填', trigger: 'change' },
         //   { max: 50, message: '长度不能超过50字符', trigger: 'change' }],
-        description: [{ max: 200, message: '长度不能超过200字符', trigger: 'change' }],
-        sort: [{ validator: checkSort, trigger: 'change' }]
+        description: [
+          { max: 200, message: "长度不能超过200字符", trigger: "change" },
+        ],
+        sort: [{ validator: checkSort, trigger: "change" }],
       },
       downloadLoading: false,
       treeProp: {
-        children: 'children',
-        label: 'menuName'
+        children: "children",
+        label: "menuName",
       },
       checkStrictly: true,
       showPermissionAllSelect: true,
-      currentRow: null
-    }
+      currentRow: null,
+    };
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     getList() {
-      this.listLoading = true
-      getPermissions(this.listQuery).then(response => {
-        this.list = response.respObj.item
-        console.log(this.list)
-        this.total = response.respObj.total
+      this.listLoading = true;
+      getPermissions(this.listQuery).then((response) => {
+        this.list = response.respObj.item;
+        console.log(this.list);
+        this.total = response.respObj.total;
 
         // Just to simulate the time of the request
         // setTimeout(() => {
-        this.listLoading = false
+        this.listLoading = false;
         // }, 1.5 * 1000)
-      })
+      });
     },
     handleFilter() {
-      this.listQuery.page = 1
-      this.getList()
+      this.listQuery.page = 1;
+      this.getList();
     },
     handleModifyStatus(row, status) {
       this.$message({
-        message: '操作成功',
-        type: 'success'
-      })
-      row.status = status
+        message: "操作成功",
+        type: "success",
+      });
+      row.status = status;
     },
-    sortChange(data) { // 排序
-      const { prop, order } = data
-      if (prop === 'create_date') {
-        if (order === 'ascending') {
-          this.listQuery.orderType = 'asc'
-        } else if (order === 'descending') {
-          this.listQuery.orderType = 'desc'
+    sortChange(data) {
+      // 排序
+      const { prop, order } = data;
+      if (prop === "create_date") {
+        if (order === "ascending") {
+          this.listQuery.orderType = "asc";
+        } else if (order === "descending") {
+          this.listQuery.orderType = "desc";
         } else {
-          this.listQuery.orderType = undefined
+          this.listQuery.orderType = undefined;
         }
-        this.listQuery.orderField = prop
+        this.listQuery.orderField = prop;
       }
-      this.handleFilter()
+      this.handleFilter();
     },
     resetTemp() {
       this.temp = {
         uuid: undefined,
-        permission: '',
-        description: '',
-        menuName: '',
-        filterUrl: '',
-        sort: 0
-      }
+        permission: "",
+        description: "",
+        menuName: "",
+        filterUrl: "",
+        sort: 0,
+      };
     },
     showPermissionAll() {
-      getPermissionAll().then(response => {
-        this.permissionAll = response.respObj.item
-      })
+      getPermissionAll().then((response) => {
+        this.permissionAll = response.respObj.item;
+      });
     },
     handleCreate() {
-      this.showPermissionAllSelect = true
-      this.showPermissionAll()
-      this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
+      this.showPermissionAllSelect = true;
+      this.showPermissionAll();
+      this.resetTemp();
+      this.dialogStatus = "create";
+      this.dialogFormVisible = true;
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-      this.temp.description = this.temp.description.trim()
+        this.$refs["dataForm"].clearValidate();
+      });
+      this.temp.description = this.temp.description.trim();
     },
     createData() {
-      const checkedUuid = this.$refs.tree.getCheckedKeys()
-      this.$refs['dataForm'].validate((valid) => {
+      const checkedUuid = this.$refs.tree.getCheckedKeys();
+      this.$refs["dataForm"].validate((valid) => {
         if (valid) {
-          postPermissionAdd(Object.assign(this.temp, { puuid: (checkedUuid.length > 0 ? checkedUuid[0] : undefined) })).then(response => {
-            this.dialogFormVisible = false
-            this.getList()
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
+          postPermissionAdd(
+            Object.assign(this.temp, {
+              puuid: checkedUuid.length > 0 ? checkedUuid[0] : undefined,
             })
-          })
+          ).then((response) => {
+            this.dialogFormVisible = false;
+            this.getList();
+            this.$notify({
+              title: "成功",
+              message: "创建成功",
+              type: "success",
+              duration: 2000,
+            });
+          });
 
           //
           // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
@@ -370,103 +381,108 @@ export default {
           //   })
           // })
         }
-      })
+      });
     },
     handleUpdate(row) {
-      this.showPermissionAllSelect = false
-      this.showPermissionAll()
-      this.temp = Object.assign({}, row) // copy obj
+      this.showPermissionAllSelect = false;
+      this.showPermissionAll();
+      this.temp = Object.assign({}, row); // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
+      this.dialogStatus = "update";
+      this.dialogFormVisible = true;
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
-      this.temp.description = this.temp.description.trim()
-
+        this.$refs["dataForm"].clearValidate();
+      });
+      this.temp.description = this.temp.description.trim();
     },
     updateData() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs["dataForm"].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          postPermissionUp(tempData).then(response => {
+          const tempData = Object.assign({}, this.temp);
+          postPermissionUp(tempData).then((response) => {
             // const index = this.list.findIndex(v => v.id === this.temp.id)
             // this.list.splice(index, 1, this.temp)
-            this.dialogFormVisible = false
+            this.dialogFormVisible = false;
             this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.getList()
-          })
+              title: "成功",
+              message: "更新成功",
+              type: "success",
+              duration: 2000,
+            });
+            this.getList();
+          });
         }
-      })
+      });
     },
     handleDelete(row, index) {
-      this.$confirm('确定删除当前权限及子孙权限?', '警告', {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async() => {
-        const param = []
-        param.push(row.uuid)
-        const requestData = { uuids: param.toString() }
-        getPermissionDel(requestData).then(response => {
-          this.$notify({
-            title: '成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.getList()
-          // this.list.splice(index, 1)
-        })
-      }).catch(err => {
-
+      this.$confirm("确定删除当前权限及子孙权限?", "警告", {
+        confirmButtonText: "确认",
+        cancelButtonText: "取消",
+        type: "warning",
       })
+        .then(async () => {
+          const param = [];
+          param.push(row.uuid);
+          const requestData = { uuids: param.toString() };
+          getPermissionDel(requestData).then((response) => {
+            this.$notify({
+              title: "成功",
+              message: "删除成功",
+              type: "success",
+              duration: 2000,
+            });
+            this.getList();
+            // this.list.splice(index, 1)
+          });
+        })
+        .catch((err) => {});
     },
     handleDownload() {
-      this.downloadLoading = true
-        import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-          const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-          const data = this.formatJson(filterVal)
-          excel.export_json_to_excel({
-            header: tHeader,
-            data,
-            filename: 'table-list'
-          })
-          this.downloadLoading = false
-        })
+      this.downloadLoading = true;
+      import("@/vendor/Export2Excel").then((excel) => {
+        const tHeader = ["timestamp", "title", "type", "importance", "status"];
+        const filterVal = [
+          "timestamp",
+          "title",
+          "type",
+          "importance",
+          "status",
+        ];
+        const data = this.formatJson(filterVal);
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: "table-list",
+        });
+        this.downloadLoading = false;
+      });
     },
     formatJson(filterVal) {
-      return this.list.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
-        } else {
-          return v[j]
-        }
-      }))
+      return this.list.map((v) =>
+        filterVal.map((j) => {
+          if (j === "timestamp") {
+            return parseTime(v[j]);
+          } else {
+            return v[j];
+          }
+        })
+      );
     },
     treeCheck(data, status) {
-      this.$refs.tree.setCheckedKeys([])
+      this.$refs.tree.setCheckedKeys([]);
       if (status.checkedKeys.length !== 0) {
-        this.$refs.tree.setCheckedKeys([data.uuid])
+        this.$refs.tree.setCheckedKeys([data.uuid]);
       }
-    }
-
-  }
-}
-
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .permission-tree {
-    margin-bottom: 30px;
-  }
-  .el-tag{
-    font-size:14px;
-  }
+.permission-tree {
+  margin-bottom: 30px;
+}
+.el-tag {
+  font-size: 14px;
+}
 </style>

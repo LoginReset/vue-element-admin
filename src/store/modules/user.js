@@ -1,4 +1,5 @@
 import { login, logout, getInfo } from '@/api/user'
+import { getSynthesize } from '@/api/product'
 // import { getToken, setToken, removeToken } from '@/utils/auth'
 import { getToken, setToken, removeToken,getOS, setOS, removeOS } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
@@ -9,7 +10,9 @@ const state = {
   avatar: '', // 头像
   introduction: '', // 简介
   roles: [], // 权限列表
-  roleName: ''// 角色名
+  roleName: '',// 角色名
+  mq:'',//
+  mqR:{}//mq权限
 }
 
 const mutations = {
@@ -37,6 +40,12 @@ const mutations = {
   SET_BROWSERNAME: (state, browserName) => {
     state.browserName = browserName
   },
+  SET_MQ: (state, mq) => {
+    state.mq = mq
+  },
+  SET_MQR: (state, mqR) => {
+    state.mqR = mqR
+  }
 }
 
 const actions = {
@@ -83,6 +92,23 @@ const actions = {
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
         }
+         let mqR = {
+          roles:false,
+          product:false,
+          device:false,
+          history:false,
+          version:false,
+          versionBatch:false,
+        }
+        if(roles.includes('product')&&roles.includes('device')&&roles.includes('version')){
+          mqR.roles = true
+          roles.includes('product-manage')?mqR.product = true:''
+          roles.includes('version-manage')?mqR.version = true:''
+          roles.includes('version-batch')?mqR.versionBatch = true:''
+          roles.includes('device-manage')?mqR.device = true:''
+          roles.includes('device-history')?mqR.history = true:''
+        }
+        commit('SET_MQR', mqR)// 权限列表
         commit('SET_ROLES', roles)// 权限列表
         commit('SET_NAME', name)// 姓名
         commit('SET_AVATAR', avatar)// 头像
@@ -94,7 +120,15 @@ const actions = {
       })
     })
   },
-
+  getMq({commit, state}){
+    return new Promise((resolve,reject)=>{
+      getSynthesize().then(response=>{
+        commit('SET_MQ',response.respObj)
+        
+        resolve()
+      })
+    })
+  },
    // user logout
    logout({ commit, state, dispatch }) {
     return new Promise((resolve, reject) => {

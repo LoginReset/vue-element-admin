@@ -47,3 +47,10 @@ export function postConfigUp(data) {
     data
   })
 } 
+//查询综合数据
+export function getSynthesize() {
+  return request({
+    url: '/b/synthesize', 
+    method: 'get'
+  })
+} 

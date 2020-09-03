@@ -25,62 +25,81 @@
   </div>
 </template>
 <script>
-import { postPwdUp } from '@/api/sys'
+import { postPwdUp } from "@/api/sys";
 export default {
-  name: 'ChangePwd',
+  name: "ChangePwd",
   data() {
     // 确认密码
     var confirmPwd = (rule, value, callback) => {
-      console.log(value)
+      console.log(value);
       if (this.temp.newPwd !== value) {
-        callback(new Error('前后密码不一致'))
+        callback(new Error("前后密码不一致"));
       }
-      callback()
-    }
+      callback();
+    };
 
     return {
       temp: {
-        oldPwd: '',
-        newPwd: '',
-        confirmPwd: ''
+        oldPwd: "",
+        newPwd: "",
+        confirmPwd: "",
       },
       rules: {
-        oldPwd: [{ required: true, message: '密码必填', trigger: 'change' },
-          { min: 6, max: 100, message: '长度范围[6,100]字符', trigger: 'change' }],
-        newPwd: [{ required: true, message: '密码必填', trigger: 'change' },
-          { min: 6, max: 100, message: '长度范围[6,100]字符', trigger: 'change' }],
-        confirmPwd: [{ required: true, message: '请确认密码', trigger: 'change' },
-          { validator: confirmPwd, trigger: 'change' }]
-      }
-    }
+        oldPwd: [
+          { required: true, message: "密码必填", trigger: "change" },
+          {
+            min: 6,
+            max: 100,
+            message: "长度范围[6,100]字符",
+            trigger: "change",
+          },
+        ],
+        newPwd: [
+          { required: true, message: "密码必填", trigger: "change" },
+          {
+            min: 6,
+            max: 100,
+            message: "长度范围[6,100]字符",
+            trigger: "change",
+          },
+        ],
+        confirmPwd: [
+          { required: true, message: "请确认密码", trigger: "change" },
+          { validator: confirmPwd, trigger: "change" },
+        ],
+      },
+    };
   },
   methods: {
     modify() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs["dataForm"].validate((valid) => {
+        console.log(this.$route);
         if (valid) {
           const data = {
             newPwd: this.temp.newPwd,
-            oldPwd: this.temp.oldPwd
-          }
-          postPwdUp(data).then(response => {
+            oldPwd: this.temp.oldPwd,
+          };
+          postPwdUp(data).then((response) => {
             this.$notify({
-              title: '成功',
-              message: '修改成功',
-              type: 'success',
-              duration: 2000
-            })
-            this.resetTemp()
-          })
+              title: "成功",
+              message: "修改成功",
+              type: "success",
+              duration: 2000,
+            });
+            this.resetTemp();
+            this.$store.dispatch("tagsView/delView", this.$route);
+            this.$router.go(-1);
+          });
         }
-      })
+      });
     },
     resetTemp() {
       this.temp = {
-        oldPwd: '',
-        newPwd: '',
-        confirmPwd: ''
-      }
-    }
-  }
-}
+        oldPwd: "",
+        newPwd: "",
+        confirmPwd: "",
+      };
+    },
+  },
+};
 </script>

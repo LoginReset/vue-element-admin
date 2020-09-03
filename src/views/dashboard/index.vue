@@ -19,16 +19,24 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'roles', 'roleName'
+      'roles', 'roleName','mq'
     ])
   },
   created() {
+    this.getList()
     console.log(this.roleName)
     if (this.roleName.includes('admin')) {
       this.currentRole = 'editorDashboard'
     }else{
       this.currentRole = 'editorDashboard'
 
+    }
+  },
+  methods:{
+    getList(){
+      console.log(123)
+      console.log('这是mq',this.mq)
+      this.$store.dispatch('user/getMq') //获取首页mq各个数量
     }
   }
 }

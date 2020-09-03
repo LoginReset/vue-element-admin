@@ -38,17 +38,14 @@ import nestedRouter from './modules/nested'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [
-  {
+export const constantRoutes = [{
     path: '/redirect',
     component: Layout,
     hidden: true,
-    children: [
-      {
-        path: '/redirect/:path*',
-        component: () => import('@/views/redirect/index')
-      }
-    ]
+    children: [{
+      path: '/redirect/:path*',
+      component: () => import('@/views/redirect/index')
+    }]
   },
   {
     path: '/login',
@@ -74,66 +71,74 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: 'dashboard', icon: 'dashboard', affix: true }
+    children: [{
+      path: 'dashboard',
+      component: () => import('@/views/dashboard/index'),
+      name: 'Dashboard',
+      meta: {
+        title: 'dashboard',
+        icon: 'dashboard',
+        affix: true
       }
-    ]
+    }]
   },
   {
     path: '/change',
     component: Layout,
-    children: [
-      {
-        path: 'password',
-        component: () => import('@/views/dashboard/password'),
-        name: 'changePwd',
-        meta: { title: '修改密码', icon: 'documentation' },
-        hidden: true
-      }
-    ]
+    redirect: '/change/password',
+    children: [{
+      path: 'password',
+      component: () => import('@/views/dashboard/password'),
+      name: 'changePwd',
+      meta: {
+        title: '修改密码',
+        icon: 'documentation'
+      },
+      hidden: true
+    }]
   },
-  {
-    path: '/documentation',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/documentation/index'),
-        name: 'Documentation',
-        meta: { title: 'documentation', icon: 'documentation', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/guide',
-    component: Layout,
-    redirect: '/guide/index',
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/guide/index'),
-        name: 'Guide',
-        meta: { title: 'guide', icon: 'guide', noCache: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/documentation',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: () => import('@/views/documentation/index'),
+  //       name: 'Documentation',
+  //       meta: { title: 'documentation', icon: 'documentation', affix: true }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/guide',
+  //   component: Layout,
+  //   redirect: '/guide/index',
+  //   children: [{
+  //     path: 'index',
+  //     component: () => import('@/views/guide/index'),
+  //     name: 'Guide',
+  //     meta: {
+  //       title: 'guide',
+  //       icon: 'guide',
+  //       noCache: true
+  //     }
+  //   }]
+  // },
   {
     path: '/profile',
     component: Layout,
     redirect: '/profile/index',
     hidden: true,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
-        meta: { title: 'profile', icon: 'user', noCache: true }
+    children: [{
+      path: 'index',
+      component: () => import('@/views/profile/index'),
+      name: 'Profile',
+      meta: {
+        title: 'profile',
+        icon: 'user',
+        noCache: true
       }
-    ]
+    }]
   }
 ]
 
@@ -141,8 +146,7 @@ export const constantRoutes = [
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
  */
-export const asyncRoutes = [
-  {
+export const asyncRoutes = [{
     path: '/product',
     component: Layout,
     redirect: '/product/manage',
@@ -153,29 +157,28 @@ export const asyncRoutes = [
       icon: 'excel',
       roles: ['product']
       // roles: ['admin', 'editor'] // you can set roles in root nav
-    }, children: [
-      {
-        path: 'manage',
-        component: () => import('@/views/product/index'),
-        name: 'product-manage',
-        meta: {
-          title: '项目管理',
-          roles: ['product-manage']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },{
-        path: 'config',
-        component: () => import('@/views/product/config'),
-        name: 'product-config',
-        meta: {
-          title: '基础配置',
-          roles: ['product-config']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-    ]
+    },
+    children: [{
+      path: 'manage',
+      component: () => import('@/views/product/index'),
+      name: 'product-manage',
+      meta: {
+        title: '项目管理',
+        roles: ['product-manage']
+        // roles: ['admin'] // or you can only set roles in sub nav
+      }
+    }, {
+      path: 'config',
+      component: () => import('@/views/product/config'),
+      name: 'product-config',
+      meta: {
+        title: '基础配置',
+        roles: ['product-config']
+        // roles: ['admin'] // or you can only set roles in sub nav
+      }
+    }, ]
   },
-  
+
   {
     path: '/device',
     component: Layout,
@@ -187,37 +190,36 @@ export const asyncRoutes = [
       icon: 'devices',
       roles: ['device']
       // roles: ['admin', 'editor'] // you can set roles in root nav
-    }, children: [
-      {
-        path: 'manage',
-        component: () => import('@/views/device/index'),
-        name: 'device-manage',
-        meta: {
-          title: '设备管理',
-          roles: ['device-manage']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },{
-        path: 'batch',
-        component: () => import('@/views/device/batch'),
-        name: 'device-manage',
-        meta: {
-          title: '批量注册',
-          roles: ['device-batch']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        },
-        
-      },{
-        path: 'history',
-        component: () => import('@/views/device/history'),
-        name: 'device-history',
-        meta: {
-          title: '批量注册记录',
-          roles: ['device-history']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        },
+    },
+    children: [{
+      path: 'manage',
+      component: () => import('@/views/device/index'),
+      name: 'device-manage',
+      meta: {
+        title: '设备管理',
+        roles: ['device-manage']
+        // roles: ['admin'] // or you can only set roles in sub nav
       }
-    ]
+    }, {
+      path: 'batch',
+      component: () => import('@/views/device/batch'),
+      name: 'device-manage',
+      meta: {
+        title: '批量注册',
+        roles: ['device-batch']
+        // roles: ['admin'] // or you can only set roles in sub nav
+      },
+
+    }, {
+      path: 'history',
+      component: () => import('@/views/device/history'),
+      name: 'device-history',
+      meta: {
+        title: '批量注册记录',
+        roles: ['device-history']
+        // roles: ['admin'] // or you can only set roles in sub nav
+      },
+    }]
   },
   {
     path: '/version',
@@ -230,27 +232,26 @@ export const asyncRoutes = [
       icon: 'version',
       roles: ['version']
       // roles: ['admin', 'editor'] // you can set roles in root nav
-    }, children: [
-      ,{
-        path: 'manage',
-        component: () => import('@/views/version/manage'),
-        name: 'version-manage',
-        meta: {
-          title: '版本管理',
-          roles: ['version-manage']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        },
-      },{
-        path: 'batch',
-        component: () => import('@/views/version/batch'),
-        name: 'version-batch',
-        meta: {
-          title: '指定版本',
-          roles: ['version-batch']
-          // roles: ['admin'] // or you can only set roles in sub nav
-        },
-      }
-    ]
+    },
+    children: [, {
+      path: 'manage',
+      component: () => import('@/views/version/manage'),
+      name: 'version-manage',
+      meta: {
+        title: '版本管理',
+        roles: ['version-manage']
+        // roles: ['admin'] // or you can only set roles in sub nav
+      },
+    }, {
+      path: 'batch',
+      component: () => import('@/views/version/batch'),
+      name: 'version-batch',
+      meta: {
+        title: '硬件设备管理',
+        roles: ['version-batch']
+        // roles: ['admin'] // or you can only set roles in sub nav
+      },
+    }]
   },
   // {
   //   path: '/file',
@@ -271,14 +272,14 @@ export const asyncRoutes = [
   //       meta: {
   //         title: '文件管理',
   //         roles: ['file-manage']
-          
+
   //         // roles: ['admin'] // or you can only set roles in sub nav
   //       }
   //     }
   //   ]
   // },
   // {
-  //   path: '/user', 
+  //   path: '/user',
   //   component: Layout,
   //   redirect: '/user/wechat',
   //   name:'userManage',
@@ -293,7 +294,7 @@ export const asyncRoutes = [
   //       path:'wechat',
   //       component: () => import('@/views/userManage/weixin'),
   //       name:'userManage-wechat',
-  //       meta: { 
+  //       meta: {
   //         title:'微信用户',
   //         roles:['user-wechat']
   //        }
@@ -330,7 +331,7 @@ export const asyncRoutes = [
   //       meta: {
   //         title: '微信消息模板',
   //         roles: ['wechat-msgTemp']
-          
+
   //         // roles: ['admin'] // or you can only set roles in sub nav
   //       }
   //     },{
@@ -406,7 +407,7 @@ export const asyncRoutes = [
   //   redirect: '/msgPush/smsTemp',
   //   alwaysShow:true,
   //   name:'msgPush',
-  //   meta: { 
+  //   meta: {
   //     title:'消息推送',
   //     icon:'icon-test',
   //     roles:['msgPush']
@@ -446,9 +447,9 @@ export const asyncRoutes = [
   //       component: () => import('@/views/msgPush/pushRedirect'),
   //       name: 'edit-pushTemp',
   //       meta: {
-  //         title: '编辑推送模板', 
-  //         noCache: false, 
-  //         activeMenu: '/msgPush/wechatTemp', 
+  //         title: '编辑推送模板',
+  //         noCache: false,
+  //         activeMenu: '/msgPush/wechatTemp',
   //         roles: ['msgPush-edit'] },
   //         hidden: true
   //     }
@@ -466,8 +467,7 @@ export const asyncRoutes = [
       roles: ['sys']
       // roles: ['admin', 'editor'] // you can set roles in root nav
     },
-    children: [
-      {
+    children: [{
         path: 'user',
         component: () => import('@/views/sys/user'),
         name: 'user',
@@ -495,32 +495,33 @@ export const asyncRoutes = [
           roles: ['sys-permission'],
           // roles: ['admin'] // or you can only set roles in sub nav
         }
-      }, {
-        path: 'fieldName',
-        component: () => import('@/views/sys/fieldName'),
-        name: 'secretKey',
-        meta: {
-          title: '全局字段',
-          roles: ['sys-fieldName'],
-          // roles: ['admin'] // or you can only set roles in sub nav
-        }
-      }, {
-        path: 'secretKey',
-        component: () => import('@/views/sys/secretKey'),
-        name: 'secretKey',
-        meta: {
-          title: '密钥管理',
-          roles: ['sys-secretKey'],
-        }
-      },{
-        path: 'province',
-        component: () => import('@/views/sys/province'),
-        name: 'province',
-        meta: {
-          title: '省份管理',
-          roles: ['sys-province'],
-        }
       },
+      //  {
+      //   path: 'fieldName',
+      //   component: () => import('@/views/sys/fieldName'),
+      //   name: 'secretKey',
+      //   meta: {
+      //     title: '全局字段',
+      //     roles: ['sys-fieldName'],
+      //     // roles: ['admin'] // or you can only set roles in sub nav
+      //   }
+      // }, {
+      //   path: 'secretKey',
+      //   component: () => import('@/views/sys/secretKey'),
+      //   name: 'secretKey',
+      //   meta: {
+      //     title: '密钥管理',
+      //     roles: ['sys-secretKey'],
+      //   }
+      // }, {
+      //   path: 'province',
+      //   component: () => import('@/views/sys/province'),
+      //   name: 'province',
+      //   meta: {
+      //     title: '省份管理',
+      //     roles: ['sys-province'],
+      //   }
+      // },
       {
         path: 'login-log',
         component: () => import('@/views/sys/login-log'),
@@ -840,12 +841,18 @@ export const asyncRoutes = [
   // },
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  }
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({
+    y: 0
+  }),
   routes: constantRoutes
 })
 

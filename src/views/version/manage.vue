@@ -74,7 +74,7 @@
       <el-table-column label="A区升级文件" align="center" width="300" show-overflow-tooltip>
         <template slot-scope="{row}">
           <el-tooltip class="item" effect="dark" :content="'点击下载文件'+row.apkNamea" placement="top">
-            <a :href="row.apkNamea" download>{{row.fileNamea}}</a>
+            <a :href="row.apkNamea" download >{{row.fileNamea}}</a>
           </el-tooltip>
         </template>
       </el-table-column>
@@ -96,7 +96,7 @@
         </template>
       </el-table-column>
       <el-table-column label="备注信息" align="center" show-overflow-tooltip>
-        <template slot-scope="{row}">
+        <template slot-scope="{row}" >
           <span>{{row.remark}}</span>
         </template>
       </el-table-column>
@@ -357,8 +357,6 @@ export default {
         this.$refs['dataForm'].validate((valid) => {
         if (valid) {
              postVersionUp(this.temp).then(response => {
-                    // const index = this.list.findIndex(v => v.id === this.temp.id)
-                    // this.list.splice(index, 1, this.temp)
                 this.cancel()
                 this.$notify({
                 title: '成功',
@@ -516,5 +514,8 @@ export default {
 <style>
     .el-tag{
         font-size: 14px;
+    }
+    a{
+      text-decoration: underline;
     }
 </style>

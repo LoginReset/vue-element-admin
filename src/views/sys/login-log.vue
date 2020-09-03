@@ -60,9 +60,13 @@
         class="filter-item"
       />
 
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        {{ $t('table.search') }}
-      </el-button>
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >{{ $t('table.search') }}</el-button>
     </div>
 
     <el-table
@@ -77,13 +81,7 @@
       :tree-props="{children: 'children'}"
       @sort-change="sortChange"
     >
-      <el-table-column
-        label="序号"
-        prop="id"
-        align="center"
-        type="index"
-        width="50"
-      />
+      <el-table-column label="序号" prop="id" align="center" type="index" width="50" />
       <el-table-column label="账号" align="center" width="220">
         <template slot-scope="{row}">
           <el-tag type="primary">{{ row.account }}</el-tag>
@@ -99,7 +97,7 @@
           <span>{{ row.ip }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="浏览器名" align="center">
+      <el-table-column label="浏览器名" align="center" width="280">
         <template slot-scope="{row}">
           <span>{{ row.browserName }}</span>
         </template>
@@ -111,9 +109,8 @@
       </el-table-column>
       <el-table-column label="状态" align="center">
         <template slot-scope="{row}">
-
-          <el-tag v-if="row.status===0" type="success"> 登入</el-tag>
-          <el-tag v-if="row.status===1" type="info"> 登出</el-tag>
+          <el-tag v-if="row.status===0" type="success">登入</el-tag>
+          <el-tag v-if="row.status===1" type="info">登出</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="登录时间" align="center" sortable="custom" prop="create_date" width="220">
@@ -121,7 +118,6 @@
           <span>{{ row.createDate }}</span>
         </template>
       </el-table-column>
-
     </el-table>
 
     <pagination
@@ -131,45 +127,48 @@
       :limit.sync="listQuery.limit"
       @pagination="getList"
     />
-
   </div>
 </template>
 
 <script>
-import { getLoginLog } from '@/api/sys'
-import { parseTime } from '@/utils'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import PButton from '@/components/PermissionBtn'
-import waves from '@/directive/waves' // waves directive
+import { getLoginLog } from "@/api/sys";
+import { parseTime } from "@/utils";
+import Pagination from "@/components/Pagination"; // secondary package based on el-pagination
+import PButton from "@/components/PermissionBtn";
+import waves from "@/directive/waves"; // waves directive
 
 export default {
-  name: 'LoginLog',
+  name: "LoginLog",
   components: { Pagination, PButton },
   directives: { waves },
 
   data() {
     return {
       pickerOptions: {
-        shortcuts: [{
-          text: '今天',
-          onClick(picker) {
-            picker.$emit('pick', new Date())
-          }
-        }, {
-          text: '昨天',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24)
-            picker.$emit('pick', date)
-          }
-        }, {
-          text: '一周前',
-          onClick(picker) {
-            const date = new Date()
-            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', date)
-          }
-        }]
+        shortcuts: [
+          {
+            text: "今天",
+            onClick(picker) {
+              picker.$emit("pick", new Date());
+            },
+          },
+          {
+            text: "昨天",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit("pick", date);
+            },
+          },
+          {
+            text: "一周前",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", date);
+            },
+          },
+        ],
       },
 
       tableKey: 0,
@@ -183,84 +182,90 @@ export default {
         orderField: undefined,
         orderType: undefined, // desc|asc
         name: undefined,
-        endDate: '',
-        beginDate: ''
+        endDate: "",
+        beginDate: "",
       },
       pvData: [],
       downloadLoading: false,
       treeProp: {
-        children: 'children',
-        label: 'menuName'
-      }
-    }
+        children: "children",
+        label: "menuName",
+      },
+    };
   },
   created() {
-    this.getList()
+    this.getList();
   },
   methods: {
     getList() {
-      this.listLoading = true
-      getLoginLog(this.listQuery).then(response => {
-        this.list = response.respObj.item
-        this.total = response.respObj.total
+      this.listLoading = true;
+      getLoginLog(this.listQuery).then((response) => {
+        this.list = response.respObj.item;
+        this.total = response.respObj.total;
         // Just to simulate the time of the request
         // setTimeout(() => {
-        this.listLoading = false
+        this.listLoading = false;
         // }, 1.5 * 1000)
-      })
+      });
     },
-    sortChange(data) { // 排序
-      const { prop, order } = data
-      if (prop === 'create_date') {
-        if (order === 'ascending') {
-          this.listQuery.orderType = 'asc'
-        } else if (order === 'descending') {
-          this.listQuery.orderType = 'desc'
+    sortChange(data) {
+      // 排序
+      const { prop, order } = data;
+      if (prop === "create_date") {
+        if (order === "ascending") {
+          this.listQuery.orderType = "asc";
+        } else if (order === "descending") {
+          this.listQuery.orderType = "desc";
         } else {
-          this.listQuery.orderType = undefined
+          this.listQuery.orderType = undefined;
         }
-        this.listQuery.orderField = prop
+        this.listQuery.orderField = prop;
       }
-      this.handleFilter()
+      this.handleFilter();
     },
     handleFilter() {
-      const typeA = typeof this.listQuery.beginDate
-      const typeB = typeof this.listQuery.endDate
+      const typeA = typeof this.listQuery.beginDate;
+      const typeB = typeof this.listQuery.endDate;
       // 点击了日期
-      if (typeA === 'object' && typeB === 'object' && this.listQuery.beginDate && this.listQuery.endDate) {
-        this.listQuery.beginDate = this.formatter(this.listQuery.beginDate)
-        this.listQuery.endDate = this.formatter(this.listQuery.endDate)
-      } else if (typeA == 'object' && this.listQuery.beginDate) {
-        this.listQuery.beginDate = this.formatter(this.listQuery.beginDate)
-      } else if (typeB == 'object' && this.listQuery.endDate) {
-        this.listQuery.endDate = this.formatter(this.listQuery.endDate)
+      if (
+        typeA === "object" &&
+        typeB === "object" &&
+        this.listQuery.beginDate &&
+        this.listQuery.endDate
+      ) {
+        this.listQuery.beginDate = this.formatter(this.listQuery.beginDate);
+        this.listQuery.endDate = this.formatter(this.listQuery.endDate);
+      } else if (typeA == "object" && this.listQuery.beginDate) {
+        this.listQuery.beginDate = this.formatter(this.listQuery.beginDate);
+      } else if (typeB == "object" && this.listQuery.endDate) {
+        this.listQuery.endDate = this.formatter(this.listQuery.endDate);
       }
 
-      this.listQuery.page = 1
-      this.getList()
+      this.listQuery.page = 1;
+      this.getList();
     },
     formatter(date) {
-      const year = date.getFullYear()
-      const month = date.getMonth() + 1
-      const day = date.getDate()
-      const hh = date.getHours()
-      const mm = date.getMinutes()
-      const ss = date.getSeconds()
-      return year + '-' + month + '-' + day + ' ' + hh + ':' + mm + ':' + ss
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const hh = date.getHours();
+      const mm = date.getMinutes();
+      const ss = date.getSeconds();
+      return year + "-" + month + "-" + day + " " + hh + ":" + mm + ":" + ss;
     },
     handleModifyStatus(row, status) {
       this.$message({
-        message: '操作成功',
-        type: 'success'
-      })
-      row.status = status
-    }
-  }
-}
+        message: "操作成功",
+        type: "success",
+      });
+      row.status = status;
+    },
+  },
+};
 </script>
 
 <style scoped>
-  .permission-tree {
-    margin-bottom: 30px;
-  }
+.permission-tree {
+  margin-bottom: 30px;
+}
 </style>

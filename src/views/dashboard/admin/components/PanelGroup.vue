@@ -1,54 +1,71 @@
 <template>
-  <el-row :gutter="100"  class="panel-group" v-if="eleR.roles">
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.componet>0&&eleR.manage">
-      <div class="card-panel" @click="handleSetLineChartData('elSum')" >
-        <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="sum" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            设备数量
-          </div>
-          <count-to :start-val="0" :end-val="ele.componet" :duration="2600" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.elementName>0&&eleR.name">
-      <div class="card-panel" @click="handleSetLineChartData('elName')">
+  <el-row :gutter="100" class="panel-group" v-if="mqR.roles">
+    <el-col :xs="12" :sm="12" :lg="8" class="card-panel-col" v-if="mq.product>0&&mqR.product">
+      <div class="card-panel" @click="handleSetLineChartData('product')">
         <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="name" class-name="card-panel-icon" />
+          <svg-icon icon-class="product" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">
-            产品数量
-          </div>
-          <count-to :start-val="0" :end-val="ele.elementName" :duration="3000" class="card-panel-num" />
+          <div class="card-panel-text">产品数量</div>
+          <count-to :start-val="0" :end-val="mq.product" :duration="2000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.elementRank>0&&eleR.rank">
-      <div class="card-panel" @click="handleSetLineChartData('elRank')">
+    <el-col :xs="12" :sm="12" :lg="8" class="card-panel-col" v-if="mq.mqUser>0&&mqR.device">
+      <div class="card-panel" @click="handleSetLineChartData('mqUser')">
+        <div class="card-panel-icon-wrapper icon-people">
+          <svg-icon icon-class="mqUser" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">设备总数</div>
+          <count-to :start-val="0" :end-val="mq.mqUser" :duration="2600" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <el-col :xs="12" :sm="12" :lg="8" class="card-panel-col" v-if="mq.mqUse>0&&mqR.versionBatch">
+      <div class="card-panel" @click="handleSetLineChartData('mqUse')">
+        <div class="card-panel-icon-wrapper icon-people">
+          <svg-icon icon-class="mqUse" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">硬件设备数量</div>
+          <count-to :start-val="0" :end-val="mq.mqUse" :duration="3000" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>
+    <!-- <el-col :xs="12" :sm="12" :lg="8" class="card-panel-col" v-if="mq.mqUnused>0&&mqR.versionBatch">
+      <div class="card-panel" @click="handleSetLineChartData('mqUnused')" >
+        <div class="card-panel-icon-wrapper icon-people">
+          <svg-icon icon-class="mqUnused" class-name="card-panel-icon" />
+        </div>
+        <div class="card-panel-description">
+          <div class="card-panel-text">
+            未投入设备
+          </div>
+          <count-to :start-val="0" :end-val="mq.mqUnused" :duration="3200" class="card-panel-num" />
+        </div>
+      </div>
+    </el-col>-->
+
+    <el-col :xs="12" :sm="12" :lg="8" class="card-panel-col" v-if="mq.register>0&&mqR.history">
+      <div class="card-panel" @click="handleSetLineChartData('register')">
         <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="rank" class-name="card-panel-icon" />
+          <svg-icon icon-class="register" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">
-            批量注册
-          </div>
-          <count-to :start-val="0" :end-val="ele.elementRank" :duration="3200" class="card-panel-num" />
+          <div class="card-panel-text">批量注册次数</div>
+          <count-to :start-val="0" :end-val="mq.register" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" v-if="ele.elementType>0&&eleR.type">
-      <div class="card-panel" @click="handleSetLineChartData('elType')">
+    <el-col :xs="12" :sm="12" :lg="8" class="card-panel-col" v-if="mq.version>0&&mqR.version">
+      <div class="card-panel" @click="handleSetLineChartData('version')">
         <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="type" class-name="card-panel-icon" />
+          <svg-icon icon-class="MqVersion" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
-          <div class="card-panel-text">
-            版本数量
-          </div>
-          <count-to :start-val="0" :end-val="ele.elementType" :duration="3600" class="card-panel-num" />
+          <div class="card-panel-text">版本数量</div>
+          <count-to :start-val="0" :end-val="mq.version" :duration="400" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -56,31 +73,27 @@
 </template>
 
 <script>
-import CountTo from 'vue-count-to'
-import { mapGetters } from 'vuex'
-import {getHome} from '@/api/ele'
-import store from '@/store'
+import CountTo from "vue-count-to";
+import { mapGetters } from "vuex";
+import store from "@/store";
 // let ele = window.ses
 export default {
   components: {
-    CountTo
+    CountTo,
   },
- 
-  data(){
-    return{
-    }
+
+  data() {
+    return {};
   },
-  computed:{
-    ...mapGetters([
-      'ele','eleR'
-    ])
+  computed: {
+    ...mapGetters(["mq", "mqR"]),
   },
   methods: {
     handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
-    }
-  }
-}
+      this.$emit("handleSetLineChartData", type);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -99,8 +112,8 @@ export default {
     overflow: hidden;
     color: #666;
     background: #fff;
-    box-shadow: 4px 4px 40px rgba(0, 0, 0, .05);
-    border-color: rgba(0, 0, 0, .05);
+    box-shadow: 4px 4px 40px rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.05);
 
     &:hover {
       .card-panel-icon-wrapper {
@@ -120,7 +133,7 @@ export default {
       }
 
       .icon-shopping {
-        background: #34bfa3
+        background: #34bfa3;
       }
     }
 
@@ -137,7 +150,7 @@ export default {
     }
 
     .icon-shopping {
-      color: #34bfa3
+      color: #34bfa3;
     }
 
     .card-panel-icon-wrapper {
@@ -173,7 +186,7 @@ export default {
   }
 }
 
-@media (max-width:550px) {
+@media (max-width: 550px) {
   .card-panel-description {
     display: none;
   }
