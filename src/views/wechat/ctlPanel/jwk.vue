@@ -1,160 +1,28 @@
 <template>
-  <el-row>
-    <el-col :md="36" :lg="18">
-      <!--<div class="c-item device-list">-->
-      <div class="app-container">
-        <div class="filter-container">
-          <el-input
-            v-model="listQuery.deviceNumber"
-            placeholder="设备编号"
-            style="width: 200px;"
-            class="filter-item"
-            clearable
-            @keyup.enter.native="handleFilter"
-          />
-          <el-input
-            v-model="listQuery.deviceName"
-            placeholder="设备deviceName"
-            style="width: 200px;"
-            class="filter-item"
-            clearable
-            @keyup.enter.native="handleFilter"
-          />
-          <el-input
-            v-model="listQuery.title"
-            placeholder="设备名"
-            style="width: 200px;"
-            class="filter-item"
-            clearable
-            @keyup.enter.native="handleFilter"
-          />
-          <!--<el-input-->
-          <!--v-model="listQuery.username"-->
-          <!--placeholder="用户名"-->
-          <!--style="width:200px"-->
-          <!--class="filter-item"-->
-
-          <!--@keyup.enter.native="handleFilter"/>-->
-
-          <el-button
-            v-waves
-            class="filter-item"
-            type="primary"
-            icon="el-icon-search"
-            @click="handleFilter"
-          >{{ $t('table.search') }}</el-button>
-          <el-button
-            class="filter-item"
-            style="margin-left: 10px;"
-            type="success"
-            icon="el-icon-refresh"
-            @click="getList"
-          >{{ $t('table.refresh') }}</el-button>
-        </div>
-        <el-table
-          :key="tableKey"
-          v-loading="listLoading"
-          :data="list"
-          border
-          fit
-          highlight-current-row
-          style="width: 100%;"
-          row-key="openId"
-          @sort-change="sortChange"
-        >
-          <el-table-column label="序号" prop="id" align="center" type="index" width="50" />
-          <el-table-column label="编号" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.deviceNumber }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="设备名" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.title }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="appKey" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.appKey }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="deviceName" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.deviceName }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="创建时间" align="center" sortable="custom" prop="create_date">
-            <template slot-scope="{row}">
-              <span>{{ row.createDate }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="操作"
-            align="center"
-            width="230"
-            class-name="small-padding fixed-width"
-          >
-            <template slot-scope="{row}">
-              <el-button
-                class="filter-item"
-                size="mini"
-                icon="el-icon-check"
-                type="success"
-                @click="selectDev(row)"
-              >选择设备</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-        <pagination
-          v-show="total>0"
-          :total="total"
-          :page.sync="listQuery.page"
-          :limit.sync="listQuery.limit"
-          @pagination="getList"
-        />
-        <!--添加 更新-->
-      </div>
-      <!--</div>-->
-    </el-col>
-    <el-col :md="12" :lg="6">
-      <!-- <ctl-panel v-if="0===type" @changeView="changeView" @sendMsg="sendMsg" />
-      <super-set v-if="1===type" @changeView="changeView" @sendMsg="sendMsg" />
-      <sys-set v-if="2===type" @changeView="changeView" @sendMsg="sendMsg" />-->
-      <jwk v-if="chooseType === 0" />
-      <sk v-if="chooseType === 1" />
-      <py v-if="chooseType === 2" />
-      <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="基础配置" name="first">
-          <ctl-panel @sendMsg="sendMsg" />
-        </el-tab-pane>
-        <el-tab-pane label="高级配置" name="second">
-          <super-set @sendMsg="sendMsg" />
-        </el-tab-pane>
-        <el-tab-pane label="设备状态" name="status">
-          <status-set @sendMsg="sendMsg" />
-        </el-tab-pane>
-        <el-tab-pane label="定时设置" name="third">
-          <sys-set @sendMsg="sendMsg" />
-        </el-tab-pane>
-      </el-tabs>-->
-    </el-col>
-  </el-row>
+  <div>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="基础配置" name="first">
+        <ctl-panel @sendMsg="sendMsg" />
+      </el-tab-pane>
+      <el-tab-pane label="高级配置" name="second">
+        <super-set @sendMsg="sendMsg" />
+      </el-tab-pane>
+      <!-- <el-tab-pane label="设备状态" name="status">
+        <status-set @sendMsg="sendMsg" />
+      </el-tab-pane>-->
+      <el-tab-pane label="定时设置" name="third">
+        <sys-set @sendMsg="sendMsg" />
+      </el-tab-pane>
+    </el-tabs>
+  </div>
 </template>
-
 <script>
-import { getList } from '@/api/device'
-import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import PButton from '@/components/PermissionBtn'
-import { hasBtnPermission } from '@/utils/permission'
+import CtlPanel from '@/views/wechat/ctlPanel/jwk/base'
+import SuperSet from '@/views/wechat/ctlPanel/jwk/superSet'
+import SysSet from '@/views/wechat/ctlPanel/jwk/sysSet'
 // import CtlPanel from "@/views/wechat/ctlPanel";
 // import SuperSet from "@/views/wechat/ctlPanel/superSet";
 // import SysSet from "@/views/wechat/ctlPanel/sysSet";
-// import StatusSet from "@/views/wechat/ctlPanel/statusSet";
-import jwk from '@/views/wechat/ctlPanel/jwk'
-import sk from '@/views/wechat/ctlPanel/sk'
-import py from '@/views/wechat/ctlPanel/py'
 
 import { mapState, mapMutations, mapActions } from 'vuex'
 import Vue from 'vue'
@@ -162,8 +30,8 @@ import { Dialog, Toast } from 'vant'
 
 Vue.use(Dialog).use(Toast)
 import mqtt from 'mqtt'
-import tools from '../ctlPanel/js/tools'
-import mqttCmd from '../ctlPanel/js/mqttCmd'
+import tools from './js/tools'
+import mqttCmd from './js/mqttCmd'
 
 let client
 const debug = true // TODO
@@ -176,18 +44,9 @@ const options = {
 }
 
 export default {
-  name: 'DeviceList',
-  components: {
-    Pagination,
-    PButton,
-    // SuperSet,
-    // SysSet,
-    // StatusSet,
-    jwk,
-    sk,
-    py
-  },
-  directives: { waves },
+  name: 'Jwk',
+
+  components: { CtlPanel, SuperSet, SysSet },
   data() {
     return {
       activeName: 'first',
@@ -204,37 +63,9 @@ export default {
       list: [],
       total: 0,
       listLoading: true,
-      listQuery: {
-        page: 1,
-        limit: 10,
-        deviceNumber: undefined,
-        deviceName: undefined,
-        title: undefined,
-        orderType: undefined,
-        orderField: undefined
-      },
-      // temp: {
-      //   openId: undefined,
-      //   nickname: undefined,
-      //   username: undefined,
-      //   headimgurl: '',
-      //   address: undefined,
-      //   phone: undefined
-      // },
-      // rules: {
-      //   address: [{
-      //     required: true, message: '地址必填', trigger: 'change'
-      //   }],
-      //   phone: [{
-      //     required: true, pattern: /^1[3456789]\d{9}$/, message: '请选择正确手机号', trigger: 'change'
-      //   }],
-      //   username: [{
-      //     required: true, message: '用户名必填', trigger: 'change'
-      //   }]
-      // },
-      // dialogFormVisible: false,
+
+      chooseType: 0,
       //  控制面板
-      chooseType: 2,
       type: 0,
       pubTopic: null,
       subTopic: null,
@@ -247,8 +78,7 @@ export default {
     }
   },
   created() {
-    this.getList()
-    // this.loginMqtt();
+    this.loginMqtt()
   },
   methods: {
     ...mapMutations('device', [
@@ -277,8 +107,8 @@ export default {
           options.username = this.index.appKey
           options.password = this.index.deviceSecret
           console.log(options)
-          client = mqtt.connect('ws://www.cdxdkj.com.cn:8083/mqtt', options)
-          this.mqttMSG()
+          // client = mqtt.connect("ws://www.cdxdkj.com.cn:8083/mqtt", options);
+          // this.mqttMSG();
         })
         .catch((error) => {
           Dialog({ message: error })
@@ -613,48 +443,11 @@ export default {
       console.log(this.$route.title)
       return this.$route.title
     },
-    getList() {
-      this.listLoading = true
-      getList(this.listQuery)
-        .then((response) => {
-          this.list = response.respObj.item
-          this.total = response.respObj.total
-          this.listLoading = false
-        })
-        .catch((error) => {
-          console.log(error)
-          this.listLoading = false
-        })
-
-      // getWechatUser(this.listQuery).then(response => {
-      //   this.list = response.respObj.item
-      //   this.total = response.respObj.total
-      //   this.listLoading = false
-      // })
-      // getProvinceView().then(response => {
-      //   console.log(response.respObj)
-      //   const list = JSON.stringify(response.respObj)
-      //   this.provinceList = JSON.parse(list)
-      //   this.provinceList.forEach(item => {
-      //     const cities = item.cities
-      //     item.areas = cities
-      //     delete item.cities
-      //   })
-      // })
-    },
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
     },
     selectDev(row) {
-      // 选择设备
-      // this.resetTemp()
-      // this.dialogFormVisible = true
-      // this.temp = row
-      // this.$nextTick(() => {
-      //   this.$refs['dataForm'].clearValidate()
-      // })
-
       if (this.index.currentDevice) {
         // 先解除之前的设备
         client.unsubscribe(
@@ -671,34 +464,7 @@ export default {
       }
       this.monitorDeviceStatus()
       this.subAndObtainStatus()
-    },
-    sortChange(data) {
-      // 排序
-      console.log(data)
-      const { prop, order } = data
-      if (prop === 'create_date') {
-        if (order === 'ascending') {
-          this.listQuery.orderType = 'asc'
-          // this.list.sort(function (a, b) {
-          //   return b.createDate < a.createDate ? 1 : -1
-          // })
-        } else if (order === 'descending') {
-          this.listQuery.orderType = 'desc'
-          // this.list.sort(function (a, b) {
-          //   return b.createDate < a.createDate ? -1 : 1
-          // })
-        } else {
-          this.listQuery.orderType = undefined
-        }
-        this.handleFilter()
-      }
     }
-    // errorHandler() {
-    //   return true
-    // },
-    // handleChange(province) {
-    //   console.log(province)
-    // }
   },
   computed: {
     ...mapState('device', ['index', 'device'])
@@ -716,9 +482,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.fixed-width .el-button--mini {
-  width: auto !important;
-}
-</style>

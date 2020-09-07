@@ -1,16 +1,18 @@
-import { userInfo } from '@/api/device'
+import {
+  userInfo
+} from '@/api/device'
 /*
   目标设备状态初始化参照服务器，初始化完成参照实时数据
  */
 const state = {
-  index: {// 首页
+  index: { // 首页
     appKey: '176694',
     deviceName: null,
     deviceSecret: null,
     logo: '', // 公司logo
     title: '成都子程电子', // 公司名
     currentName: '请选择设备', // 当前设备即设备名
-    currentDevice: null// 目标设备deviceName
+    currentDevice: null // 目标设备deviceName
   },
   device: {
     status: -1, // -1/0登录中 1在线 2离线 3请选择设备 4
@@ -21,13 +23,22 @@ const state = {
     zqStatus: 0, // 增强开关
     jhStatus: 0, // 净化开关
     xdStatus: 0, // 消毒开关
+    // 新增
+    smStatus: 0, // 水膜开关
+    byStatus: 0, // 备用开关
+    msStatus: 0, // 模式
+    disinfect: 0, // 杀菌
+    closeStatus: 0, // 关机模式
+    close: 0,
+
     ghlw: 0, // 滤网倒计时
     gzsc: 0, // 工作总时长
     jhdjs: 0, // 净化倒计时
     xddjs: 0, // 消毒倒计时
     jhTime: null, // 净化时间段
     xdTime: ['00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00',
-      '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00']// 消毒时间段 字符串数组 每个item内容长度为2
+      '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00', '00'
+    ] // 消毒时间段 字符串数组 每个item内容长度为2
   }
 }
 
@@ -40,6 +51,25 @@ const mutations = {
   },
   zqStatus(state, val) {
     state.device.zqStatus = val
+  },
+  smStatus(state, val) {
+    state.device.smStatus = val
+  },
+  byStatus(state, val) {
+    state.device.byStatus = val
+  },
+  msStatus(state, val) {
+    state.device.msStatus = val
+  },
+
+  disinfect(state, val) {
+    state.device.disinfect = val
+  },
+  closeStatus(state, val) {
+    state.device.closeStatus = val
+  },
+  close(state, val) {
+    state.device.close = val
   },
   jhdjs(state, val) {
     state.device.jhdjs = val
@@ -134,7 +164,10 @@ const mutations = {
 }
 
 const actions = {
-  userInfo({ commit, state }, data) {
+  userInfo({
+    commit,
+    state
+  }, data) {
     return new Promise((resolve, reject) => {
       userInfo({}).then(response => {
         state.index.appKey = response.respObj.appKey
@@ -148,7 +181,10 @@ const actions = {
       })
     })
   },
-  modifyTitle({ commit, state }, data) { // private String deviceName;private String deviceLocaton;private String userOpen;
+  modifyTitle({
+    commit,
+    state
+  }, data) { // private String deviceName;private String deviceLocaton;private String userOpen;
     return new Promise((resolve, reject) => {
       // modifyDeviceTitle(data).then(response => {
       //   commit('modifyTitle', data);
